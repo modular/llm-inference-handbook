@@ -100,7 +100,7 @@ applications include:
   LLMs and vision language models. It makes your interaction with models faster
   and more controllable by co-designing the backend runtime and frontend
   language.
-- [Max](https://github.com/modular/modular). A high-performance AI serving
+- [MAX](https://github.com/modular/modular). A high-performance AI serving
   framework from Modular. It provides an integrated suite of tools for AI
   compute workloads across CPUs and GPUs and supports customization at both the
   model and [kernel level](/kernel-optimization/kernel-optimization-tools/).
