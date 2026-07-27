@@ -26,11 +26,6 @@ pnpm build
 pnpm serve
 ```
 
-## Contributing
-
-Contributions are welcome! Feel free to open issues, suggest improvements, or
-submit pull requests.
-
 ## Markdown linting
 
 Markdown files are linted with [rumdl](https://rumdl.dev/). Prose is wrapped at
@@ -82,6 +77,11 @@ on macOS):
 
 Install the recommended extensions when prompted, or open the Extensions view
 and run **Extensions: Show Recommended Extensions**.
+
+## Contributing
+
+Contributions are welcome! Feel free to open issues, suggest improvements, or
+submit pull requests.
 
 ## Licenses
 
