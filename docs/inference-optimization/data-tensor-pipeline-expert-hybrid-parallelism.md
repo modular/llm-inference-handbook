@@ -180,14 +180,6 @@ GPU memory, especially for large models. Lowering tensor parallelism means fewer
 GPUs share the model, leaving less room for KV cache. This can degrade inference
 optimizations like prefix caching.
 
-TP and PP also pair naturally in multi-node deployments. A common layout uses TP
-among GPUs connected by a fast intra-node fabric and PP across node boundaries.
-The frequent TP collectives remain on the faster links, while only pipeline
-activations cross the slower inter-node network. For example, two nodes with
-eight GPUs each could use TP=8 within each node and PP=2 across the nodes. One
-model replica would then use `TP × PP = 16` GPUs. Data parallelism can replicate
-that complete group when the deployment needs more aggregate throughput.
-
 These trade-offs aren’t unique to tensor and data parallelism. When designing a
 hybrid parallelism plan, it’s essential to benchmark different configurations
 based on your specific model size, hardware setup, and inference requirements.
