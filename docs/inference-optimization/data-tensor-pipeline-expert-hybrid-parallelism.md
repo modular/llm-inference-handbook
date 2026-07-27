@@ -57,8 +57,8 @@ Combine it with tensor or pipeline parallelism.
 
 Today, many LLMs can't fit on a single GPU, even after quantization, especially
 once you account for the KV cache and runtime overhead. For example, FP8 weights
-require roughly 1 GB per billion parameters, a model like Llama 3.1 405B needs
-about 405 GB just for weights. That alone exceeds the memory of any single
+require roughly 1 GB per billion parameters, so a model like Llama 3.1 405B
+needs about 405 GB just for weights. That alone exceeds the memory of any single
 current GPU, so one device often can't load the model or serve it efficiently.
 
 Tensor parallelism (TP) is one of the primary techniques for addressing this. It
@@ -80,7 +80,7 @@ exchange intermediate results repeatedly as a request flows through the
 transformer layers. Interconnect bandwidth and latency therefore weigh heavily
 on performance.
 
-Therefore, tensor parallelism works best among GPUs linked by high-bandwidth
+Tensor parallelism works best among GPUs linked by high-bandwidth
 interconnects within a single node, such as NVLink. Stretching a high tensor
 parallelism degree across nodes can turn network communication into the dominant
 bottleneck. The degree is also constrained; it generally has to divide the
