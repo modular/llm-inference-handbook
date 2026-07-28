@@ -215,6 +215,27 @@ const MODELS: Model[] = [
 
   // ── Kimi ──
   {
+    name: 'Kimi-K3',
+    family: 'Kimi',
+    company: 'Moonshot AI',
+    architecture: 'MoE',
+    released: '2026-07',
+    license: 'Kimi K3 License',
+    licenseUrl: 'https://huggingface.co/moonshotai/Kimi-K3/blob/main/LICENSE',
+    huggingface: 'moonshotai/Kimi-K3',
+    totalParams: '2.8T',
+    activeParams: '104B',
+    contextLength: '1M',
+    modality: 'Multimodal',
+    modalityNote: 'Text, Image, Video',
+    useCase: 'Long-horizon coding, knowledge work, and reasoning',
+    precisions: ['MXFP4 + MXFP8'],
+    deployment: ['2-node 8× H200', '8× B300', '8× MI355X'],
+    vllmDocs: 'https://recipes.vllm.ai/moonshotai/Kimi-K3',
+    sglangDocs:
+      'https://docs.sglang.io/cookbook/autoregressive/Moonshotai/Kimi-K3',
+  },
+  {
     name: 'Kimi-K2.6',
     family: 'Kimi',
     company: 'Moonshot AI',

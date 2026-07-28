@@ -153,7 +153,7 @@ const GPU_DATA: GPU[] = [
     vramDisplay: '288 GB',
     bandwidthGBs: 8000,
     bandwidthDisplay: '8.0 TB/s',
-    exampleLLMs: ['GLM-5.2', 'Kimi-K2.6', 'MiniMax-M3', 'MiMo-V2.5-Pro'],
+    exampleLLMs: ['GLM-5.2', 'Kimi-K3', 'MiniMax-M3', 'MiMo-V2.5-Pro'],
     notes:
       '4th Gen CDNA architecture; FP4/FP6 support; competes with B200 for the largest open models',
   },
