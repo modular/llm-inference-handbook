@@ -41,7 +41,7 @@ Quantization can help LLM inference in three main ways:
 - **Less data movement**. LLM decoding is often limited by GPU memory bandwidth
   because the runtime repeatedly reads model weights while generating tokens.
   Lower-precision weights mean fewer bytes to be moved from
-  [GPU memory to the compute units](/kernel-optimization/gpu-architecture-fundamentals/),
+  [GPU memory to the compute units](/kernel-optimization/gpu-architecture-fundamentals/gpu-memory/),
   which can reduce per-token latency.
 - **Faster computation**. GPUs and other accelerators can process supported
   low-precision formats at higher throughput than FP32 or FP16.
