@@ -112,9 +112,8 @@ workload size, and ecosystem support.
 
 ### GPU memory (VRAM)
 
-[VRAM](/kernel-optimization/gpu-architecture-fundamentals/gpu-memory/#hbm-high-bandwidth-memory)
-sets the ceiling on model size and context length because everything the GPU
-touches during inference must live in the memory: the model weights, the
+VRAM sets the ceiling on model size and context length because everything the
+GPU touches during inference must live in the memory: the model weights, the
 activations, and the KV cache. Weights determine the baseline footprint, so the
 model has to fit before you can serve it at all. For example, DeepSeek V3 and
 R1, with 671B parameters, require 8 NVIDIA H200 GPUs (141 GB each) to run. In
@@ -129,6 +128,9 @@ exhaust memory. To avoid bottlenecks, you need
 techniques like
 [prefill-decode disaggregation](/inference-optimization/prefill-decode-disaggregation/)
 and [KV cache offloading](/inference-optimization/kv-cache-offloading/).
+
+For more information, see the
+[GPU memory hierarchy](/kernel-optimization/gpu-architecture-fundamentals/gpu-memory/).
 
 ### Memory bandwidth
 
