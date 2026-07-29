@@ -129,9 +129,9 @@ Specifically, for the two stages of LLM inference:
   which is a major reason inference servers batch aggressively.
 
 Therefore, tensor cores are essential to inference performance, but not
-uniformly. They set the ceiling for prefill and for large-batch decode.
-Small-batch decode stays bandwidth-bound no matter how fast the cores are. As
-with
+uniformly. They often set the ceiling for compute-heavy prefill and large-batch
+decode. Small-batch decode commonly remains bandwidth-bound, so additional
+tensor core throughput alone may not help. As with
 [occupancy](/kernel-optimization/gpu-architecture-fundamentals/streaming-multiprocessors/#occupancy),
 they tell you where the compute ceiling is.
 

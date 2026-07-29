@@ -80,9 +80,9 @@ You can specify the number of thread blocks in a grid and how they are arranged
 across one, two, or three dimensions. Each block within the grid is assigned a
 unique block index that determines the position within the grid. Similarly, you
 also specify the number of threads per thread block and how they are arranged
-across one, two, or three dimensions. A block can hold up to 1024 threads on
-current hardware, subject to the register and shared-memory limits of the
-kernel.
+across one, two, or three dimensions. Current NVIDIA and AMD GPUs commonly allow
+up to 1024 threads per block, subject to device-specific dimension, register,
+and shared-memory limits.
 
 The GPU assigns each thread block within the grid to a streaming multiprocessor
 (SM), where the block generally remains resident until it completes; blocks are
@@ -168,10 +168,10 @@ could be written as `var i = global_idx.x`. For more information, see the
 
 Launch geometry changes how a kernel uses the hardware:
 
-- A block needs enough threads to provide several warps, but an oversized block
-  can consume too many registers or too much shared memory.
-- Adjacent threads should access adjacent memory when possible. This lets the
-  GPU combine memory requests into efficient transactions.
+- A block often needs enough threads to provide several warps, but an oversized
+  block can consume too many registers or too much shared memory.
+- Adjacent threads should access adjacent global memory addresses when possible.
+  This lets the GPU combine memory requests into efficient transactions.
 - Branches should keep threads within a warp on the same path when the
   algorithm allows.
 - A grid should expose enough independent blocks to keep all SMs busy.

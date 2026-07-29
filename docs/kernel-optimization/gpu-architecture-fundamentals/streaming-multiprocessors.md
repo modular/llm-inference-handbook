@@ -65,8 +65,9 @@ pipeline, adding more warps may provide little benefit.
 
 ## Block residency
 
-The GPU assigns each block to one SM. A block cannot move between SMs during
-execution, and all threads in the block draw from resources on that SM.
+The GPU assigns each block to one SM. Under normal execution, a block remains on
+that SM until completion, and all threads in the block draw from resources on
+that SM.
 
 Several limits determine how many blocks and warps can reside together:
 

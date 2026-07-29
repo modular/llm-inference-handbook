@@ -33,9 +33,9 @@ threads and partitioned among them.
 Register access is much cheaper than going to shared memory or HBM because the
 data is already on-chip and directly available to the compute units.
 
-Registers are a limited resource. The more registers each thread uses, the fewer
-threads (and warps) the SM can run concurrently. This is a primary driver of the
-occupancy tradeoff.
+Registers are a limited resource. Higher register use per thread can reduce the
+number of resident threads and warps when register allocation becomes the
+binding limit. This is a primary driver of the occupancy tradeoff.
 
 ## Shared memory (SMEM) and L1 cache
 
@@ -67,9 +67,10 @@ and [attention](/kernel-optimization/flashattention/).
 
 Shared memory is organized into banks (typically 32). When multiple threads in a
 [warp](/kernel-optimization/gpu-architecture-fundamentals/threads-warps-blocks/#warps)
-access the same bank simultaneously, a bank conflict occurs and the accesses
-are serialized. Avoiding bank conflicts is a common micro-optimization in kernel
-tuning.
+access different addresses in the same bank simultaneously, a bank conflict
+occurs and the accesses are serialized (threads reading the same address are
+served by a broadcast and do not conflict). Avoiding bank conflicts is a common
+micro-optimization in kernel tuning.
 
 Here is a comparison:
 
@@ -87,13 +88,14 @@ already have registers?
 Registers are the fastest storage on the GPU, but they are not enough on their
 own.
 
-1. **Registers are private**. Each thread has its own registers, so data cannot
-   be shared. If multiple threads need the same data, they must reload it from
-   global memory. L1 cache and shared memory support data reuse across threads.
-2. **Registers are limited**. Each thread only gets a small number of registers.
-   Large data (e.g., weights, tiles) cannot fit, so it must come from memory. L1
-   helps cache it automatically, and shared memory lets you stage and reuse it
-   explicitly.
+1. **Registers are private**. One thread cannot directly read registers
+   allocated to another thread. Warp shuffle instructions can exchange register
+   values within a warp, while shared memory supports reuse across a full thread
+   block. L1 can also prevent repeated accesses from reaching HBM.
+2. **Registers are limited**. Each thread only gets a small number of
+   registers. Large data, such as complete weight tensors or large tiles, cannot
+   fit, so it must come from memory. L1 helps cache it automatically, and shared
+   memory lets you stage and reuse it explicitly.
 3. **No coordination between threads.** Threads cannot communicate through
    registers. Shared memory provides a shared workspace for cooperation and
    synchronization.
@@ -116,7 +118,8 @@ of being fetched repeatedly from HBM.
 
 In LLM inference, the L2 cache can help with:
 
-- KV cache entries accessed by multiple attention heads
+- KV cache entries shared by multiple query heads in grouped-query or
+  multi-query attention
 - Weight tiles reused across batch elements
 - Small lookup tables or metadata
 
@@ -127,7 +130,7 @@ can drop and HBM bandwidth becomes the binding constraint.
 
 HBM is the main GPU memory (often called VRAM or global memory). It stores model
 weights, KV cache, activations, and all other large data structures. Modern data
-center GPUs use HBM2e or HBM3:
+center GPUs use HBM2e, HBM3, or HBM3e:
 
 | GPU             | HBM capacity | Peak HBM bandwidth |
 |-----------------|-------------:|-------------------:|
@@ -150,17 +153,16 @@ traffic between HBM and compute units.
 The values below provide an approximate Hopper-class example. Exact capacity,
 latency, and bandwidth vary by GPU, access pattern, and measurement method.
 
-| Level              | Size (H100)         | Bandwidth          | Scope                      | Latency       | Managed by                        |
-|--------------------|---------------------|--------------------|----------------------------|---------------|-----------------------------------|
-| Registers          | 256 KB per SM       | Highest            | Per thread                 | ~1 cycle      | Compiler                          |
-| Shared memory / L1 | Up to 228 KB per SM | ~20 TB/s effective | Per block (SMEM) / SM (L1) | ~20-30 cycles | Programmer (SMEM) / Hardware (L1) |
-| L2 cache           | 50 MB               | ~12 TB/s           | All SMs                    | ~200 cycles   | Hardware                          |
-| HBM                | 80 GB               | 3.35 TB/s          | Global                     | ~400+ cycles  | Programmer                        |
+| Level              | Size (H100)                             | Bandwidth          | Scope                      | Latency       | Managed by                        |
+|--------------------|-----------------------------------------|--------------------|----------------------------|---------------|-----------------------------------|
+| Registers          | 256 KB per SM                           | Highest            | Per thread                 | ~1 cycle      | Compiler                          |
+| Shared memory / L1 | 256 KB combined pool; up to 228 KB SMEM | ~20 TB/s effective | Per block (SMEM) / SM (L1) | ~20-30 cycles | Programmer (SMEM) / Hardware (L1) |
+| L2 cache           | 50 MB                                   | ~12 TB/s           | All SMs                    | ~200 cycles   | Hardware                          |
+| HBM                | 80 GB                                   | 3.35 TB/s          | Global                     | ~400+ cycles  | Programmer / runtime              |
 
-Every kernel optimization technique, whether it's tiling, fusion, or data layout
-changes, is ultimately about moving data access up this pyramid: keeping
-frequently used data in registers or shared memory rather than reading it from
-HBM repeatedly.
+Many kernel optimization techniques, including tiling, fusion, and data layout
+changes, reduce traffic lower in this pyramid by keeping frequently used data in
+registers or shared memory rather than reading it from HBM repeatedly.
 
 <LinkList>
 
