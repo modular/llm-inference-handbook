@@ -69,11 +69,13 @@ workload distribution, thread blocks serve multiple crucial purposes:
 1. They break down the overall workload (managed by the grid) of a kernel
    function into smaller, more manageable portions that can be processed
    independently. This division allows for better resource utilization and
-   scheduling flexibility across multiple streaming multiprocessors (SMs) in the
-   GPU.
+   scheduling flexibility across multiple
+   [streaming multiprocessors (SMs)](/kernel-optimization/gpu-architecture-fundamentals/streaming-multiprocessors/)
+   in the GPU.
 2. Thread blocks provide a scope for threads to collaborate through
-   shared memory and synchronization primitives, enabling efficient parallel
-   algorithms and data sharing patterns.
+   [shared memory](/kernel-optimization/gpu-architecture-fundamentals/gpu-memory/#shared-memory-smem-and-l1-cache)
+   and synchronization primitives, enabling efficient parallel algorithms and
+   data sharing patterns.
 3. Thread blocks help with scalability by allowing the same program to
    run efficiently across different GPU architectures, as the hardware can
    automatically distribute blocks based on available resources.
@@ -103,8 +105,8 @@ launch dimensions and coordinates available inside the kernel:
 - `gridDim`: Grid dimensions, namely the number of blocks in each dimension.
 - `blockDim`: Block dimensions, namely the number of threads in each dimension
   of a block.
-- `blockIdx`: The current block's position within the grid.
-- `threadIdx`: The current thread's position within the block.
+- `blockIdx`: The current block position within the grid.
+- `threadIdx`: The current thread position within the block.
 
 A kernel combines the last three to work out which element each thread owns.
 The canonical example is a vector addition, where every thread handles one
@@ -179,8 +181,10 @@ Launch geometry changes how a kernel uses the hardware:
 - A grid should expose enough independent blocks to keep all SMs busy.
 
 The best geometry depends on the work per thread and the resources required by
-each block. Fixed rules such as “always use 256 threads” are starting points,
-not universal answers.
+each block. Resource use also affects
+[occupancy](/kernel-optimization/gpu-architecture-fundamentals/streaming-multiprocessors/#occupancy).
+Fixed rules such as “always use 256 threads” are starting points, not universal
+answers.
 
 <LinkList>
 

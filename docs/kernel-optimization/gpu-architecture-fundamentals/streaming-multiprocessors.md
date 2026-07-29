@@ -14,8 +14,10 @@ import LinkList from '@site/src/components/LinkList';
 # Streaming multiprocessors
 
 A **streaming multiprocessor (SM)** is the main compute unit of an NVIDIA GPU.
-A GPU contains many SMs, and each SM accepts thread blocks, schedules their
-warps, and executes instructions with on-chip compute and memory resources.
+A GPU contains many SMs, and each SM accepts
+[thread blocks](/kernel-optimization/gpu-architecture-fundamentals/threads-warps-blocks/#thread-blocks),
+schedules their warps, and executes instructions with on-chip compute and memory
+resources.
 AMD hardware uses different names and groups work differently, but the same
 broad idea applies: many parallel compute units share the workload.
 
@@ -25,11 +27,13 @@ The exact design changes between GPU generations, but an SM typically contains:
 
 - A set of arithmetic execution units (CUDA cores on NVIDIA GPUs, execution
   units on AMD GPUs) for integer and floating-point arithmetic
-- Tensor cores for accelerated matrix operations (on modern architectures)
+- [Tensor cores](/kernel-optimization/gpu-architecture-fundamentals/tensor-cores/)
+  for accelerated matrix operations (on modern architectures)
 - A warp scheduler that picks ready warps and issues instructions each cycle
 - A register file, shared memory, and L1 cache. On many architectures, shared
   memory and L1 share on-chip resources and can be configured. For more
-  information, see [GPU memory](/gpu-memory).
+  information, see the
+  [GPU memory hierarchy](/kernel-optimization/gpu-architecture-fundamentals/gpu-memory/).
 
 :::note
 On-chip means physically located on the GPU silicon die itself, right next to
@@ -92,7 +96,8 @@ set the occupancy ceiling.
 
 Occupancy is not a score to maximize blindly. A kernel may accept lower
 occupancy to keep a useful tile in shared memory, hold intermediate values in
-registers, or reduce repeated HBM traffic. FlashAttention follows this pattern:
+registers, or reduce repeated HBM traffic.
+[FlashAttention](/kernel-optimization/flashattention/) follows this pattern:
 more on-chip storage can lower occupancy while cutting far more expensive
 off-chip memory movement.
 
@@ -109,9 +114,12 @@ leave SMs idle, increasing latency. Excessive resource use can reduce the number
 of resident blocks and make latency harder to hide.
 
 Batch size and sequence shape also affect the amount of parallel work. A kernel
-that fills the GPU during prefill may underuse the same GPU during single-token
-decode. This is why utilization has to be interpreted for the actual inference
-phase rather than as one aggregate percentage.
+that fills the GPU during
+[prefill](/llm-inference-basics/how-does-llm-inference-work/#prefill) may
+underuse the same GPU during single-token
+[decode](/llm-inference-basics/how-does-llm-inference-work/#decode). This is why
+utilization has to be interpreted for the actual inference phase rather than as
+one aggregate percentage.
 
 ## FAQs
 

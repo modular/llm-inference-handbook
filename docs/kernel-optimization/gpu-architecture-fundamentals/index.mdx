@@ -25,18 +25,23 @@ GPUs and other parallel accelerators as well.
 
 ## Hardware and the execution model
 
-The hardware is what physically exists on the GPU: streaming
-multiprocessors (SMs), tensor cores, registers, caches, shared memory, and high
-bandwidth memory (HBM). These resources determine how much work and data the GPU
-can keep close to the compute units.
+The hardware is what physically exists on the GPU:
+[streaming multiprocessors (SMs)](/kernel-optimization/gpu-architecture-fundamentals/streaming-multiprocessors/),
+[tensor cores](/kernel-optimization/gpu-architecture-fundamentals/tensor-cores/),
+and the registers, caches, shared memory, and high bandwidth memory (HBM) that
+form the
+[GPU memory hierarchy](/kernel-optimization/gpu-architecture-fundamentals/gpu-memory/).
+These resources determine how much work and data the GPU can keep close to the
+compute units.
 
 The execution model is the abstraction used to write a kernel. Code creates
 threads and organizes them into warps, blocks, and grids. The GPU schedules that
 work across the available hardware.
 
-Kernel optimization connects these two views. A fast kernel maps the execution
-model onto the hardware and respects limits on compute, memory bandwidth,
-registers, shared memory, and scheduling capacity.
+[Kernel optimization](/kernel-optimization/kernel-optimization-for-llm-inference/)
+connects these two views. A fast kernel maps the execution model onto the
+hardware and respects limits on compute, memory bandwidth, registers, shared
+memory, and scheduling capacity.
 
 ## GPU execution and memory map
 
@@ -44,14 +49,18 @@ The visual below follows work from individual threads to an SM, then shows the
 memory layers that feed the compute units. Four terms establish the execution
 hierarchy:
 
-- A [**thread**](./threads-warps-blocks#threads) is the smallest logical unit of
-  work and usually handles one element or a small group of elements.
-- A [**warp**](./threads-warps-blocks#warps) is a group of 32 threads that an
-  NVIDIA SM schedules together.
-- A [**thread block**](./threads-warps-blocks#thread-blocks) groups threads that
-  can cooperate through shared memory and synchronization.
 - A
-  [**streaming multiprocessor (SM)**](./streaming-multiprocessors#what-an-sm-contains)
+  [thread](/kernel-optimization/gpu-architecture-fundamentals/threads-warps-blocks/#threads)
+  is the smallest logical unit of work and usually handles one element or a
+  small group of elements.
+- A
+  [warp](/kernel-optimization/gpu-architecture-fundamentals/threads-warps-blocks/#warps)
+  is a group of 32 threads that an NVIDIA SM schedules together.
+- A
+  [thread block](/kernel-optimization/gpu-architecture-fundamentals/threads-warps-blocks/#thread-blocks)
+  groups threads that can cooperate through shared memory and synchronization.
+- A
+  [streaming multiprocessor (SM)](/kernel-optimization/gpu-architecture-fundamentals/streaming-multiprocessors/#what-an-sm-contains)
   is the on-chip compute unit that accepts blocks and issues instructions from
   ready warps.
 

@@ -71,7 +71,7 @@ expanded over time:
 Note that input precision and accumulator precision can differ. For example, a
 kernel might multiply FP16 or BF16 inputs while accumulating into FP32 to reduce
 numerical error (the sum step is where numerical error tends to pile up). A
-16-bit running sum can overflow its limited range, or lose small values when
+16-bit running sum can overflow the limited range, or lose small values when
 they're added to a much larger total.
 
 The exact combination of input type, accumulator type, tile shape, and
@@ -88,8 +88,8 @@ them efficiently. Important factors include:
 - **Alignment:** Pointers and leading dimensions often need suitable alignment
   for efficient vectorized loads and matrix instructions.
 - **Layout:** Threads expect matrix fragments in architecture-specific register
-  layouts. Shared-memory layouts may need swizzling or padding to avoid bank
-  conflicts.
+  layouts. Shared-memory layouts may need swizzling or padding to avoid
+  [bank conflicts](/kernel-optimization/gpu-architecture-fundamentals/gpu-memory/#shared-memory-smem-and-l1-cache).
 - **Precision:** Inputs must use a supported type and accumulation mode.
 - **Data supply:** HBM and shared-memory transfers must keep pace with the
   tensor core pipeline.
@@ -107,26 +107,33 @@ accelerate, which is why tensor core throughput (measured in TFLOPS or TOPS)
 largely sets how fast the compute-heavy parts of inference run.
 
 As mentioned above, tensor cores also operate on reduced-precision inputs: FP16,
-BF16, TF32, INT8, FP8 and FP4. This ties them directly to quantization. Applying
-weights and activations to a lower-precision format both shrinks their memory
-footprint and puts them on a faster tensor-core path, so the two optimizations
-reinforce each other.
+BF16, TF32, INT8, FP8 and FP4. This ties them directly to
+[quantization](/model-preparation/llm-quantization/). Applying weights and
+activations to a lower-precision format both shrinks their memory footprint and
+puts them on a faster tensor-core path, so the two optimizations reinforce each
+other.
 
 Specifically, for the two stages of LLM inference:
 
-- During **prefill**, many tokens are processed at once, the matmuls are large,
-  and arithmetic intensity is high. The tensor cores are well fed and this phase
-  is usually compute-bound, so tensor core throughput is the thing that matters.
-- During **decode**, the bottleneck shifts to memory bandwidth (streaming
-  weights and the KV cache), so raw tensor core FLOPS stop being the limitation
-  and the cores sit partly idle. Batching multiple sequences restores a larger
-  matrix dimension and brings tensor core utilization back up, which is a major
-  reason inference servers batch aggressively.
+- During
+  [prefill](/llm-inference-basics/how-does-llm-inference-work/#prefill),
+  many tokens are processed at once, the matmuls are large, and arithmetic
+  intensity is high. The tensor cores are well fed and this phase is usually
+  compute-bound, so tensor core throughput is the thing that matters.
+- During
+  [decode](/llm-inference-basics/how-does-llm-inference-work/#decode), the
+  bottleneck shifts to memory bandwidth (streaming weights and the KV cache), so
+  raw tensor core FLOPS stop being the limitation and the cores sit partly idle.
+  [Batching multiple sequences](/inference-optimization/static-dynamic-continuous-batching/)
+  restores a larger matrix dimension and brings tensor core utilization back up,
+  which is a major reason inference servers batch aggressively.
 
 Therefore, tensor cores are essential to inference performance, but not
 uniformly. They set the ceiling for prefill and for large-batch decode.
 Small-batch decode stays bandwidth-bound no matter how fast the cores are. As
-with occupancy, they tell you where the compute ceiling is.
+with
+[occupancy](/kernel-optimization/gpu-architecture-fundamentals/streaming-multiprocessors/#occupancy),
+they tell you where the compute ceiling is.
 
 ## FAQs
 

@@ -16,17 +16,19 @@ import LinkList from '@site/src/components/LinkList';
 
 GPU memory is organized as a hierarchy. Small on-chip storage sits close to the
 compute units and provides low latency, while high bandwidth memory (HBM)
-provides much more capacity off-chip. Most GPU kernel optimization techniques
+provides much more capacity off-chip. Most
+[GPU kernel optimization techniques](/kernel-optimization/kernel-optimization-for-llm-inference/)
 come down to moving less data or reusing data at a faster level of this
 hierarchy.
 
 ## Registers
 
-Registers are the fastest storage on the GPU. Each thread has its own logically
-private registers, meaning other threads cannot access them. Physically,
-however, these registers come from a large register file on the SM (for example,
-256 KB per SM on H100), which is shared across all resident threads and
-partitioned among them.
+Registers are the fastest storage on the GPU. Each thread has a logically
+private set of registers, meaning other threads cannot access them. Physically,
+however, these registers come from a large register file on the
+[SM](/kernel-optimization/gpu-architecture-fundamentals/streaming-multiprocessors/)
+(for example, 256 KB per SM on H100), which is shared across all resident
+threads and partitioned among them.
 
 Register access is much cheaper than going to shared memory or HBM because the
 data is already on-chip and directly available to the compute units.
@@ -59,13 +61,15 @@ The main purpose of shared memory is to reduce expensive HBM accesses. A common
 pattern is to load data once from global memory into shared memory, then reuse
 it multiple times across threads. Because shared memory is on-chip and much
 faster than HBM, this can significantly improve performance. This pattern
-appears in many high-performance kernels, such as matrix multiplication and
-attention mechanisms.
+appears in many high-performance kernels, including
+[matrix multiplication](/kernel-optimization/gpu-architecture-fundamentals/tensor-cores/)
+and [attention](/kernel-optimization/flashattention/).
 
 Shared memory is organized into banks (typically 32). When multiple threads in a
-warp access the same bank simultaneously, a bank conflict occurs and the
-accesses are serialized. Avoiding bank conflicts is a common micro-optimization
-in kernel tuning.
+[warp](/kernel-optimization/gpu-architecture-fundamentals/threads-warps-blocks/#warps)
+access the same bank simultaneously, a bank conflict occurs and the accesses
+are serialized. Avoiding bank conflicts is a common micro-optimization in kernel
+tuning.
 
 Here is a comparison:
 
