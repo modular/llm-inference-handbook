@@ -114,7 +114,9 @@ When evaluating speculative decoding, three metrics matter most:
   [Fast Inference from Transformers via Speculative Decoding](https://arxiv.org/pdf/2211.17192),
   you can calculate it with a theoretical formula:
 
-  $$ \tau = \frac{1 - \alpha^{\gamma+1}}{1 - \alpha} $$
+  $$
+  \tau = \frac{1 - \alpha^{\gamma+1}}{1 - \alpha}
+  $$
 
 ### How acceptance rate impacts performance
 

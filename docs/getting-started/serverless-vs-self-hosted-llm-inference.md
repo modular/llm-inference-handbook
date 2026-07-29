@@ -116,7 +116,7 @@ cheaper over time, thanks to:
   </figure>
 
 - GPU hardware is becoming more efficient and affordable.
-- Projects like vLLM and SGLang improve model inference efficiency.
+- Projects like vLLM, SGLang and MAX improve model inference efficiency.
 - Better-performing open-source models that require fewer resources with
   different optimization techniques.
 

@@ -401,8 +401,8 @@ At a high level, LLM inference follows a simple loop:
 1. The input text is converted into tokens
 2. Tokens are processed in the prefill phase to build context and KV cache
 3. The model enters the decode phase. At each step:
-    - The model produces a probability distribution
-    - A sampling strategy selects the next token
+   - The model produces a probability distribution
+   - A sampling strategy selects the next token
 4. The process repeats until a stopping condition is met
 5. Tokens are converted back into readable text
 
