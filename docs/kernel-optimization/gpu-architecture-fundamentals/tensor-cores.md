@@ -83,15 +83,15 @@ the hardware rather than assume that one tensor core mode works everywhere.
 Tensor cores deliver high throughput only when the surrounding kernel feeds
 them efficiently. Important factors include:
 
-- **Shape:** Matrix dimensions need enough full instruction tiles. Edge tiles
+- **Shape**: Matrix dimensions need enough full instruction tiles. Edge tiles
   may require padding, masking, or a fallback path.
-- **Alignment:** Pointers and leading dimensions often need suitable alignment
+- **Alignment**: Pointers and leading dimensions often need suitable alignment
   for efficient vectorized loads and matrix instructions.
-- **Layout:** Threads expect matrix fragments in architecture-specific register
+- **Layout**: Threads expect matrix fragments in architecture-specific register
   layouts. Shared-memory layouts may need swizzling or padding to avoid
   [bank conflicts](/kernel-optimization/gpu-architecture-fundamentals/gpu-memory/#shared-memory-smem-and-l1-cache).
-- **Precision:** Inputs must use a supported type and accumulation mode.
-- **Data supply:** HBM and shared-memory transfers must keep pace with the
+- **Precision**: Inputs must use a supported type and accumulation mode.
+- **Data supply**: HBM and shared-memory transfers must keep pace with the
   tensor core pipeline.
 
 A kernel can issue tensor core instructions and still run poorly. If tile
