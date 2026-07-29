@@ -31,19 +31,15 @@ combines the position within a block with the block position to compute which
 part of the input to process. For more information, see
 [grids and indexing](#grids-and-indexing) below.
 
-The same kernel body can therefore process a vector with thousands or millions
-of elements. Threads can also use two- or three-dimensional coordinates, which
-map naturally to matrices, images, and tiled computations.
+The same kernel body can process a vector with thousands or millions of
+elements. Threads can also use two- or three-dimensional coordinates, which map
+naturally to matrices, images, and tiled computations.
 
 ## Warps
 
 A **warp**, also known as a **wavefront** on AMD GPUs, is a subset of threads
 from a thread block that execute together. On NVIDIA GPUs a warp is 32 threads.
 AMD wavefronts are traditionally 64, and 32 or 64 on RDNA.
-
-An NVIDIA GPU groups threads into **warps** of 32. A warp is the unit presented
-to a warp scheduler. When a warp receives an instruction, active threads in the
-warp execute that instruction on their own registers and data.
 
 The warp is the actual scheduling unit. It is what gets presented to a warp
 scheduler, and a warp can only be issued one instruction at a time. When a warp
@@ -109,7 +105,7 @@ launch dimensions and coordinates available inside the kernel:
 - `threadIdx`: The current thread position within the block.
 
 A kernel combines the last three to work out which element each thread owns.
-The canonical example is a vector addition, where every thread handles one
+A simple example is a vector addition, where every thread handles one
 element:
 
 ```cpp
