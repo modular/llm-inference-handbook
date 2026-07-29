@@ -49,16 +49,17 @@ depending on how much control you want over the GPU.
   - Custom CUDA kernels
   - Optimized attention implementations like FlashAttention
 
-    This gives you fine-grained control. You can design and tune memory access,
-    thread layout, and computation schedule from scratch. However, it’s also
-    hard as it requires deep knowledge of GPU architecture.
-    :::note
-    For Triton, you're still writing kernels, but the tile-based programming
-    model hides many of the low-level details: no manual warp management, no
-    explicit shared memory scheduling for common patterns. This makes Triton
-    easier than writing raw CUDA kernels. It also provides more control than
-    fully compiler-driven methods.
-    :::
+  This gives you fine-grained control. You can design and tune memory access,
+  thread layout, and computation schedule from scratch. However, it’s also
+  hard as it requires deep knowledge of GPU architecture.
+
+  :::note
+  For Triton, you're still writing kernels, but the tile-based programming
+  model hides many of the low-level details: no manual warp management, no
+  explicit shared memory scheduling for common patterns. This makes Triton
+  easier than writing raw CUDA kernels. It also provides more control than
+  fully compiler-driven methods.
+  :::
 
 - **Compiler-driven optimization**. You rely on compiler systems such as TVM or
   XLA to generate optimized kernels from a higher-level description of
@@ -67,11 +68,11 @@ depending on how much control you want over the GPU.
   - Reorder computation for better efficiency
   - Generate optimized kernels automatically
 
-    In this model, you describe what to compute, and the compiler determines how
-    to execute it efficiently for the target hardware backend. This
-    significantly lowers the barrier to entry. However, it offers less direct
-    control over low-level execution and may lag behind hand-written kernels
-    when supporting new model architectures or specialized computation patterns.
+  In this model, you describe what to compute, and the compiler determines how
+  to execute it efficiently for the target hardware backend. This
+  significantly lowers the barrier to entry. However, it offers less direct
+  control over low-level execution and may lag behind hand-written kernels
+  when supporting new model architectures or specialized computation patterns.
 
 ## What kernel optimization is not
 

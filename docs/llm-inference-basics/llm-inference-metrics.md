@@ -37,14 +37,18 @@ Key metrics to measure latency:
   first one. TTFT is excluded, since it measures only the steady generation
   phase:
 
-  $$ \text{Token Generation Time} = {\text{E2EL – TTFT}} $$
+  $$
+  \text{Token Generation Time} = {\text{E2EL – TTFT}}
+  $$
 
 - **Time per Output Token (TPOT)**: The average time gap between generating each
   subsequent token (excluding TTFT). A lower TPOT means the model can produce
   tokens faster, leading to higher tokens per second. TPOT is usually calculated
   as follows:
 
-  $$ \text{TPOT} = \frac{\text{E2EL – TTFT}}{\text{Total Output Tokens} - 1} $$
+  $$
+  \text{TPOT} = \frac{\text{E2EL – TTFT}}{\text{Total Output Tokens} - 1}
+  $$
 
   In streaming scenarios where users see text appear word-by-word (like
   ChatGPT's interface), TPOT determines how smooth the experience feels. The
@@ -56,20 +60,27 @@ Key metrics to measure latency:
   For a single request, the mean of all ITLs equals TPOT, which is why
   **the two are sometimes used interchangeably**:
 
-  <!-- rumdl-disable-next-line MD013 -->
-  $$ \text{Average ITL} = \text{TPOT} = \frac{\text{E2EL – TTFT}}{\text{Total Output Tokens} - 1} $$
+  $$
+  \text{Average ITL} = \text{TPOT}
+  = \frac{\text{E2EL – TTFT}}{\text{Total Output Tokens} - 1}
+  $$
 
   Across multiple requests, however, the difference comes down to how you
   average:
 
-  <!-- rumdl-disable-next-line MD013 -->
-  $$ \text{Average ITL} = \frac{\text{Sum of all ITLs across Requests}}{\text{Total Output Tokens across Requests}} $$
+  $$
+  \text{Average ITL}
+  = \frac{\text{Sum of all ITLs across Requests}}
+         {\text{Total Output Tokens across Requests}}
+  $$
 
   In this case, the average ITL is different from the average TPOT since the
   latter is usually calculated as follows:
 
-  <!-- rumdl-disable-next-line MD013 -->
-  $$ \text{Average TPOT} = \frac{\text{TPOT}_1 + \text{TPOT}_2 + \cdots + \text{TPOT}_N}{N} $$
+  $$
+  \text{Average TPOT}
+  = \frac{\text{TPOT}_1 + \text{TPOT}_2 + \cdots + \text{TPOT}_N}{N}
+  $$
 
   When reading benchmark results, always check how TPOT and ITL are defined.
   Different frameworks and papers may calculate and use the metrics differently,
@@ -164,11 +175,12 @@ There are two common ways to measure throughput:
 - **Tokens per Second (TPS)**: This metric provides a finer-grained view of
   throughput by measuring how many tokens are processed every second across all
   active requests. It comes in two forms:
+
   - **Input TPS**: How many input tokens the model processes per second.
   - **Output TPS**: How many output tokens the model generates per second.
 
-    Understanding both metrics helps you identify performance bottlenecks based
-    on the nature of your inference workload. For example:
+  Understanding both metrics helps you identify performance bottlenecks based
+  on the nature of your inference workload. For example:
 
   - A summarization request that includes long documents (e.g., 2,000-token
     inputs) cares more about input TPS.
@@ -176,19 +188,19 @@ There are two common ways to measure throughput:
     [prompts](/model-interaction/prompt-engineering/) (e.g., 20-token prompt →
     500-token response) depends heavily on output TPS.
 
-    When reviewing benchmarks or evaluating LLM performance, **always check
-    whether TPS metrics refer to input, output, or a combined view**. They
-    highlight different strengths and limitations depending on the use case.
+  When reviewing benchmarks or evaluating LLM performance, **always check
+  whether TPS metrics refer to input, output, or a combined view**. They
+  highlight different strengths and limitations depending on the use case.
 
-    Factors that impact TPS:
+  Factors that impact TPS:
 
   - Batch size (larger batches can increase TPS until saturation)
   - KV cache efficiency and memory usage
   - Prompt length and generation length
   - GPU memory bandwidth and compute utilization
 
-    These factors also mean TPS can be easy to misread since it can be gamed.
-    For example:
+  These factors also mean TPS can be easy to misread since it can be gamed.
+  For example:
 
   - A shorter prompt lowers TTFT, which cuts the amount of work each request
     requires. With less work per request, TPS looks higher than it really is.

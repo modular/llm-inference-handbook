@@ -287,14 +287,14 @@ use shared and dedicated endpoints depending on your needs.
 Weight loading happens at service startup. Here is the specific pipeline:
 
 1. Model files are read from disk (SSD / network storage)
-    - Model checkpoint (e.g., `.safetensors`, `.bin`)
-    - Read via CPU
-    - Very slow compared to GPU memory
-    - Bandwidth: SSD at ~1–10 GB/s
+   - Model checkpoint (e.g., `.safetensors`, `.bin`)
+   - Read via CPU
+   - Very slow compared to GPU memory
+   - Bandwidth: SSD at ~1–10 GB/s
 2. CPU RAM staging
-    - Weights are temporarily placed in system memory
-    - Often deserialized or memory-mapped
-    - CPU RAM bandwidth: ~50–200 GB/s for typical configurations
+   - Weights are temporarily placed in system memory
+   - Often deserialized or memory-mapped
+   - CPU RAM bandwidth: ~50–200 GB/s for typical configurations
 3. Transferred to
    [GPU HBM](/kernel-optimization/gpu-architecture-fundamentals/#hbm-high-bandwidth-memory)
 4. Cached there for the lifetime of the serving process
