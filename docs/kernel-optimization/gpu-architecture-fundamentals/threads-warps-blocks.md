@@ -1,4 +1,4 @@
----
+[---
 sidebar_position: 1
 description: Learn how GPU kernels organize work into threads, warps, thread blocks, and grids.
 keywords:
@@ -190,3 +190,4 @@ answers.
 - [AMD ROCm HIP programming model](https://rocm.docs.amd.com/projects/HIP/en/latest/understand/programming_model.html)
 - [GPU programming fundamentals](https://mojolang.org/docs/manual/gpu/fundamentals/)
 </LinkList>
+](https://docs.static.modular-staging.com/rest-api/)
