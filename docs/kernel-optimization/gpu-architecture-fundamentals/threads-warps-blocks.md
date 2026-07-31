@@ -95,8 +95,13 @@ other blocks.
 
 ## Grids and indexing
 
-A **grid** contains all blocks created by one kernel launch. CUDA makes the
-launch dimensions and coordinates available inside the kernel:
+A **grid** is the top-level organizational structure that defines a kernel
+launch—it contains all the thread blocks, which contain all the execution
+threads.
+
+To write a GPU kernel, you must specify the work to perform by creating a grid.
+On an NVIDIA GPU, the CUDA programming model allows you to define the kernel’s
+launch dimensions and coordinates with these values:
 
 - `gridDim`: Grid dimensions, namely the number of blocks in each dimension.
 - `blockDim`: Block dimensions, namely the number of threads in each dimension
@@ -105,8 +110,14 @@ launch dimensions and coordinates available inside the kernel:
 - `threadIdx`: The current thread position within the block.
 
 A kernel combines the last three to work out which element each thread owns.
-A simple example is a vector addition, where every thread handles one
-element:
+
+## Writing a kernel function
+
+Now that you understand how GPU work is organized into threads, warps,
+thread blocks, and grids, you can better understand kernel code.
+
+Here’s a simple CUDA kernel that performs a vector addition, where every
+thread handles one element:
 
 ```cpp
 __global__ void vecAdd(float* A, float* B, float* C, int vectorLength)
@@ -131,21 +142,27 @@ int blocks = (vectorLength + threads - 1) / threads;
 vecAdd<<<blocks, threads>>>(devA, devB, devC, vectorLength);
 ```
 
-For more information, see the
-[CUDA Programming Guide](https://docs.nvidia.com/cuda/cuda-programming-guide/02-basics/intro-to-cuda-cpp.html).
-
 The grid usually contains more blocks than the GPU can run at once. As blocks
 finish, the GPU assigns new blocks to free SM capacity. This scheduling model
 lets one launch scale across GPUs with different SM counts without changing the
 kernel.
 
-CUDA C++ targets NVIDIA hardware. Mojo provides the same grid-and-block model
-through GPU APIs that can target NVIDIA, AMD, and Apple hardware. The index
-arithmetic and the launch look like this:
+However, the CUDA code above only works for NVIDIA GPUs. If you want to
+program an AMD GPU, you might instead use AMD’s native ROCm software. Both
+frameworks use C/C++ as the core programming language, with some extra
+keyword and syntax extensions.
+
+Alternatively, [MAX](https://www.modular.com/open-source/max) provides
+a hardware-agnostic programming model for GPUs and other accelerators,
+using the [Mojo programming language](https://mojolang.org/). This
+framework provides the same grid-and-block programming model described
+above, except the code can target NVIDIA GPUs, AMD GPUs, Apple silicon,
+and more. For example, here’s the same vector addition function written
+in Mojo:
 
 ```mojo
-from std.gpu import block_dim, block_idx, thread_idx
-from std.gpu.host import DeviceContext
+from max.gpu import block_dim, block_idx, thread_idx
+from max.gpu.host import DeviceContext
 
 def kernel():
     var i = block_idx.x * block_dim.x + thread_idx.x
@@ -161,8 +178,13 @@ def main() raises:
 `grid_dim` and `block_dim` correspond to the two CUDA launch values, and the
 index arithmetic is identical. Mojo also exposes `global_idx`, a shorthand that
 computes `block_idx.x * block_dim.x + thread_idx.x` for you, so the same line
-could be written as `var i = global_idx.x`. For more information, see the
-[Mojo documentation](https://mojolang.org/docs/manual/gpu/fundamentals/).
+could be written as `var i = global_idx.x`. 
+
+To learn about programming NVIDIA GPUs, see the
+[CUDA Programming Guide](https://docs.nvidia.com/cuda/cuda-programming-guide/02-basics/intro-to-cuda-cpp.html).
+
+To learn about programming any GPU, see the
+[Mojo GPU programming guide](https://mojolang.org/docs/manual/gpu/fundamentals/).
 
 ## How the hierarchy affects kernel performance
 
