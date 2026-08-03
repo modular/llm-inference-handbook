@@ -109,7 +109,8 @@ launch dimensions and coordinates with these values:
 - `blockIdx`: The current block position within the grid.
 - `threadIdx`: The current thread position within the block.
 
-A kernel combines the last three to work out which element each thread owns.
+A kernel combines these values, typically by computing a global thread ID, to
+determine which element or portion of data each thread should process.
 
 ## Writing a kernel function
 
@@ -178,7 +179,7 @@ def main() raises:
 `grid_dim` and `block_dim` correspond to the two CUDA launch values, and the
 index arithmetic is identical. Mojo also exposes `global_idx`, a shorthand that
 computes `block_idx.x * block_dim.x + thread_idx.x` for you, so the same line
-could be written as `var i = global_idx.x`. 
+could be written as `var i = global_idx.x`.
 
 To learn about programming NVIDIA GPUs, see the
 [CUDA Programming Guide](https://docs.nvidia.com/cuda/cuda-programming-guide/02-basics/intro-to-cuda-cpp.html).
