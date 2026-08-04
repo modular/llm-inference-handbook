@@ -18,7 +18,8 @@ complex.
 
 ## Data parallelism
 
-Data parallelism (DP) runs multiple replicas of the same model in parallel. Each
+Data parallelism (DP) increases total throughput by distributing individual
+requests or microbatches across multiple replicas of the same model. Each
 replica has its own copy of the model weights and handles different requests
 independently. A replica can run on a single GPU, or it can span multiple GPUs
 using [tensor parallelism](#tensor-parallelism) or
@@ -55,16 +56,20 @@ Combine it with tensor or pipeline parallelism.
 
 ## Tensor parallelism
 
-Today, many LLMs can't fit on a single GPU, even after quantization, especially
-once you account for the KV cache and runtime overhead. For example, FP8 weights
-require roughly 1 GB per billion parameters, so a model like Llama 3.1 405B
-needs about 405 GB just for weights. That alone exceeds the memory of any single
-current GPU, so one device often can't load the model or serve it efficiently.
+Tensor parallelism (TP) distributes the weights of a model across multiple GPUs
+to deploy large models that can't fit into the memory of a single GPU. It
+divides the tensors within each model layer, so every device holds a shard of a
+layer rather than a copy of it.
 
-Tensor parallelism (TP) is one of the primary techniques for addressing this. It
-divides the tensors within each model layer across multiple GPUs. During
-operations such as matrix multiplication, each GPU holds a shard of the weight
-tensor and computes part of the result. The GPUs then exchange or combine
+This is necessary because many modern LLMs can't fit on a single GPU, even after
+quantization, especially once you account for the KV cache and runtime overhead.
+For example, FP8 weights require roughly 1 GB per billion parameters, so a model
+like Llama 3.1 405B needs about 405 GB just for weights. That alone exceeds the
+memory of any single current GPU, so one device often can't load the model or
+serve it efficiently.
+
+During operations such as matrix multiplication, each GPU holds a shard of the
+weight tensor and computes part of the result. The GPUs then exchange or combine
 intermediate results using collective communication operations such as
 all-reduce or all-gather, depending on how the tensors are partitioned.
 
@@ -81,13 +86,15 @@ transformer layers. Interconnect bandwidth and latency therefore weigh heavily
 on performance.
 
 Tensor parallelism works best among GPUs linked by high-bandwidth
-interconnects within a single node, such as NVLink. Stretching a high tensor
-parallelism degree across nodes can turn network communication into the dominant
-bottleneck. The degree is also constrained; it generally has to divide the
-number of attention heads evenly, so you can't scale to arbitrary GPU counts.
+interconnects within a single node, such as NVLink. Splitting tensors across
+GPUs that sit in separate nodes can turn network communication into the dominant
+bottleneck. The number of GPUs you shard across is also constrained; it
+generally has to divide the number of attention heads evenly, so you can't scale
+to arbitrary GPU counts.
 
-Before sharding a model, check whether the weights, KV cache, and other
-inference memory requirements fit comfortably on a single GPU, especially after
+Before sharding a model to perform tensor parallelism, check whether the
+weights, KV cache, and other inference memory requirements fit comfortably on a
+single GPU, especially after
 [quantization](/model-preparation/llm-quantization/). Single-GPU serving avoids
 cross-device synchronization entirely, and adding GPUs through tensor
 parallelism rarely yields a linear speedup. Use tensor parallelism when the
@@ -95,19 +102,19 @@ memory footprint or latency targets justify the communication overhead.
 
 ## Pipeline parallelism
 
-Pipeline parallelism (PP) divides the model’s layers into sequential chunks,
-each assigned to a separate device. Data flows through these chunks like an
-assembly line, with the output of one device becoming the input for the next.
-For instance, in a four-way pipeline, each device processes a quarter of the
-model’s layers.
+Pipeline parallelism (PP) divides the model’s layers into sequential chunks
+called stages, each assigned to a separate device. Data flows through these
+stages like an assembly line, with the output of one device becoming the input
+for the next. For instance, in a four-way pipeline, each device processes a
+quarter of the model’s layers.
 
-<Diagram name="pp-diagram" alt="Pipeline parallelism: consecutive layer ranges on each GPU" />
+<Diagram name="pp-diagram" alt="Pipeline parallelism: consecutive layers on each GPU" />
 
-Unlike tensor parallelism, pipeline parallelism does not require devices to
+Unlike tensor parallelism, pipeline parallelism doesn't require devices to
 combine partial results within every layer. A stage sends activations to the
-next stage only after completing the assigned layer range. This lower
-communication frequency can make pipeline parallelism a better fit for slower
-links, including links between nodes.
+next stage only after finishing all of its own layers. This lower
+communication frequency can make pipeline parallelism a better fit for
+low-bandwidth connections, including the interconnects between nodes.
 
 The trade-off is a pipeline bubble. A stage can sit idle while waiting for work
 from the previous stage. A slow or memory-heavy stage can also hold up every
@@ -117,13 +124,13 @@ memory demand, not only the number of layers.
 <Diagram name="pp-batching" alt="Pipeline parallelism microbatch schedule filling the pipeline across iterations" />
 
 To shrink idle periods, the server can keep multiple requests or microbatches in
-flight. While one pipeline stage handles a later layer range for one microbatch,
-an earlier stage can begin work on the next microbatch. This scheduling
-mechanism improves throughput, though it does not completely eliminate idle time
-at the start and end of the pipeline. For more information, see the
+flight. While a later stage handles one microbatch, an earlier stage can begin
+work on the next microbatch. This scheduling mechanism improves throughput,
+though it doesn't completely eliminate idle time at the start and end of the
+pipeline. For more information, see the
 [GPipe paper](https://arxiv.org/pdf/1811.06965).
 
-Note that pipeline parallelism does not necessarily reduce latency for an
+Note that pipeline parallelism doesn't necessarily reduce latency for an
 individual request. Every request still passes through all stages in order and
 pays the cost of activation transfers. Pipeline parallelism works best when
 enough concurrent work is available to keep the pipeline full or when lower
