@@ -18,55 +18,128 @@ complex.
 
 ## Data parallelism
 
-Data parallelism is a common technique to accelerate computation. In this
-approach, the model's weights are replicated across multiple GPU devices, and
-the global batch of input data is divided into smaller microbatches. Each device
-only processes the microbatch assigned to it and this process happens in
-parallel for all devices. This delivers faster execution by allowing larger
-batches to be processed simultaneously.
+Data parallelism (DP) increases total throughput by distributing individual
+requests or microbatches across multiple replicas of the same model. Each
+replica has its own copy of the model weights and handles different requests
+independently. A replica can run on a single GPU, or it can span multiple GPUs
+using [tensor parallelism](#tensor-parallelism) or
+[pipeline parallelism](#pipeline-parallelism) internally.
+
+AI teams often use a router to distribute independent requests across replicas.
+For batch workloads, a larger batch can also be split into smaller microbatches,
+with each replica processing a different microbatch at the same time. This
+approach allows more requests to be processed concurrently.
 
 <Diagram name="dp" alt="Data parallelism: a full model replica on each GPU" />
 
+As a result, adding more replicas increases aggregate throughput and
+concurrency. It doesn't directly reduce the compute latency of an individual
+request, because that request is still processed by a single replica.
+
+Data parallelism also provides a failure boundary. When a health check marks one
+replica unavailable, the router can stop sending new requests to it and use the
+remaining replicas. This improves availability, though the healthy replicas need
+spare capacity to absorb the traffic. Any in-flight request and local KV cache
+on the failed replica may also be lost.
+
+A key consideration here is how to route requests. For LLM inference, requests
+can vary widely in prompt length, output length, and KV cache usage. GPU
+capacity is also expensive, so poor load distribution can leave some replicas
+overloaded while others sit underused. Production routers therefore often
+consider multiple signals when choosing a replica. For more information, see
+[inference routing](/inference-optimization/inference-routing/).
+
+The main cost of data parallelism is memory duplication. Every replica needs a
+copy of the model weights and maintains a separate KV cache. If one copy of the
+model can't fit on a worker, data parallelism alone doesn't solve the problem.
+Combine it with tensor or pipeline parallelism.
+
 ## Tensor parallelism
 
-Tensor parallelism slices individual layers of the model into smaller blocks.
-These blocks are computed independently and in parallel across different
-devices. For example, during matrix multiplication, different slices of the
-matrix can be processed simultaneously on different GPUs.
+Tensor parallelism (TP) distributes the weights of a model across multiple GPUs
+to deploy large models that can't fit into the memory of a single GPU. It
+divides the tensors within each model layer, so every device holds a shard of a
+layer rather than a copy of it.
+
+This is necessary because many modern LLMs can't fit on a single GPU, even after
+quantization, especially once you account for the KV cache and runtime overhead.
+For example, FP8 weights require roughly 1 GB per billion parameters, so a model
+like Llama 3.1 405B needs about 405 GB just for weights. That alone exceeds the
+memory of any single current GPU, so one device often can't load the model or
+serve it efficiently.
+
+During operations such as matrix multiplication, each GPU holds a shard of the
+weight tensor and computes part of the result. The GPUs then exchange or combine
+intermediate results using collective communication operations such as
+all-reduce or all-gather, depending on how the tensors are partitioned.
 
 <Diagram name="tp-inference" alt="Tensor parallelism: model layers split across GPUs" />
 
-This approach delivers faster computation and allows serving LLMs that do not
-fit into the memory of a single device. However, because it involves extra
-communication between devices, you need to balance the performance gain against
-this overhead.
+By distributing weights, cache, and computation, tensor parallelism makes models
+that exceed the capacity of a single GPU practical to serve. It can also lower
+the latency of an individual request when the gains from parallel computation
+outweigh the added communication cost.
+
+That communication is the central tradeoff. GPUs in tensor parallelism must
+exchange intermediate results repeatedly as a request flows through the
+transformer layers. Interconnect bandwidth and latency therefore weigh heavily
+on performance.
+
+Tensor parallelism works best among GPUs linked by high-bandwidth
+interconnects within a single node, such as NVLink. Splitting tensors across
+GPUs that sit in separate nodes can turn network communication into the dominant
+bottleneck. The number of GPUs you shard across is also constrained; it
+generally has to divide the number of attention heads evenly, so you can't scale
+to arbitrary GPU counts.
+
+Before sharding a model to perform tensor parallelism, check whether the
+weights, KV cache, and other inference memory requirements fit comfortably on a
+single GPU, especially after
+[quantization](/model-preparation/llm-quantization/). Single-GPU serving avoids
+cross-device synchronization entirely, and adding GPUs through tensor
+parallelism rarely yields a linear speedup. Use tensor parallelism when the
+memory footprint or latency targets justify the communication overhead.
 
 ## Pipeline parallelism
 
-[Pipeline parallelism](https://arxiv.org/pdf/1811.06965) divides the model’s
-layers into sequential chunks, each assigned to a separate device. Data flows
-through these chunks like an assembly line, with the output of one device
-becoming the input for the next. For instance, in a four-way pipeline, each
-device processes a quarter of the model’s layers.
+Pipeline parallelism (PP) divides the model’s layers into sequential chunks
+called stages, each assigned to a separate device. Data flows through these
+stages like an assembly line, with the output of one device becoming the input
+for the next. For instance, in a four-way pipeline, each device processes a
+quarter of the model’s layers.
 
-<Diagram name="pp-diagram" alt="Pipeline parallelism: consecutive layer ranges on each GPU" />
+<Diagram name="pp-diagram" alt="Pipeline parallelism: consecutive layers on each GPU" />
 
-However, because each device depends on the output of the previous one, some
-devices may be idle at times, which means resource underutilization. To reduce
-these idle periods, the input batch can be split into smaller microbatches. Each
-microbatch flows through the pipeline one by one, and gradients are accumulated
-at the end. This microbatching improves GPU utilization, though it does not
-completely eliminate idle time.
+Unlike tensor parallelism, pipeline parallelism doesn't require devices to
+combine partial results within every layer. A stage sends activations to the
+next stage only after finishing all of its own layers. This lower
+communication frequency can make pipeline parallelism a better fit for
+low-bandwidth connections, including the interconnects between nodes.
+
+The trade-off is a pipeline bubble. A stage can sit idle while waiting for work
+from the previous stage. A slow or memory-heavy stage can also hold up every
+stage that follows. Stage boundaries should therefore balance execution time and
+memory demand, not only the number of layers.
 
 <Diagram name="pp-batching" alt="Pipeline parallelism microbatch schedule filling the pipeline across iterations" />
 
-Note that pipeline parallelism can increase the total latency for each request
-because of communication between different pipeline stages.
+To shrink idle periods, the server can keep multiple requests or microbatches in
+flight. While a later stage handles one microbatch, an earlier stage can begin
+work on the next microbatch. This scheduling mechanism improves throughput,
+though it doesn't completely eliminate idle time at the start and end of the
+pipeline. For more information, see the
+[GPipe paper](https://arxiv.org/pdf/1811.06965).
+
+Note that pipeline parallelism doesn't necessarily reduce latency for an
+individual request. Every request still passes through all stages in order and
+pays the cost of activation transfers. Pipeline parallelism works best when
+enough concurrent work is available to keep the pipeline full or when lower
+communication frequency matters more than the pipeline bubble.
 
 ## Expert parallelism
 
 Expert parallelism is a specialized parallelism strategy used in Mixture of
-Experts (MoE) models. In these models, only a subset of the model’s experts is
+Experts (MoE) models. In these models, only a subset of the experts is
 activated for each token. Instead of duplicating all experts across every device
 (e.g., GPU), expert parallelism splits the experts themselves across different
 devices.
