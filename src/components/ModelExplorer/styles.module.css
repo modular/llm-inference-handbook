@@ -80,7 +80,7 @@
 
 .split {
   display: grid;
-  grid-template-columns: 240px 1fr;
+  grid-template-columns: 220px 1fr;
   gap: 1rem;
   align-items: stretch;
 }
