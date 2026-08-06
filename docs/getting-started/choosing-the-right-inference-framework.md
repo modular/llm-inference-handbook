@@ -275,7 +275,7 @@ max serve --model meta-llama/Llama-3.1-8B-Instruct
 <TabItem value="vllm" label="vLLM">
 
 ```bash
-vllm serve meta-llama/Llama-3.1-8B-Instruct
+vllm serve --model meta-llama/Llama-3.1-8B-Instruct
 ```
 
 </TabItem>
