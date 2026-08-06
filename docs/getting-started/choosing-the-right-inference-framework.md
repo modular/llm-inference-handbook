@@ -7,6 +7,8 @@ keywords:
     - vLLM, SGLang, LMDeploy, TensorRT-LLM, Hugging Face TGI, llama.cpp, MLC-LLM, Ollama
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 import LinkList from '@site/src/components/LinkList';
 
 # Choosing the right inference framework
@@ -59,24 +61,50 @@ does not solve well, such as:
   enough.
 
 These frameworks hide much of the model execution complexity behind serving
-options you can tune. Here is an example of using vLLM to serve
-DeepSeek-V4-Flash. You can tune different configurations directly without
-touching the model itself. vLLM automatically handles it for you.
+options you can tune. Here is an example of serving Gemma 4 31B. The flag names
+and accepted values differ, but each framework exposes similar categories of
+knobs, such as model parallelism, memory utilization, and maximum sequence
+length. You tune these directly without touching the model itself.
+
+<Tabs groupId="inference-framework">
+<TabItem value="max" label="MAX">
 
 ```bash
-vllm serve deepseek-ai/DeepSeek-V4-Flash \
-  --trust-remote-code \
-  --kv-cache-dtype fp8 \
-  --block-size 256 \
-  --enable-expert-parallel \
-  --tensor-parallel-size 8 \
-  --attention_config.use_fp4_indexer_cache=True \
-  --moe-backend deep_gemm_mega_moe \
-  --tokenizer-mode deepseek_v4 \
-  --tool-call-parser deepseek_v4 \
-  --enable-auto-tool-choice \
-  --reasoning-parser deepseek_v4
+max serve --model google/gemma-4-31B-it \
+  --devices gpu:0,1 \
+  --max-batch-size 16 \
+  --device-memory-utilization 0.95 \
+  --max-length 262144
 ```
+
+</TabItem>
+<TabItem value="vllm" label="vLLM">
+
+```bash
+vllm serve --model google/gemma-4-31B-it \
+  --tensor-parallel-size 2 \
+  --gpu-memory-utilization 0.90 \
+  --enable-auto-tool-choice \
+  --reasoning-parser gemma4 \
+  --tool-call-parser gemma4 \
+  --chat-template examples/tool_chat_template_gemma4.jinja \
+  --limit-mm-per-prompt '{"image": 4, "audio": 1}' \
+  --async-scheduling
+```
+
+</TabItem>
+<TabItem value="sglang" label="SGLang">
+
+```bash
+sglang serve --model-path google/gemma-4-31B-it \
+  --reasoning-parser gemma4 \
+  --tool-call-parser gemma4 \
+  --mem-fraction-static 0.9 \
+  --host 0.0.0.0 --port 30000
+```
+
+</TabItem>
+</Tabs>
 
 By abstracting away low-level infrastructure work, inference frameworks let you
 focus on building applications instead of reimplementing inference logic for
@@ -87,6 +115,15 @@ latency, throughput, and cost profile of the same model on the same hardware.
 For example, [in a 2023 benchmark](https://vllm.ai/blog/2023-06-20-vllm), the
 vLLM team reported up to 24× higher throughput than Hugging Face Transformers
 without requiring any changes to the underlying model architecture.
+
+The same gap shows up between inference frameworks, not just against raw
+Transformers. In a
+[2026 benchmark](https://www.modular.com/blog/three-trends-from-mlsys-2026),
+Modular reported serving `google/gemma-4-31B-it` with MAX on an NVIDIA B200 at
+2.5× faster P99 [TTFT](/llm-inference-basics/llm-inference-metrics/) and 1.5×
+the throughput of vLLM. Numbers like these are workload-specific, so treat them
+as a reason to benchmark your own traffic rather than as a ranking that holds
+everywhere.
 
 ## Inference frameworks and tools
 
@@ -112,6 +149,10 @@ applications include:
   that leverages NVIDIA's TensorRT, a high-performance deep learning inference
   library. It is optimized for running large models on NVIDIA GPUs, providing
   fast inference and support for advanced optimizations like quantization.
+- [TokenSpeed](https://github.com/lightseekorg/tokenspeed). An inference
+  engine from the LightSeek Foundation aimed at agentic workloads. It features a
+  pluggable, layered kernel system, a sophisticated scheduler with safe KV cache
+  management, compiler-backed parallelism, and an OpenAI-compatible serving API.
 - [Hugging Face TGI](https://github.com/huggingface/text-generation-inference).
   A toolkit for deploying and serving LLMs. It is used in production at Hugging
   Face to power Hugging Chat, the Inference API and Inference Endpoint. Note
@@ -168,14 +209,19 @@ Library mode loads the inference engine in the same process as your application.
 This works well for offline batch jobs, evaluation pipelines, and custom
 services that need direct access to engine outputs without an extra network hop.
 
-For example, the
+For example, both vLLM and SGLang expose an in-process engine for this:
+
+<Tabs groupId="inference-framework">
+<TabItem value="vllm" label="vLLM">
+
+The
 [vLLM offline inference API](https://docs.vllm.ai/en/latest/serving/offline_inference.html)
 exposes an `LLM` class:
 
 ```python
 from vllm import LLM, SamplingParams
 
-model = "Qwen/Qwen2.5-0.5B-Instruct"
+model = "meta-llama/Llama-3.1-8B-Instruct"
 llm = LLM(model=model)
 
 outputs = llm.generate(
@@ -184,13 +230,16 @@ outputs = llm.generate(
 )
 ```
 
+</TabItem>
+<TabItem value="sglang" label="SGLang">
+
 [SGLang's offline engine](https://docs.sglang.io/docs/basic_usage/offline_engine_api)
 provides a similar interface:
 
 ```python
 import sglang as sgl
 
-model = "Qwen/Qwen2.5-0.5B-Instruct"
+model = "meta-llama/Llama-3.1-8B-Instruct"
 llm = sgl.Engine(model_path=model)
 
 outputs = llm.generate(
@@ -198,6 +247,9 @@ outputs = llm.generate(
     {"temperature": 0.2, "max_new_tokens": 64},
 )
 ```
+
+</TabItem>
+</Tabs>
 
 The application now owns the engine lifecycle. A crash, dependency conflict, or
 GPU out-of-memory error can affect the entire process, so this pattern requires
@@ -210,24 +262,33 @@ or streaming API. This is usually a better boundary when multiple applications
 share a model, clients use different programming languages, or the serving layer
 needs to scale and deploy independently.
 
-Start an OpenAI-compatible vLLM server:
+Start an OpenAI-compatible server:
+
+<Tabs groupId="inference-framework">
+<TabItem value="max" label="MAX">
 
 ```bash
-vllm serve Qwen/Qwen2.5-0.5B-Instruct \
-  --host 0.0.0.0 \
-  --port 8000
+max serve --model meta-llama/Llama-3.1-8B-Instruct
 ```
 
-Or start an SGLang server:
+</TabItem>
+<TabItem value="vllm" label="vLLM">
 
 ```bash
-python -m sglang.launch_server \
-  --model-path Qwen/Qwen2.5-0.5B-Instruct \
-  --host 0.0.0.0 \
-  --port 30000
+vllm serve --model meta-llama/Llama-3.1-8B-Instruct
 ```
 
-Because both servers expose an
+</TabItem>
+<TabItem value="sglang" label="SGLang">
+
+```bash
+sglang serve --model-path meta-llama/Llama-3.1-8B-Instruct
+```
+
+</TabItem>
+</Tabs>
+
+Because these servers expose an
 [OpenAI-compatible API](/model-interaction/openai-compatible-api/), the
 application code can use the same client interface like this:
 
@@ -240,7 +301,7 @@ client = OpenAI(
 )
 
 response = client.chat.completions.create(
-    model="Qwen/Qwen2.5-0.5B-Instruct",
+    model="meta-llama/Llama-3.1-8B-Instruct",
     messages=[
         {"role": "user", "content": "Explain continuous batching in two sentences."}
     ],
