@@ -81,7 +81,7 @@ max serve --model google/gemma-4-31B-it \
 <TabItem value="vllm" label="vLLM">
 
 ```bash
-vllm serve google/gemma-4-31B-it \
+vllm serve --model google/gemma-4-31B-it \
   --tensor-parallel-size 2 \
   --gpu-memory-utilization 0.90 \
   --enable-auto-tool-choice \
