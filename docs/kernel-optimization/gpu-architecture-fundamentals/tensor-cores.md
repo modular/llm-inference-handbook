@@ -13,11 +13,11 @@ import LinkList from '@site/src/components/LinkList';
 
 # Tensor Cores
 
-**Tensor Cores** are specialized execution units for matrix
-multiply-accumulate operations in NVIDIA hardware. NVIDIA introduced them with the Volta
+**Tensor Cores** are specialized execution units for matrix multiply-accumulate
+operations in NVIDIA hardware. NVIDIA introduced them with the Volta
 architecture. Rather than issuing a long sequence of scalar multiply and add
-instructions, a warp or group of warps can use a matrix instruction that
-updates a small output tile.
+instructions, a warp or group of warps can use a matrix instruction that updates
+a small output tile.
 
 Transformers spend much of their time in matrix multiplication, including
 attention projections and feed-forward layers. Tensor Cores can therefore
@@ -100,9 +100,9 @@ tensor throughput won’t translate into application throughput.
 
 ## Why Tensor Cores are important for LLM inference
 
-LLM inference is largely a sequence of large matrix multiplications (matmuls): the QKV and
-output projections, the feed-forward (MLP) layers, and the matmuls inside
-attention itself. They are exactly the shape Tensor Cores are built to
+LLM inference is largely a sequence of large matrix multiplications (matmuls):
+the QKV and output projections, the feed-forward (MLP) layers, and the matmuls
+inside attention itself. They are exactly the shape Tensor Cores are built to
 accelerate, which is why tensor core throughput (measured in TFLOPS or TOPS)
 largely sets how fast the compute-heavy parts of inference run.
 
