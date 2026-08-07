@@ -51,7 +51,7 @@ Here are situations where custom benchmarking makes sense:
 - **Comparing different models**. When you make a decision between two of the
   best LLMs, benchmarks reveal how they differ in throughput, latency, and cost
   under your workload.
-- **Evaluating inference frameworks**. Frameworks like vLLM, SGLang,
+- **Evaluating inference frameworks**. Frameworks like vLLM, SGLang, MAX,
   TensorRT-LLM, and Hugging Face TGI provide different inference optimizations.
   Benchmarks help you see which delivers the best trade-off for your setup.
 - **Testing infrastructure changes**. Moving from A10G to H100 GPUs, or
@@ -167,8 +167,8 @@ to control include:
 - **Server parameters**: parallelism (e.g., data, tensor and expert), caching
   strategies, memory allocation
 - **Client parameters**: request rate, concurrency limits, batch sizes, timeouts
-- **Framework differences**: optimizations in vLLM, SGLang, TensorRT-LLM, TGI,
-  etc.
+- **Framework differences**: optimizations in vLLM, SGLang, MAX, TensorRT-LLM,
+  TGI, etc.
 - **Workload variations**: model choice, input sequence length, output length,
   request distribution
 

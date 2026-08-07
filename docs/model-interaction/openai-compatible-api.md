@@ -197,8 +197,8 @@ the same.
 Any modern open-source LLM can be served behind an OpenAI-compatible API, such
 as Llama, Qwen, Mistral, DeepSeek, Kimi, and domain-specific fine-tuned models.
 
-If you're using frameworks like vLLM and SGLang, they can expose these models
-through OpenAI-compatible endpoints automatically.
+If you're using frameworks like vLLM, SGLang, and MAX, they can expose these
+models through OpenAI-compatible endpoints automatically.
 
 ### Is an OpenAI-compatible API required to self-host an LLM?
 
@@ -214,9 +214,10 @@ cheaper.
 
 Cost savings come from where the API is running. Here’s the breakdown:
 
-- **If you self-host LLMs through tools like vLLM and SGLang**, you mainly pay
-  for GPUs instead of per-token pricing. You can apply inference optimizations
-  like [KV cache offloading](/inference-optimization/kv-cache-offloading/) and
+- **If you self-host LLMs through tools like vLLM, SGLang, and MAX**, you mainly
+  pay for GPUs instead of per-token pricing. You can apply inference
+  optimizations like
+  [KV cache offloading](/inference-optimization/kv-cache-offloading/) and
   [prefill-decode disaggregation](/inference-optimization/prefill-decode-disaggregation/)
   to improve utilization and potentially reduce serving cost. This can be far
   cheaper for steady or high-volume workloads when the deployment is well

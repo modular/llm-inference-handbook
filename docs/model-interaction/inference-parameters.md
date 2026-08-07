@@ -34,8 +34,8 @@ production cost.
 You will see these parameters in hosted APIs,
 [OpenAI-compatible servers](/model-interaction/openai-compatible-api/),
 [inference frameworks](/getting-started/choosing-the-right-inference-framework/)
-like vLLM and SGLang, and agentic frameworks. Here is a quick summary of the
-common ones:
+like vLLM, SGLang, and MAX, and agentic frameworks. Here is a quick summary of
+the common ones:
 
 | Parameter                 | What it controls                                    | Common use                                            |
 |---------------------------|-----------------------------------------------------|-------------------------------------------------------|

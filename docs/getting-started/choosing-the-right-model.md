@@ -155,7 +155,8 @@ Why people use it:
 
 - Massive ecosystem and community adoption
 - Clear model cards with license, benchmarks, and intended use
-- Native support in most inference frameworks (e.g., vLLM, SGLang, TensorRT-LLM)
+- Native support in most inference frameworks (e.g., vLLM, SGLang, MAX,
+  TensorRT-LLM)
 - Easy access to weights, configs, and tokenizers
 
 Note that **not all models are equally accessible on Hugging Face**. Some models
@@ -263,8 +264,8 @@ Key characteristics:
 
 - Avoid arbitrary code execution for safe loading
 - Fast memory mapping as weights can be loaded efficiently
-- Widely supported by inference frameworks such as vLLM, TensorRT-LLM, and
-  SGLang
+- Widely supported by inference frameworks such as vLLM, TensorRT-LLM, SGLang,
+  and MAX
 
 Example files:
 

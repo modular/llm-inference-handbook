@@ -11,7 +11,8 @@ keywords:
     - Speed up LLM inference
 ---
 
-import LinkList from '@site/src/components/LinkList'; import BatchingSimulator
+import Tabs from '@theme/Tabs'; import TabItem from '@theme/TabItem'; import
+LinkList from '@site/src/components/LinkList'; import BatchingSimulator
 from '@site/src/components/BatchingSimulator'; import ChunkedPrefillVisualizer
 from '@site/src/components/ChunkedPrefillVisualizer';
 
@@ -101,9 +102,9 @@ to finish.
 
 Major
 [inference frameworks](/getting-started/choosing-the-right-inference-framework/)
-such as vLLM, SGLang, TensorRT-LLM (in-flight batching) and LMDeploy (persistent
-batching) all support continuous batching or similar mechanisms. For memory
-management in long or mixed-length batches, see
+such as vLLM, SGLang, MAX, TensorRT-LLM (in-flight batching) and LMDeploy
+(persistent batching) all support continuous batching or similar mechanisms. For
+memory management in long or mixed-length batches, see
 [PagedAttention](/inference-optimization/pagedattention/).
 
 ## Chunked prefill
@@ -144,7 +145,50 @@ overhead because the prompt is processed through multiple smaller prefill steps
 instead of one large step. As a result, TTFT may increase, especially when
 smaller chunk sizes are used.
 
-Most inference frameworks let you tune the chunk size. Note that:
+Most inference frameworks let you tune the chunk size, though they express it as
+a token budget per batch rather than a chunk count:
+
+<Tabs groupId="inference-framework">
+<TabItem value="max" label="MAX">
+
+```bash
+max serve --model meta-llama/Llama-3.1-8B-Instruct \
+  --enable-chunked-prefill \
+  --max-batch-input-tokens 8192 \
+  --chunked-prefill-min-chunk-size 512
+```
+
+`--max-batch-input-tokens` sets the target number of un-encoded tokens per
+batch, and `--chunked-prefill-min-chunk-size` puts a floor on how small a chunk
+the scheduler may create.
+
+</TabItem>
+<TabItem value="vllm" label="vLLM">
+
+```bash
+vllm serve --model meta-llama/Llama-3.1-8B-Instruct \
+  --enable-chunked-prefill \
+  --max-num-batched-tokens 8192
+```
+
+`--max-num-batched-tokens` caps how many tokens the scheduler may issue in a
+single iteration, so a longer prompt is split across iterations.
+
+</TabItem>
+<TabItem value="sglang" label="SGLang">
+
+```bash
+sglang serve --model-path meta-llama/Llama-3.1-8B-Instruct \
+  --chunked-prefill-size 8192
+```
+
+`--chunked-prefill-size` is the maximum number of tokens in one prefill chunk.
+Set it to `-1` to disable chunked prefill in SGLang.
+
+</TabItem>
+</Tabs>
+
+When choosing values, note that:
 
 - **Smaller chunks** give the scheduler more opportunities to run decodes,
   reducing ITL spikes for active requests.

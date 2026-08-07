@@ -210,8 +210,9 @@ works well with open-source models and is supported by libraries such as
 [Microsoft Guidance](https://github.com/guidance-ai/llguidance), and
 [XGrammar](https://github.com/mlc-ai/xgrammar). Inference frameworks like
 [vLLM](https://docs.vllm.ai/en/latest/features/structured_outputs.html) and
-[SGLang](https://docs.sglang.ai/advanced_features/structured_outputs.html) have
-already integrated these tools directly.
+[SGLang](https://docs.sglang.ai/advanced_features/structured_outputs.html), and
+[MAX](https://docs.modular.com/serve/structured-output/) have already
+integrated these tools directly.
 
 The main advantages are speed, precision, and reliability. The Outlines team
 even showed that

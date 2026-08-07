@@ -35,8 +35,8 @@ LLMs.
 [The architecture of GPUs](/kernel-optimization/gpu-architecture-fundamentals/)
 is optimized for matrix multiplication and tensor operations, which are core
 components of transformer-based models. Modern inference frameworks and runtimes
-(e.g., vLLM, SGLang, LMDeploy, TensorRT-LLM, and Hugging Face TGI) are designed
-to take full advantage of GPU acceleration.
+(e.g., vLLM, SGLang, MAX, LMDeploy, TensorRT-LLM, and Hugging Face TGI) are
+designed to take full advantage of GPU acceleration.
 
 ## TPUs
 

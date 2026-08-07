@@ -90,7 +90,7 @@ Speculative decoding can accelerate LLM inference, but only when the draft and
 target models align well. Before enabling it in production, always benchmark
 performance under your workload. For a quick test, you can choose
 [inference frameworks](/getting-started/choosing-the-right-inference-framework/)
-like vLLM and SGLang, which provide built-in support for this inference
+like vLLM, SGLang, and MAX, which provide built-in support for this inference
 optimization technique.
 
 ### Key metrics
