@@ -96,7 +96,7 @@ them efficiently. Important factors include:
 
 A kernel can issue tensor core instructions and still run poorly. If tile
 loading dominates execution or if matrix dimensions are too small, theoretical
-tensor throughput will not translate into application throughput.
+tensor throughput won’t translate into application throughput.
 
 ## Why tensor cores are important for LLM inference
 
