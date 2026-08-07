@@ -162,7 +162,7 @@ and more. For example, here’s the same vector addition function written
 in Mojo:
 
 ```mojo
-from max.gpu import block_dim, block_idx, thread_idx
+from std.gpu import block_dim, block_idx, thread_idx
 from max.gpu.host import DeviceContext
 
 def kernel():
