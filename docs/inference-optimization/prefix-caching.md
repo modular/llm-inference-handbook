@@ -11,6 +11,8 @@ keywords:
     - Speed up LLM inference
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 import LinkList from '@site/src/components/LinkList';
 
 # Prefix caching
@@ -166,8 +168,55 @@ use cases.
 - Google Gemini
   [discounts cached tokens](https://ai.google.dev/gemini-api/docs/caching?lang=python)
   and charges for storage separately.
-- Frameworks like vLLM, TensorRT-LLM, and SGLang support automatic prefix
-  caching for different open-source LLMs.
+
+Frameworks like vLLM, SGLang, and MAX support prefix caching for different
+open-source LLMs. In these engines, prefix caching is tied to how the KV cache
+is allocated and is usually on by default. What you actually control is whether
+to disable it and the granularity at which cached tokens are matched:
+
+<Tabs groupId="inference-framework">
+<TabItem value="max" label="MAX">
+
+```bash
+max serve --model google/gemma-3-27b-it \
+  --enable-prefix-caching \
+  --kv-cache-page-size 256
+```
+
+Prefix caching is on by default in MAX. Disable it with
+`--no-enable-prefix-caching`. The page size must be a multiple of 128.
+
+</TabItem>
+<TabItem value="vllm" label="vLLM">
+
+```bash
+vllm serve --model google/gemma-3-27b-it \
+  --enable-prefix-caching \
+  --block-size 16
+```
+
+Disable it in vLLM with `--no-enable-prefix-caching`.
+
+</TabItem>
+<TabItem value="sglang" label="SGLang">
+
+```bash
+sglang serve --model-path google/gemma-3-27b-it
+```
+
+SGLang implements prefix caching as
+[RadixAttention](https://arxiv.org/pdf/2312.07104), a radix tree over the KV
+cache, and enables it by default. It matches at token granularity rather than in
+fixed blocks (`--page-size` defaults to `1`). Disable it with
+`--disable-radix-cache`.
+
+</TabItem>
+</Tabs>
+
+:::note
+Disabling prefix caching is usually not a performance optimization. It is
+primarily useful for establishing a no-cache baseline.
+:::
 
 In agent workflows, the benefit is even more pronounced. Some use cases have
 input-to-output token ratios of 100:1, making the cost of reprocessing large

@@ -8,8 +8,9 @@ keywords:
     - AWQ, SmoothQuant, GPTQ
 ---
 
-import LinkList from '@site/src/components/LinkList'; import
-QuantizationVisualizer from '@site/src/components/Calculator/Quantization';
+import Tabs from '@theme/Tabs'; import TabItem from '@theme/TabItem'; import
+LinkList from '@site/src/components/LinkList'; import QuantizationVisualizer
+from '@site/src/components/Calculator/Quantization';
 
 # LLM quantization
 
@@ -237,7 +238,53 @@ models.
 Many
 [modern inference frameworks](/getting-started/choosing-the-right-inference-framework/)
 not only serve quantized models efficiently but also provide built-in APIs or
-tooling to quantize models. In other cases, models are quantized offline using
+tooling to quantize models. For example, online quantization often only requires
+a single serving flag:
+
+<Tabs groupId="inference-framework">
+<TabItem value="max" label="MAX">
+
+```bash
+max serve --model meta-llama/Llama-3.1-8B-Instruct \
+  --quantization-encoding float8_e4m3fn
+```
+
+`--quantization-encoding` accepts high-precision encodings (`float32`,
+`float16`, `bfloat16`), low-precision floating-point formats (`float8_e4m3fn`,
+`float4_e2m1fnx2`), the GGUF integer formats (`q4_0`, `q4_k`, `q6_k`), and
+`gptq` for GPTQ checkpoints. For more information, see
+[Quantization in the MAX documentation](https://docs.modular.com/develop/quantize/).
+
+</TabItem>
+<TabItem value="vllm" label="vLLM">
+
+```bash
+vllm serve --model meta-llama/Llama-3.1-8B-Instruct \
+  --quantization mxfp8
+```
+
+`--quantization` accepts methods such as `fp8_per_tensor`, `fp8_per_block`,
+`mxfp8`, and `bitsandbytes`. If you leave it unset, vLLM reads
+`quantization_config` from the model config and falls back to the unquantized
+weights. For more information, see
+[Quantization in the vLLM documentation](https://docs.vllm.ai/en/latest/features/quantization/).
+
+</TabItem>
+<TabItem value="sglang" label="SGLang">
+
+```bash
+sglang serve --model-path meta-llama/Llama-3.1-8B-Instruct \
+  --quantization fp8
+```
+
+`--quantization` accepts methods such as `awq`, `gptq`, `fp8`, and
+`bitsandbytes`. For more information, see
+[Quantization in the SGLang documentation](https://docs.sglang.io/docs/advanced_features/quantization).
+
+</TabItem>
+</Tabs>
+
+In other cases, models are quantized offline using
 specialized tools and then loaded directly by the serving framework. As a
 result, most users no longer need to implement quantization algorithms
 themselves.

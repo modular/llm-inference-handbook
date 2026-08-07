@@ -9,18 +9,19 @@ keywords:
     - Speed up LLM inference
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 import LinkList from '@site/src/components/LinkList';
 
 # PagedAttention
 
-[PagedAttention](https://blog.vllm.ai/2023/06/20/vllm.html) is a
-memory-efficient approach to managing the KV cache in LLM inference. The primary
-serving benefit does not come from a faster attention kernel. It comes from how
-the serving engine allocates and manages KV cache memory. Attention kernels
-implement part of the mechanism (they read KV blocks through a lookup table),
-but the win is at the serving layer, which is why this page sits in the
-Inference Optimization chapter. For attention efficiency at the kernel level,
-see
+PagedAttention is a memory-efficient approach to managing the KV cache in LLM
+inference. The primary serving benefit does not come from a faster attention
+kernel. It comes from how the serving engine allocates and manages KV cache
+memory. Attention kernels implement part of the mechanism (they read KV blocks
+through a lookup table), but the win is at the serving layer, which is why this
+page sits in the Inference Optimization chapter. For attention efficiency at the
+kernel level, see
 [FlashAttention](/kernel-optimization/flashattention/).
 
 ## Attention and the KV cache
@@ -72,6 +73,9 @@ reserved GPU memory can sit unused.
 The result is lower effective batch size, more memory fragmentation, and fewer
 concurrent requests.
 
+For more information, see the
+[PagedAttention blog post](https://blog.vllm.ai/2023/06/20/vllm.html).
+
 ## How does PagedAttention work?
 
 PagedAttention breaks this big chunk into smaller blocks, kind of like pages in
@@ -96,8 +100,27 @@ techniques like
 combine.
 
 PagedAttention was first implemented by vLLM. Since then, other projects like
-Hugging Face TGI and TensorRT-LLM have also adopted and implemented
-PagedAttention.
+MAX have also adopted and implemented it. They expose the block size as a
+serving flag, though the name may be different:
+
+<Tabs groupId="inference-framework">
+<TabItem value="max" label="MAX">
+
+```bash
+max serve --model meta-llama/Llama-3.1-8B-Instruct \
+  --kv-cache-page-size 256
+```
+
+</TabItem>
+<TabItem value="vllm" label="vLLM">
+
+```bash
+vllm serve --model meta-llama/Llama-3.1-8B-Instruct \
+  --block-size 16
+```
+
+</TabItem>
+</Tabs>
 
 <LinkList>
 

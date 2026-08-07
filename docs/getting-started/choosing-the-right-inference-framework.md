@@ -180,8 +180,8 @@ tools are optimized for low-resource environments:
 - [Ollama](https://ollama.com/). A user-friendly local inference tool built on
   top of llama.cpp. It’s designed for simplicity and ease of use, ideal for
   running models on your laptop with minimal setup. However, Ollama is mainly
-  used for single-request use cases. Unlike runtimes like vLLM or SGLang, it
-  doesn’t support concurrent requests. This difference matters since many
+  used for single-request use cases. Unlike runtimes like vLLM, SGLang, or MAX,
+  it doesn’t support concurrent requests. This difference matters since many
   inference optimizations, such as paged attention, prefix caching, and dynamic
   batching, are only effective when handling multiple requests in parallel.
 
@@ -354,12 +354,12 @@ small workstation. This works well for quick demos and early prototyping. It’s
 simple and private, but limited to single-user workloads with no real
 concurrency or batching.
 
-From there, teams move to high-performance server runtimes like vLLM. These
-frameworks provide continuous batching, KV cache optimizations, and improved GPU
-utilization on data center GPUs. However, most of these runtimes lack built-in
-multi-region routing, automatic failover, and true horizontal scaling. GPU
-provisioning, performance tuning, and fault tolerance also remain complex and
-time-consuming to implement.
+From there, teams move to high-performance server runtimes, which provide
+continuous batching, KV cache optimizations, and improved GPU utilization on
+data center GPUs. However, most of these runtimes lack built-in multi-region
+routing, automatic failover, and true horizontal scaling. GPU provisioning,
+performance tuning, and fault tolerance also remain complex and time-consuming
+to implement.
 
 When teams need to run and scale inference across multiple GPU clusters,
 regions, or clouds, they typically adopt
@@ -381,9 +381,9 @@ selecting a runtime.
 ### Which inference frameworks support distributed inference for LLMs?
 
 Some models are too large to fit on a single GPU, so you need distributed
-inference. Frameworks like vLLM and SGLang offer advanced optimizations like
-prefill-decode disaggregation or KV-aware routing across multiple workers. They
-let you run larger models, handle longer context windows, and serve more
+inference. Frameworks like vLLM, SGLang, and MAX offer advanced optimizations
+like prefill-decode disaggregation or KV-aware routing across multiple workers.
+They let you run larger models, handle longer context windows, and serve more
 concurrent traffic without hitting memory limits.
 
 ### What’s the best way to start experimenting with inference frameworks?

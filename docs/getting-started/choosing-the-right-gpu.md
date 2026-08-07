@@ -241,7 +241,7 @@ infrastructure cannot guarantee **Control**, on-demand **Availability**, and
 
 A GPU is only as effective as the software that supports it. NVIDIA benefits
 from a mature CUDA Toolkit and TensorRT-LLM ecosystem. AMD’s ROCm stack is
-improving steadily, with growing support across PyTorch, vLLM, and SGLang.
+improving steadily, with growing support across PyTorch, vLLM, SGLang, and MAX.
 
 ## Matching GPUs to open-source LLMs
 
@@ -316,8 +316,8 @@ doesn’t reflect real AI inference workloads. For LLMs, you need tools that
 measure
 [throughput and latency metrics like TTFT and ITL](/llm-inference-basics/llm-inference-metrics/).
 
-You can start by checking open-source leaderboards from frameworks such as vLLM,
-SGLang, and TensorRT-LLM. They provide ready-to-use scripts that help you
+You can start by checking benchmark results from frameworks such as vLLM,
+SGLang, MAX, and TensorRT-LLM. They provide ready-to-use scripts that help you
 compare inference performance across different GPUs.
 
 However, these frameworks usually require manual configuration and tuning, which
@@ -351,7 +351,7 @@ On most systems, you can quickly verify your GPU type using command-line tools:
 ### How important are CUDA and driver versions when choosing a GPU?
 
 Very important. GPU performance isn’t just about the hardware. Your NVIDIA
-driver, CUDA version, and framework build (e.g., PyTorch, vLLM, SGLang,
+driver, CUDA version, and framework build (e.g., PyTorch, vLLM, SGLang, MAX,
 TensorRT-LLM) all need to line up. When they don’t, you’ll see errors,
 slowdowns, or missing features like FP8 or
 [FlashAttention](/kernel-optimization/flashattention/). If you want the

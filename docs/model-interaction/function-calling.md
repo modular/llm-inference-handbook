@@ -51,7 +51,7 @@ Both can be used together.
 ### Do all LLMs support function calling?
 
 Not all, but many modern models do. Open-source models like Llama, Qwen, and
-DeepSeek usually work well when served through vLLM or SGLang.
+DeepSeek usually work well when served through vLLM, SGLang, or MAX.
 
 ### Is function calling the same as tools or agents?
 

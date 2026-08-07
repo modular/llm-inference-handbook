@@ -71,9 +71,9 @@ Inference is the computation. Serving is the production process that makes that
 computation available to users and applications.
 
 In everyday conversations, people often use the terms interchangeably because
-modern frameworks handle both. Tools like vLLM, SGLang, and TensorRT-LLM not
-only run inference efficiently but also manage requests and expose APIs. As a
-result, "inference framework" and "serving framework" often refer to the same
+modern frameworks handle both. Tools like vLLM, SGLang, MAX, and TensorRT-LLM
+not only run inference efficiently but also manage requests and expose APIs. As
+a result, "inference framework" and "serving framework" often refer to the same
 systems.
 
 Strictly speaking, however, they're not the same thing, and the distinction

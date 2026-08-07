@@ -46,7 +46,7 @@ On this page, a worker refers to a routable unit that can independently run
 inference and own some runtime state, especially KV cache. Depending on the
 deployment, it can map to different things:
 
-- **Single process or replica**. A vLLM, SGLang, or similar model server
+- **Single process or replica**. A vLLM, SGLang, MAX, or similar model server
   process.
 - **Kubernetes Pod**. In many Kubernetes deployments, one model-serving Pod is
   the worker from the router’s point of view.
