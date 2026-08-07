@@ -14,7 +14,7 @@ import LinkList from '@site/src/components/LinkList';
 # Tensor cores
 
 **Tensor cores** are specialized execution units for matrix
-multiply-accumulate operations. NVIDIA introduced them with the Volta
+multiply-accumulate operations in NVIDIA hardware. NVIDIA introduced them with the Volta
 architecture. Rather than issuing a long sequence of scalar multiply and add
 instructions, a warp or group of warps can use a matrix instruction that
 updates a small output tile.
