@@ -69,7 +69,7 @@ Shared memory is organized into banks (typically 32). When multiple threads in a
 [warp](/kernel-optimization/gpu-architecture-fundamentals/threads-warps-blocks/#warps)
 access different addresses in the same bank simultaneously, a bank conflict
 occurs and the accesses are serialized (threads reading the same address are
-served by a broadcast and do not conflict). Avoiding bank conflicts is a common
+served by a broadcast and don’t conflict). Avoiding bank conflicts is a common
 micro-optimization in kernel tuning.
 
 Here is a comparison:
