@@ -100,7 +100,7 @@ tensor throughput won’t translate into application throughput.
 
 ## Why tensor cores are important for LLM inference
 
-LLM inference is largely a sequence of large matrix multiplications: the QKV and
+LLM inference is largely a sequence of large matrix multiplications (matmuls): the QKV and
 output projections, the feed-forward (MLP) layers, and the matmuls inside
 attention itself. They are exactly the shape tensor cores are built to
 accelerate, which is why tensor core throughput (measured in TFLOPS or TOPS)
