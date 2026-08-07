@@ -112,15 +112,14 @@ workload size, and ecosystem support.
 
 ### GPU memory (VRAM)
 
-[VRAM](/kernel-optimization/gpu-architecture-fundamentals/) sets the ceiling on
-model size and context length because everything the GPU touches during
-inference must live in the memory: the model weights, the activations, and the
-KV cache. Weights determine the baseline footprint, so the model has to fit
-before you can serve it at all. For example, DeepSeek V3 and R1, with 671B
-parameters, require 8 NVIDIA H200 GPUs (141 GB each) to run. In contrast,
-smaller models such as Phi-3 can fit within 16–24GB when quantized. The KV cache
-then consumes whatever VRAM is left, which limits how long a context you can
-support.
+VRAM sets the ceiling on model size and context length because everything the
+GPU touches during inference must live in the memory: the model weights, the
+activations, and the KV cache. Weights determine the baseline footprint, so the
+model has to fit before you can serve it at all. For example, DeepSeek V3 and
+R1, with 671B parameters, require 8 NVIDIA H200 GPUs (141 GB each) to run. In
+contrast, smaller models such as Phi-3 can fit within 16–24GB when quantized.
+The KV cache then consumes whatever VRAM is left, which limits how long a
+context you can support.
 
 In production, the major challenge is often the KV cache. Its size grows
 linearly with sequence length, meaning long-context workloads can quickly
@@ -130,10 +129,13 @@ techniques like
 [prefill-decode disaggregation](/inference-optimization/prefill-decode-disaggregation/)
 and [KV cache offloading](/inference-optimization/kv-cache-offloading/).
 
+For more information, see the
+[GPU memory hierarchy](/kernel-optimization/gpu-architecture-fundamentals/gpu-memory/).
+
 ### Memory bandwidth
 
 Memory bandwidth is how fast the GPU can move data between its
-[HBM](/kernel-optimization/gpu-architecture-fundamentals/#hbm-high-bandwidth-memory)
+[HBM](/kernel-optimization/gpu-architecture-fundamentals/gpu-memory/#hbm-high-bandwidth-memory)
 and the compute cores, measured in GB/s or TB/s. For LLM inference, it is one of
 the most important specifications, because the **decode phase is memory-bound**.
 To generate each new token, the GPU must repeatedly stream most or all model
@@ -296,7 +298,7 @@ Weight loading happens at service startup. Here is the specific pipeline:
    - Often deserialized or memory-mapped
    - CPU RAM bandwidth: ~50–200 GB/s for typical configurations
 3. Transferred to
-   [GPU HBM](/kernel-optimization/gpu-architecture-fundamentals/#hbm-high-bandwidth-memory)
+   [GPU HBM](/kernel-optimization/gpu-architecture-fundamentals/gpu-memory/#hbm-high-bandwidth-memory)
 4. Cached there for the lifetime of the serving process
 
 Once copied, weights are stored in HBM and are ready for repeated reads during

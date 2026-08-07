@@ -1,0 +1,78 @@
+---
+sidebar_position: 2
+description: Build a practical model of GPU hardware and the execution model used to write and optimize GPU kernels.
+keywords:
+    - GPU architecture
+    - GPU execution model
+    - streaming multiprocessors
+    - GPU memory hierarchy
+    - Tensor Cores
+---
+
+import GPUExecutionVisualizer from '@site/src/components/GPUExecutionVisualizer';
+
+# GPU architecture
+
+Before writing or tuning GPU kernels, you need a working model of how a GPU runs
+code. Without it, suggestions like “increase occupancy” or "reduce shared memory
+bank conflicts" are just a set of rules to memorize. You don't fully understand
+when they apply and when they don't.
+
+This section explains modern GPU architecture at the level needed for kernel
+work. The details lean toward NVIDIA hardware because CUDA dominates much of the
+LLM inference ecosystem today. However, the core concepts apply broadly to AMD
+GPUs and other parallel accelerators as well.
+
+## Hardware and the execution model
+
+The hardware is what physically exists on the GPU:
+[streaming multiprocessors (SMs)](/kernel-optimization/gpu-architecture-fundamentals/streaming-multiprocessors/),
+[Tensor Cores](/kernel-optimization/gpu-architecture-fundamentals/tensor-cores/),
+and the registers, caches, shared memory, and high bandwidth memory (HBM) that
+form the
+[GPU memory hierarchy](/kernel-optimization/gpu-architecture-fundamentals/gpu-memory/).
+These resources determine how much work and data the GPU can keep close to the
+compute units.
+
+The execution model is the abstraction used to write a kernel. Code creates
+threads and organizes them into warps, blocks, and grids. The GPU schedules that
+work across the available hardware.
+
+[Kernel optimization](/kernel-optimization/kernel-optimization-for-llm-inference/)
+connects these two views. A fast kernel maps the execution model onto the
+hardware and respects limits on compute, memory bandwidth, registers, shared
+memory, and scheduling capacity.
+
+## GPU execution and memory map
+
+The visual below follows work from individual threads to an SM, then shows the
+memory layers that feed the compute units. Four terms establish the execution
+hierarchy:
+
+- A
+  [thread](/kernel-optimization/gpu-architecture-fundamentals/threads-warps-blocks/#threads)
+  is the smallest logical unit of work and usually handles one element or a
+  small group of elements.
+- A
+  [warp](/kernel-optimization/gpu-architecture-fundamentals/threads-warps-blocks/#warps)
+  is a group of 32 threads that an NVIDIA SM schedules together.
+- A
+  [thread block](/kernel-optimization/gpu-architecture-fundamentals/threads-warps-blocks/#thread-blocks)
+  groups threads that can cooperate through shared memory and synchronization.
+- A
+  [streaming multiprocessor (SM)](/kernel-optimization/gpu-architecture-fundamentals/streaming-multiprocessors/#what-an-sm-contains)
+  is the on-chip compute unit that accepts blocks and issues instructions from
+  ready warps.
+
+<GPUExecutionVisualizer />
+
+## What's next
+
+The four pages below separate the execution model from the physical hardware,
+then show how the two views meet during kernel execution.
+
+```mdx-code-block
+import DocCardList from '@theme/DocCardList';
+
+<DocCardList />
+```
