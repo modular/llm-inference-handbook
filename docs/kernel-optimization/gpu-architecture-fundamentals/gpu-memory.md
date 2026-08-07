@@ -46,7 +46,7 @@ roles are different.
 L1 cache is hardware-managed. When a thread reads from global memory (HBM), the
 GPU may store the data in L1 automatically. If the same data is accessed again,
 it can be served from L1 much faster (a cache hit) instead of going back to HBM.
-This process is transparent to the programmer: you do not explicitly load data
+This process is transparent to the programmer: you don’t explicitly load data
 into L1 or control what stays there. As a result, L1 is best viewed as a
 best-effort optimization that improves performance when there is temporal or
 spatial locality in memory access patterns.
