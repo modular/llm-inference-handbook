@@ -58,7 +58,7 @@ kernel more closely to one architecture.
 
 ## Supported precision
 
-Tensor cores do not accept every type on every GPU generation. Support has
+Tensor cores don’t accept every type on every GPU generation. Support has
 expanded over time:
 
 - Volta introduced FP16 matrix inputs with higher-precision accumulation.
