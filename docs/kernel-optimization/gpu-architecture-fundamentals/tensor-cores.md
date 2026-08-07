@@ -1,8 +1,8 @@
 ---
 sidebar_position: 4
-description: Learn how tensor cores execute tiled matrix operations and what precision, shape, and layout constraints kernels must satisfy.
+description: Learn how Tensor Cores execute tiled matrix operations and what precision, shape, and layout constraints kernels must satisfy.
 keywords:
-    - tensor cores
+    - Tensor Cores
     - matrix multiply accumulate
     - GPU mixed precision
     - tensor core tiles
@@ -11,16 +11,16 @@ keywords:
 
 import LinkList from '@site/src/components/LinkList';
 
-# Tensor cores
+# Tensor Cores
 
-**Tensor cores** are specialized execution units for matrix
+**Tensor Cores** are specialized execution units for matrix
 multiply-accumulate operations in NVIDIA hardware. NVIDIA introduced them with the Volta
 architecture. Rather than issuing a long sequence of scalar multiply and add
 instructions, a warp or group of warps can use a matrix instruction that
 updates a small output tile.
 
 Transformers spend much of their time in matrix multiplication, including
-attention projections and feed-forward layers. Tensor cores can therefore
+attention projections and feed-forward layers. Tensor Cores can therefore
 provide much higher throughput than general-purpose arithmetic units when a
 kernel satisfies the required precision, tile, and layout constraints.
 
@@ -58,14 +58,14 @@ kernel more closely to one architecture.
 
 ## Supported precision
 
-Tensor cores don’t accept every type on every GPU generation. Support has
+Tensor Cores don’t accept every type on every GPU generation. Support has
 expanded over time:
 
 - Volta introduced FP16 matrix inputs with higher-precision accumulation.
 - Ampere added formats and modes such as BF16, TF32, and broader integer
   support.
 - Hopper added FP8 tensor core paths and new matrix instructions.
-- Blackwell extended tensor cores further with FP4 and FP6 formats and a
+- Blackwell extended Tensor Cores further with FP4 and FP6 formats and a
   second-generation Transformer Engine.
 
 Note that input precision and accumulator precision can differ. For example, a
@@ -80,7 +80,7 @@ the hardware rather than assume that one tensor core mode works everywhere.
 
 ## Tile and layout requirements
 
-Tensor cores deliver high throughput only when the surrounding kernel feeds
+Tensor Cores deliver high throughput only when the surrounding kernel feeds
 them efficiently. Important factors include:
 
 - **Shape**: Matrix dimensions need enough full instruction tiles. Edge tiles
@@ -98,15 +98,15 @@ A kernel can issue tensor core instructions and still run poorly. If tile
 loading dominates execution or if matrix dimensions are too small, theoretical
 tensor throughput won’t translate into application throughput.
 
-## Why tensor cores are important for LLM inference
+## Why Tensor Cores are important for LLM inference
 
 LLM inference is largely a sequence of large matrix multiplications (matmuls): the QKV and
 output projections, the feed-forward (MLP) layers, and the matmuls inside
-attention itself. They are exactly the shape tensor cores are built to
+attention itself. They are exactly the shape Tensor Cores are built to
 accelerate, which is why tensor core throughput (measured in TFLOPS or TOPS)
 largely sets how fast the compute-heavy parts of inference run.
 
-As mentioned above, tensor cores also operate on reduced-precision inputs: FP16,
+As mentioned above, Tensor Cores also operate on reduced-precision inputs: FP16,
 BF16, TF32, INT8, FP8 and FP4. This ties them directly to
 [quantization](/model-preparation/llm-quantization/). Applying weights and
 activations to a lower-precision format both shrinks their memory footprint and
@@ -118,7 +118,7 @@ Specifically, for the two stages of LLM inference:
 - During
   [prefill](/llm-inference-basics/how-does-llm-inference-work/#prefill),
   many tokens are processed at once, the matmuls are large, and arithmetic
-  intensity is high. The tensor cores are well fed and this phase is usually
+  intensity is high. The Tensor Cores are well fed and this phase is usually
   compute-bound, so tensor core throughput is the thing that matters.
 - During
   [decode](/llm-inference-basics/how-does-llm-inference-work/#decode), the
@@ -128,7 +128,7 @@ Specifically, for the two stages of LLM inference:
   restores a larger matrix dimension and brings tensor core utilization back up,
   which is a major reason inference servers batch aggressively.
 
-Therefore, tensor cores are essential to inference performance, but not
+Therefore, Tensor Cores are essential to inference performance, but not
 uniformly. They often set the ceiling for compute-heavy prefill and large-batch
 decode. Small-batch decode commonly remains bandwidth-bound, so additional
 tensor core throughput alone may not help. As with
@@ -137,15 +137,15 @@ they tell you where the compute ceiling is.
 
 ## FAQs
 
-### What is the difference between CUDA cores and tensor cores?
+### What is the difference between CUDA cores and Tensor Cores?
 
 CUDA cores are general-purpose execution units for standard floating-point and
-integer operations. Tensor cores are specialized units designed for matrix
+integer operations. Tensor Cores are specialized units designed for matrix
 multiply-accumulate on small tiles (e.g., 4×4 or 16×16, depending on
 architecture and data type). For matrix-heavy workloads like transformer layers,
-tensor cores deliver significantly higher throughput than CUDA cores.
+Tensor Cores deliver significantly higher throughput than CUDA cores.
 
-### Does using FP16 or FP8 automatically activate tensor cores?
+### Does using FP16 or FP8 automatically activate Tensor Cores?
 
 No. The operation, dimensions, layout, alignment, and generated instructions
 must all match a supported tensor core path. Always test your code to confirm

@@ -172,7 +172,7 @@ def kernel():
 def main() raises:
     var ctx = DeviceContext()
     # Same geometry as the CUDA launch above.
-    ctx.enqueue_function[kernel](grid_dim=blocks, block_dim=256)
+    ctx.enqueue_function[kernel](grid_dim=4096, block_dim=256)
     ctx.synchronize()
 ```
 

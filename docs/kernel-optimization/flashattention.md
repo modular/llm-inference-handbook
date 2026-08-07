@@ -137,7 +137,7 @@ comparison that explains how the algorithm has evolved across versions.
 | FlashAttention-4 | 2026 | Fully asynchronous MMA, larger tiles, software-emulated exponentials, conditional softmax rescaling, tensor memory, and 2-CTA MMA   | Up to 1.3× faster over cuDNN 9.13, up to 2.7× over Triton, and up to 1613 TFLOPS/s (71% utilization) on B200 BF16 benchmarks | Written in CuTeDSL. The official implementation is exposed through `flash-attn-4` and targets Hopper and Blackwell GPUs such as H100 and B200 |
 
 FlashAttention-4 is specifically tuned for the NVIDIA Blackwell architecture.
-The key insight is asymmetric hardware scaling. Tensor cores (which do the big
+The key insight is asymmetric hardware scaling. Tensor Cores (which do the big
 matrix multiplies like QKᵀ and PV) got much faster on Blackwell. However, other
 critical resources did not scale as much:
 

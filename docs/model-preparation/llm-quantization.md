@@ -46,7 +46,7 @@ Quantization can help LLM inference in three main ways:
 - **Faster computation**. GPUs and other accelerators can process supported
   low-precision formats at higher throughput than FP32 or FP16.
   [On the H100 SXM](https://www.nvidia.com/en-us/data-center/h100/), for
-  example, the BF16/FP16 tensor cores hit 1,979 TFLOPS, while FP8 and INT8
+  example, the BF16/FP16 Tensor Cores hit 1,979 TFLOPS, while FP8 and INT8
   double that to 3,958 TFLOPS/TOPS, a clean 2x from halving the bit width. The
   actual speedup depends on whether the hardware and inference runtime provide
   optimized kernels for the chosen format.

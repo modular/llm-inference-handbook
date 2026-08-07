@@ -27,7 +27,7 @@ The exact design changes between GPU generations, but an SM typically contains:
 
 - A set of arithmetic execution units (CUDA cores on NVIDIA GPUs, execution
   units on AMD GPUs) for integer and floating-point arithmetic
-- [Tensor cores](/kernel-optimization/gpu-architecture-fundamentals/tensor-cores/)
+- [Tensor Cores](/kernel-optimization/gpu-architecture-fundamentals/tensor-cores/)
   for accelerated matrix operations (on modern architectures)
 - A warp scheduler that picks ready warps and issues instructions each cycle
 - A register file, shared memory, and L1 cache. On many architectures, shared
