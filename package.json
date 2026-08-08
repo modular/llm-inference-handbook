@@ -17,6 +17,7 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@docsearch/react": "^3.9.0",
     "@docusaurus/core": "^3.9.0",
     "@docusaurus/faster": "^3.9.0",
     "@docusaurus/plugin-client-redirects": "^3.9.0",
@@ -24,6 +25,7 @@
     "@docusaurus/preset-classic": "^3.9.0",
     "@docusaurus/theme-classic": "^3.9.0",
     "@docusaurus/theme-common": "^3.9.0",
+    "@docusaurus/theme-search-algolia": "^3.10.1",
     "@mantine/core": "8.3.13",
     "@mantine/hooks": "8.3.13",
     "@mantine/notifications": "8.3.13",
