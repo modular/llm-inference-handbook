@@ -269,7 +269,6 @@ const config: Config = {
       contextualSearch: true,
       searchPagePath: 'search',
       insights: false,
-      maxResultsPerGroup: 6,
     },
   } satisfies Preset.ThemeConfig,
 
