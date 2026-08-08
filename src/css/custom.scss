@@ -640,42 +640,7 @@ table {
 
   .DocSearch-Button {
     width: 100%;
-    height: 36px;
-    margin: 0;
-    padding: 0 12px;
-    border: 1px solid var(--Elements-Twilight-20-70);
-    border-radius: 4px;
-    background: var(--Elements-Twilight-0-100);
-    box-shadow: none;
-    font-family: var(--inter);
-    font-size: 14px;
-    line-height: 24px;
-    color: var(--Elements-Twilight-60-50);
   }
-
-  .DocSearch-Button:hover,
-  .DocSearch-Button:focus {
-    box-shadow: none;
-    border-color: var(--Elements-Twilight-40-60);
-    color: var(--Elements-Twilight-100-0);
-  }
-
-  .DocSearch-Button-Keys {
-    min-width: auto;
-  }
-
-  .DocSearch-Button-Key {
-    top: 0;
-    padding: 0 4px;
-    border: 1px solid var(--Elements-Twilight-20-70);
-    background: var(--Elements-Twilight-0-100);
-    box-shadow: none;
-    font-size: 11px;
-  }
-}
-
-.DocSearch-Container {
-  z-index: 201;
 }
 
 nav.menu {
