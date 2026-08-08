@@ -262,6 +262,15 @@ const config: Config = {
       disableSwitch: true,
       respectPrefersColorScheme: false,
     },
+    algolia: {
+      appId: 'YKT8GOY8JO',
+      apiKey: 'afcc1015b8a021c0e5bd3292da05d2cb',
+      indexName: 'inference-handbook',
+      contextualSearch: true,
+      searchPagePath: 'search',
+      insights: false,
+      maxResultsPerGroup: 6,
+    },
   } satisfies Preset.ThemeConfig,
 
   future: {
