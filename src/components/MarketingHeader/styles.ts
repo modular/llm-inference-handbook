@@ -356,6 +356,7 @@ ul {
   padding: 10px 14px;
 }
 
+.mh-search-trigger,
 .mh-mobile-toggle {
   align-items: center;
   background: transparent;
@@ -366,6 +367,11 @@ ul {
   gap: 8px;
   min-height: 37px;
   padding: 8px 0;
+}
+
+.mh-search-icon {
+  height: 20px;
+  width: 20px;
 }
 
 .mh-mobile-toggle-lines {
@@ -654,6 +660,7 @@ ul {
     display: none;
   }
 
+  .mh-search-trigger,
   .mh-mobile-toggle {
     display: inline-flex;
   }

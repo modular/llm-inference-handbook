@@ -20,6 +20,7 @@ type Props = {
   shadowRoot: ShadowRoot;
   handbookSidebar?: PropSidebar;
   activePath?: string;
+  onSearchClick?: () => void;
 };
 
 type MobileTab = 'handbook' | 'modular';
@@ -28,6 +29,7 @@ export default function MarketingHeader({
   shadowRoot,
   handbookSidebar,
   activePath,
+  onSearchClick,
 }: Props): JSX.Element {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -116,6 +118,16 @@ export default function MarketingHeader({
             >
               {marketingHeaderCtas.primary.label}
             </a>
+            {onSearchClick ? (
+              <button
+                className="mh-search-trigger"
+                type="button"
+                onClick={onSearchClick}
+              >
+                <span className="mh-sr-only">Search</span>
+                <SearchIcon />
+              </button>
+            ) : null}
             <button
               className="mh-mobile-toggle"
               type="button"
@@ -418,6 +430,31 @@ function ChevronIcon(): JSX.Element {
       aria-hidden="true"
     >
       <path d="M0.5 3L3.5 6L6.5 3" stroke="currentColor" />
+    </svg>
+  );
+}
+
+function SearchIcon(): JSX.Element {
+  return (
+    <svg
+      className="mh-search-icon"
+      viewBox="0 0 20 20"
+      fill="none"
+      aria-hidden="true"
+    >
+      <circle
+        cx="8.75"
+        cy="8.75"
+        r="5.25"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M12.75 12.75L16.5 16.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }

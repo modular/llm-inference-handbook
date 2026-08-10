@@ -682,6 +682,15 @@ kbd.DocSearch-Button-Key {
   }
 }
 
+// Real SearchBar backing the marketing header's mobile search button, which
+// lives in a shadow root and can't host it directly. `visibility: hidden` (not
+// `display: none`) is deliberate: it keeps this duplicate button out of the tab
+// order and the accessibility tree while still allowing a programmatic click.
+.handbook-mobile-search-mount {
+  position: absolute;
+  visibility: hidden;
+}
+
 // DocSearch dialog
 .DocSearch {
   .DocSearch-Modal {
