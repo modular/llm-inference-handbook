@@ -450,7 +450,7 @@ runtime statistics:
   determines whether a draft token is sufficiently close to the target
   distribution to be accepted.
 
-Because AdaSD can accept tokens that do not strictly satisfy the original
+Because AdaSD can accept tokens that don't strictly satisfy the original
 speculative decoding acceptance rule, it is a lossy approach. The authors report
 up to 1.46× speedup over vanilla speculative decoding while limiting accuracy
 degradation to less than 1.8% on their benchmarks.

@@ -82,7 +82,7 @@ matters the moment you start designing infrastructure.
 - Inference is the forward pass: tokens in, next-token distribution out,
   repeated through prefill and the decode loop. This is a computational
   operation. You can run inference in a Jupyter notebook or a Python script with
-  no server in sight. That's still inference, but you are not serving anything.
+  no server in sight. That's still inference, but you aren't serving anything.
 - Serving is everything required to turn that capability into a reliable
   production service: an API surface (HTTP/gRPC), request queuing and
   scheduling, batching across concurrent requests, load balancing across

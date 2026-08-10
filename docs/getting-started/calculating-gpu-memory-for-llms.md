@@ -66,7 +66,7 @@ Use the calculator below to estimate GPU memory requirements for your model:
 
 :::note
 Not all GPUs support all precision formats natively. A100 and other Ampere GPUs
-support INT8 but do not support FP8 in hardware. Native FP8 requires Hopper,
+support INT8 but don't support FP8 in hardware. Native FP8 requires Hopper,
 Ada, or newer architectures. If your inference stack relies on FP8 kernels, make
 sure your GPU supports them. Some 4-bit models use INT4 quantization, while
 native FP4 support relies on newer architectures and software stacks.

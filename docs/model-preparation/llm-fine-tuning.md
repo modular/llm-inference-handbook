@@ -247,7 +247,7 @@ information. A
 prompt template, or tool call is usually a better fit because it can fetch fresh
 data at inference time.
 
-Fine-tuning is also a poor first step when you do not have a reliable evaluation
+Fine-tuning is also a poor first step when you don't have a reliable evaluation
 set. Without it, it is hard to tell whether a fine-tuned model actually improved
 the target behavior or simply changed its style.
 

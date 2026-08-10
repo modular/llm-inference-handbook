@@ -56,7 +56,7 @@ iteration.
   - Alert engineers through monitoring dashboards or incident systems
   - Automatically revert to the previous model or routing configuration
   - Log the event for future auditing
-- **Fault isolation**. Model failures should not bring down entire applications.
+- **Fault isolation**. Model failures shouldn't bring down entire applications.
   Use retries, timeouts, circuit breakers, and load shedding to contain issues
   before they cascade.
 
