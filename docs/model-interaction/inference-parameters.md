@@ -15,7 +15,7 @@ import TopPvsTopK from '@site/src/components/TopPvsTopK';
 # LLM inference parameters
 
 Inference parameters are the settings you pass with an LLM request to control
-how the model generates responses. They do not change the model weights.
+how the model generates responses. They don't change the model weights.
 Instead, they impact the
 [decoding process](/llm-inference-basics/how-does-llm-inference-work/), such as:
 
@@ -179,7 +179,7 @@ They are useful when the output has a clear boundary:
 - Stop after one list item, one SQL statement, or one
   [tool call](/model-interaction/function-calling/).
 
-Stop sequences are not a replacement for schema enforcement. They only end
+Stop sequences aren't a replacement for schema enforcement. They only end
 generation when a sequence appears. If you need guaranteed JSON, use
 [structured outputs](/model-interaction/structured-outputs/) or constrained
 decoding when your provider supports it.
@@ -235,7 +235,7 @@ stable serving setup, you can often get the same or near-identical output. This
 is useful for testing prompts, comparing model versions, or debugging an
 unexpected output.
 
-However, do not treat seeds as a perfect production guarantee. Reproducibility
+However, don't treat seeds as a perfect production guarantee. Reproducibility
 can still change when the model version, tokenizer, serving framework, hardware
 kernels, batching behavior, or floating-point implementation changes.
 
@@ -251,7 +251,7 @@ These fields are useful for:
 - Debugging classification prompts.
 - Measuring how strongly the model prefers a constrained label.
 
-They can increase response size and are not always supported by chat APIs.
+They can increase response size and aren't always supported by chat APIs.
 Enable them when you need the signal, not by default for every production
 request.
 

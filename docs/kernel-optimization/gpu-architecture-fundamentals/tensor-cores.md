@@ -5,7 +5,7 @@ keywords:
     - Tensor Cores
     - matrix multiply accumulate
     - GPU mixed precision
-    - tensor core tiles
+    - Tensor Core tiles
     - LLM inference kernels
 ---
 
@@ -26,7 +26,7 @@ kernel satisfies the required precision, tile, and layout constraints.
 
 ## Matrix instructions and tiles
 
-At a conceptual level, a tensor core instruction performs a tiled operation of
+At a conceptual level, a Tensor Core instruction performs a tiled operation of
 the form:
 
 $$
@@ -48,8 +48,8 @@ combines the partial results.
 
 The programming interface depends on the abstraction level. For example:
 
-- Libraries such as cuBLAS and cuBLASLt choose tensor core kernels internally
-- Compilers such as Triton can generate tensor core instructions from blocked
+- Libraries such as cuBLAS and cuBLASLt choose Tensor Core kernels internally
+- Compilers such as Triton can generate Tensor Core instructions from blocked
   tensor programs
 
 Higher-level interfaces reduce implementation work. Lower-level interfaces can
@@ -64,7 +64,7 @@ expanded over time:
 - Volta introduced FP16 matrix inputs with higher-precision accumulation.
 - Ampere added formats and modes such as BF16, TF32, and broader integer
   support.
-- Hopper added FP8 tensor core paths and new matrix instructions.
+- Hopper added FP8 Tensor Core paths and new matrix instructions.
 - Blackwell extended Tensor Cores further with FP4 and FP6 formats and a
   second-generation Transformer Engine.
 
@@ -76,7 +76,7 @@ they're added to a much larger total.
 
 The exact combination of input type, accumulator type, tile shape, and
 throughput depends on the compute capability. Write your code to target
-the hardware rather than assume that one tensor core mode works everywhere.
+the hardware rather than assume that one Tensor Core mode works everywhere.
 
 ## Tile and layout requirements
 
@@ -92,9 +92,9 @@ them efficiently. Important factors include:
   [bank conflicts](/kernel-optimization/gpu-architecture-fundamentals/gpu-memory/#shared-memory-smem-and-l1-cache).
 - **Precision**: Inputs must use a supported type and accumulation mode.
 - **Data supply**: HBM and shared-memory transfers must keep pace with the
-  tensor core pipeline.
+  Tensor Core pipeline.
 
-A kernel can issue tensor core instructions and still run poorly. If tile
+A kernel can issue Tensor Core instructions and still run poorly. If tile
 loading dominates execution or if matrix dimensions are too small, theoretical
 tensor throughput won’t translate into application throughput.
 
@@ -103,7 +103,7 @@ tensor throughput won’t translate into application throughput.
 LLM inference is largely a sequence of large matrix multiplications (matmuls):
 the QKV and output projections, the feed-forward (MLP) layers, and the matmuls
 inside attention itself. They are exactly the shape Tensor Cores are built to
-accelerate, which is why tensor core throughput (measured in TFLOPS or TOPS)
+accelerate, which is why Tensor Core throughput (measured in TFLOPS or TOPS)
 largely sets how fast the compute-heavy parts of inference run.
 
 As mentioned above, Tensor Cores also operate on reduced-precision inputs: FP16,
@@ -119,19 +119,19 @@ Specifically, for the two stages of LLM inference:
   [prefill](/llm-inference-basics/how-does-llm-inference-work/#prefill),
   many tokens are processed at once, the matmuls are large, and arithmetic
   intensity is high. The Tensor Cores are well fed and this phase is usually
-  compute-bound, so tensor core throughput is the thing that matters.
+  compute-bound, so Tensor Core throughput is the thing that matters.
 - During
   [decode](/llm-inference-basics/how-does-llm-inference-work/#decode), the
   bottleneck shifts to memory bandwidth (streaming weights and the KV cache), so
-  raw tensor core FLOPS stop being the limitation and the cores sit partly idle.
+  raw Tensor Core FLOPS stop being the limitation and the cores sit partly idle.
   [Batching multiple sequences](/inference-optimization/static-dynamic-continuous-batching/)
-  restores a larger matrix dimension and brings tensor core utilization back up,
+  restores a larger matrix dimension and brings Tensor Core utilization back up,
   which is a major reason inference servers batch aggressively.
 
 Therefore, Tensor Cores are essential to inference performance, but not
 uniformly. They often set the ceiling for compute-heavy prefill and large-batch
 decode. Small-batch decode commonly remains bandwidth-bound, so additional
-tensor core throughput alone may not help. As with
+Tensor Core throughput alone may not help. As with
 [occupancy](/kernel-optimization/gpu-architecture-fundamentals/streaming-multiprocessors/#occupancy),
 they tell you where the compute ceiling is.
 
@@ -148,7 +148,7 @@ Tensor Cores deliver significantly higher throughput than CUDA cores.
 ### Does using FP16 or FP8 automatically activate Tensor Cores?
 
 No. The operation, dimensions, layout, alignment, and generated instructions
-must all match a supported tensor core path. Always test your code to confirm
+must all match a supported Tensor Core path. Always test your code to confirm
 whether the kernel actually issues matrix instructions and how well those
 pipelines are utilized.
 

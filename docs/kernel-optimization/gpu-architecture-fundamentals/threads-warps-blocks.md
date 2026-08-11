@@ -47,7 +47,7 @@ receives an instruction, the active threads of it each execute that instruction
 on their own registers and data. Different warps are independent and can execute
 different instructions at the same time.
 
-Threads in a warp do not need to produce the same result, but control flow is
+Threads in a warp don't need to produce the same result, but control flow is
 most efficient when they follow the same path. If a branch sends some threads
 one way and others another way, the warp executes the paths separately. Each
 has a different active-thread mask so that only the threads on the current path

@@ -37,7 +37,7 @@ Summarize this article.
 # Improved prompt
 Summarize the article in three bullet points.
 Focus on key technical insights.
-Do not include opinions or marketing language.
+Don't include opinions or marketing language.
 ```
 
 The second prompt gives the model clear expectations, which leads to more
@@ -246,7 +246,7 @@ messages = [
 
 By including earlier messages, the model can maintain a coherent conversation.
 
-From the model’s perspective, however, these messages are not treated specially.
+From the model’s perspective, however, these messages aren't treated specially.
 During inference, the entire conversation history is simply converted into a
 sequence of tokens and processed as part of the input prompt.
 
@@ -263,7 +263,7 @@ strategies such as:
 
 #### Injected by developers
 
-Assistant messages do not always need to come from the model itself. Developers
+Assistant messages don't always need to come from the model itself. Developers
 can also insert synthetic assistant messages to guide the behavior of the model.
 
 This technique is sometimes called **assistant prefilling** or

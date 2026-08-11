@@ -114,7 +114,7 @@ Production inference systems must tolerate failures. GPUs crash, nodes go
 offline, and entire regions can become unavailable. With distributed inference:
 
 - Traffic can be rerouted automatically when a worker fails
-- Regional outages do not bring down the entire service
+- Regional outages don't bring down the entire service
 - Capacity can be rebalanced dynamically during incidents
 
 This transforms inference from a fragile single point of failure into a
@@ -240,14 +240,14 @@ predictable latency.
 
 ### Distributed inference runtimes
 
-Most teams do not build distributed inference from scratch. Instead, they rely
+Most teams don't build distributed inference from scratch. Instead, they rely
 on specialized runtimes that implement core
 [inference techniques](/inference-optimization/) such as parallelism and
 prefix-aware routing.
 
 In practice, teams often run inference runtimes such as vLLM, SGLang, and llm-d
 on Kubernetes. To some extent, they do help handle how inference runs at the
-micro level, but they do not fully solve macro-level concerns for LLM workloads
+micro level, but they don't fully solve macro-level concerns for LLM workloads
 such as multi-region routing, autoscaling, or operational visibility.
 
 ### Orchestration, scaling, and observability

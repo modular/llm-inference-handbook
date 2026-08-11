@@ -88,7 +88,7 @@ fragile interfaces.
 
 ## Why multi-model pipelines matter
 
-Many production AI applications are not really one-model problems. One large
+Many production AI applications aren't really one-model problems. One large
 model can often perform several tasks reasonably well, but that does not mean it
 is the best choice for each stage.
 

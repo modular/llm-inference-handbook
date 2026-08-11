@@ -65,7 +65,7 @@ in cost.
 
 LLM inference breaks those assumptions in several ways:
 
-- **Requests are not equal**. A 100-token prompt and a 100k-token prompt have
+- **Requests aren't equal**. A 100-token prompt and a 100k-token prompt have
   completely different memory and compute footprints. Some requests finish in
   milliseconds, while others may generate tokens for minutes.
 - **Workers carry state**. During prefill, the model builds KV cache that can be

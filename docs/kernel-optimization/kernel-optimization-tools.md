@@ -13,7 +13,7 @@ import LinkList from '@site/src/components/LinkList';
 
 # Choosing the right kernel optimization tool
 
-Today, most teams do not optimize kernels by writing raw CUDA from scratch. They
+Today, most teams don't optimize kernels by writing raw CUDA from scratch. They
 work through a stack of tools that sits between model code and the GPU.
 
 The practical question is simple: if you need faster kernels for LLM inference,
@@ -62,15 +62,15 @@ themselves.
 
 That tuning matters. A kernel that works on one NVIDIA generation does not
 automatically achieve peak performance on the next one. New GPUs have different
-memory hierarchies, tensor core behavior, scheduling details, and instruction
-sets. NVIDIA’s library teams retune for those changes so users do not have to.
+memory hierarchies, Tensor Core behavior, scheduling details, and instruction
+sets. NVIDIA’s library teams retune for those changes so users don't have to.
 
 The benefit is obvious. If your workload is built from standard operations,
 these libraries are often good enough out of the box.
 
 However, they have several limitations:
 
-- **Coverage is limited to known patterns**. They do not automatically support
+- **Coverage is limited to known patterns**. They don't automatically support
   every new attention variant, fusion strategy, or model-specific operator. When
   models evolve, library support often lags behind.
 - **Limited cross-operator optimization**. They are hard to customize across
@@ -180,7 +180,7 @@ Note that people often talk about XLA in two closely related contexts:
   projects targeting CPUs, GPUs, TPUs, and other backends
 
 They share important pieces such as StableHLO, but the public and internal
-stacks are not identical, and backend maturity varies by framework and target.
+stacks aren't identical, and backend maturity varies by framework and target.
 
 Like TVM, XLA faces several practical limitations:
 
@@ -251,7 +251,7 @@ The important thing to notice is not the syntax. It is the programming model:
 
 - You work with blocks or tiles of data (`tl.arange`, `tl.load`)
 - You explicitly load and store data
-- You do not directly manage `threadIdx`, `blockIdx`, or most warp-level details
+- You don't directly manage `threadIdx`, `blockIdx`, or most warp-level details
 
 That makes Triton a good fit for modern AI kernel work. It is often used for
 custom attention kernels, fused pointwise operations, and research-driven
@@ -397,7 +397,7 @@ can do.
 
 ## How should you choose among these tools
 
-Most teams should not start at the bottom of the stack.
+Most teams shouldn't start at the bottom of the stack.
 
 - If your workload matches common operator patterns, start with vendor libraries
   through your framework or inference engine.
@@ -434,7 +434,7 @@ performance upside is large enough to justify the engineering cost.
 
 ### Are vendor libraries enough for modern LLM inference?
 
-They are essential for many standard operations, but they are not enough for
+They are essential for many standard operations, but they aren't enough for
 every frontier workload.
 
 Once a model introduces a new attention pattern, a new fusion opportunity, or an

@@ -38,7 +38,7 @@ doesn’t map well to AI workloads. Here’s why:
   merely a technical oversight; it's rooted in architectural and practical
   considerations.
 - **GPUs can’t be sliced easily**: GPUs are powerful and highly parallel, but
-  they are not as flexible as CPUs for handling many inference tasks across
+  they aren't as flexible as CPUs for handling many inference tasks across
   different models at the same time.
 - **High cost of idle GPUs**: They're the high-performance sports cars of the
   computing world, exceptional for specific tasks but costly to maintain,
@@ -70,7 +70,7 @@ This issue presents itself in three different stages:
    size. LLMs introduce significant delays due to their billions of parameters.
    Key bottlenecks include:
 
-   - **Slow downloads from model hubs**: Platforms like Hugging Face are not
+   - **Slow downloads from model hubs**: Platforms like Hugging Face aren't
      optimized for high-throughput, multi-part downloads, making the retrieval
      of large model files time-consuming.
    - **Sequential data flow**: Model files are transferred through multiple

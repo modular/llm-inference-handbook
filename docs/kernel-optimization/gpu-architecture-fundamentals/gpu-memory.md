@@ -85,7 +85,7 @@ Here is a comparison:
 A common question: why do we need shared memory (SMEM) and L1 cache when we
 already have registers?
 
-Registers are the fastest storage on the GPU, but they are not enough on their
+Registers are the fastest storage on the GPU, but they aren't enough on their
 own.
 
 1. **Registers are private**. One thread cannot directly read registers
