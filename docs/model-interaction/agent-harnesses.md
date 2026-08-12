@@ -28,10 +28,10 @@ is often summarized as:
 
 ## Why do you need an agent harness?
 
-Many models today can process text, images, audio, and video themselves.
-However, without support from the application around it, they can't run a
-tool, execute code, set up an environment, remember a previous call, or judge
-whether the larger task is finished.
+Many models today accept more than text, including images, audio, or video.
+However, without support from the surrounding application, they can't run a
+tool, execute code, set up an environment, retain state across API calls, or
+verify whether the larger task is finished.
 
 [Function calling](/model-interaction/function-calling/) closes part of that gap
 by letting a model request an action, but a request is not an execution. The
@@ -64,13 +64,13 @@ Agent harnesses work best when a task needs several model calls, external
 actions, and feedback from the environment. Common use cases include:
 
 - **Coding agents**. Read a repository, edit files, run tests, and iterate on
-  failures. This is the highest-volume harness workload today and among the most
-  demanding, with large
+  failures. This is a common harness workload and among the most demanding, with
+  large
   [context windows](/llm-inference-basics/how-does-llm-inference-work/#what-is-a-context-window-and-how-does-it-work-in-llm-inference)
   and tool calls on multiple steps.
 - **Deep research**. Search, read, cross-check, and synthesize sources. These
-  runs last a long time, fan out to parallel sub-agents, and fill context with
-  retrieved documents rather than reasoning from the agent itself.
+  runs can last a long time, fan out to parallel sub-agents, and fill context
+  with retrieved documents rather than reasoning from the agent itself.
 - **Customer support services**. A support agent can read account data, apply
   policy, draft a response, and request approval before a refund or account
   change.
@@ -92,17 +92,17 @@ These harnesses are generally invoked per task, run in a terminal or editor, and
 scope their actions to a repository and the commands needed to build and test
 it.
 
-- **Claude Code**. The terminal harness from Anthropic, built around deep MCP
-  support and sub-agents for parallel work.
-- **Codex**. An open-source, sandbox-first terminal harness from OpenAI, and one
-  of the most widely installed.
+- **Claude Code**. The harness from Anthropic, available in terminals, IDE
+  integrations, desktop clients, and on the web, with MCP and subagent support.
+- **Codex**. The open-source CLI from OpenAI is a sandbox-first terminal
+  harness; Codex also runs in IDE, app, and cloud workflows.
 - **OpenCode**. An open-source terminal coding agent with provider selection,
   permissions, and specialized agents.
 - **Cline**. Started as an editor extension and grew a standalone open-source AI
   coding agent, with support for parallel agents and SDK workflows.
 - **Letta Code**. An open-source, model-agnostic harness built around persistent
   memory. Agents persist across sessions rather than starting fresh each time,
-  with skills, subagents, and git-backed memory.
+  with subagents, searchable conversation history, and skills.
 
 Some model providers ship harnesses optimized for their own models, such as Qwen
 Code, ZCode, and Kimi Code.
@@ -164,8 +164,10 @@ larger API surface, so check the current integration documentation before
 choosing a server.
 
 Open models also change capacity planning. Long context and several concurrent
-agent sessions can consume more GPU memory than the model weights suggest. Test
-with realistic trajectories and tool output before setting production limits.
+agent sessions can consume more GPU memory than the model weights suggest,
+because each active request allocates a KV cache that grows with the context and
+generated tokens. Test with realistic trajectories and tool output before
+setting production limits.
 
 ## Serving agentic workloads with MAX
 
@@ -174,20 +176,24 @@ verification calls, so latency compounds with every step.
 [MAX](https://www.modular.com/open-source/max?utm_source=llm_handbook) is built
 for that pattern:
 
-- **Predictable multi-step latency**. Compiled inference and continuous batching
-  keep each step in the loop fast, so a 30-step task doesn't accumulate delay.
-- **Faster tool calls**.
-  [Tool calling](https://docs.modular.com/serve/function-calling/) is
-  compiler-optimized, and the time saved on each round trip adds up across an
-  agentic loop.
-- **Structured output at compiler speed**. Constrained decoding is compiled into
-  the graph, so the JSON, function signatures, and typed tool calls a harness
-  depends on stay both valid and fast.
-- **Hardware-portable agents**. The same containers run on NVIDIA, AMD and other
-  accelerators, so you can mix vendors across agent roles for cost and
-  resilience without changing the serving interface.
-- **On-device agents**. MAX compiles agent models natively for Apple Silicon and
-  ARM CPUs, so agents can reason offline and scale to the cloud when needed.
+- **Multi-step serving performance**. Compiled inference can reduce model
+  execution latency, while continuous batching improves utilization and
+  throughput under concurrent load. Both become more important as an agent loop
+  makes more inference calls.
+- **Function calling support**.
+  [Function calling](https://docs.modular.com/serve/function-calling/) follows
+  the OpenAI-compatible format for supported tool-use models. The harness still
+  executes each requested function and returns the result.
+- **Structured output**.
+  [Constrained decoding](https://docs.modular.com/serve/structured-output/)
+  uses llguidance to enforce supported output formats. This can ensure valid
+  structure, but not semantic correctness.
+- **NVIDIA and AMD portability**. The
+  [MAX container](https://docs.modular.com/max/container/) can run supported
+  models on NVIDIA and AMD GPUs without changing the serving interface.
+- **ARM CPU deployment**. MAX can serve supported models on
+  [compatible ARM64 Linux CPUs](https://docs.modular.com/max/packages/). Large
+  GenAI model inference through MAX is not currently available on Apple silicon.
 
 Learn more about our
 [agentic AI solutions](https://www.modular.com/solutions/agentic?utm_source=llm_handbook)
@@ -228,6 +234,6 @@ endpoint makes every model interchangeable.
 ## Additional resources
 
 - [Unrolling the Codex agent loop](https://openai.com/index/unrolling-the-codex-agent-loop/)
-- [Inside the Codex harness](https://openai.com/index/unlocking-the-codex-harness/)
+- [Unlocking the Codex harness: how we built the App Server](https://openai.com/index/unlocking-the-codex-harness/)
 - [Harness Engineering for Self-Improvement](https://lilianweng.github.io/posts/2026-07-04-harness/)
 </LinkList>
