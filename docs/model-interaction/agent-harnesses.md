@@ -34,7 +34,7 @@ tool, execute code, set up an environment, retain state across API calls, or
 verify whether the larger task is finished.
 
 [Function calling](/model-interaction/function-calling/) closes part of that gap
-by letting a model request an action, but a request is not an execution. The
+by letting a model request an action, but a request isn't an execution. The
 [Model Context Protocol (MCP)](/model-interaction/model-context-protocol/)
 standardizes how tools and data sources connect, but it doesn't define the agent
 loop. Something still has to run the tools, feed the results back, and decide
@@ -56,7 +56,7 @@ Without a deliberate harness, a model fails in predictable ways:
   tool result caused it.
 
 These are mainly runtime problems. A stronger model can reduce some mistakes,
-but a model upgrade does not replace control flow, permissions, or verification.
+but a model upgrade doesn't replace control flow, permissions, or verification.
 
 ## Agent harness use cases
 
@@ -135,7 +135,7 @@ endpoint. This provides more privacy and customization, and helps control your
 cost.
 
 API compatibility makes the connection possible, but protocol compatibility
-alone does not guarantee good agent behavior. To connect a harness to a model
+alone doesn't guarantee good agent behavior. To connect a harness to a model
 and verify that the pairing works, work through the following steps:
 
 1. **Choose a model trained for tool use**. Confirm that the model can select
@@ -164,10 +164,8 @@ larger API surface, so check the current integration documentation before
 choosing a server.
 
 Open models also change capacity planning. Long context and several concurrent
-agent sessions can consume more GPU memory than the model weights suggest,
-because each active request allocates a KV cache that grows with the context and
-generated tokens. Test with realistic trajectories and tool output before
-setting production limits.
+agent sessions can consume more GPU memory than the model weights suggest. Test
+with realistic trajectories and tool output before setting production limits.
 
 ## Serving agentic workloads with MAX
 
@@ -176,24 +174,20 @@ verification calls, so latency compounds with every step.
 [MAX](https://www.modular.com/open-source/max?utm_source=llm_handbook) is built
 for that pattern:
 
-- **Multi-step serving performance**. Compiled inference can reduce model
-  execution latency, while continuous batching improves utilization and
-  throughput under concurrent load. Both become more important as an agent loop
-  makes more inference calls.
-- **Function calling support**.
-  [Function calling](https://docs.modular.com/serve/function-calling/) follows
-  the OpenAI-compatible format for supported tool-use models. The harness still
-  executes each requested function and returns the result.
-- **Structured output**.
-  [Constrained decoding](https://docs.modular.com/serve/structured-output/)
-  uses llguidance to enforce supported output formats. This can ensure valid
-  structure, but not semantic correctness.
-- **NVIDIA and AMD portability**. The
-  [MAX container](https://docs.modular.com/max/container/) can run supported
-  models on NVIDIA and AMD GPUs without changing the serving interface.
-- **ARM CPU deployment**. MAX can serve supported models on
-  [compatible ARM64 Linux CPUs](https://docs.modular.com/max/packages/). Large
-  GenAI model inference through MAX is not currently available on Apple silicon.
+- **Predictable multi-step latency**. Compiled inference and continuous batching
+  keep each step in the loop fast, so a 30-step task doesn't accumulate delay.
+- **Faster tool calls**.
+  [Tool calling](https://docs.modular.com/serve/function-calling/) is
+  compiler-optimized, and the time saved on each round trip adds up across an
+  agentic loop.
+- **Structured output at compiler speed**. Constrained decoding is compiled into
+  the graph, so the JSON, function signatures, and typed tool calls a harness
+  depends on stay both valid and fast.
+- **Hardware-portable agents**. The same containers run on NVIDIA, AMD and other
+  accelerators, so you can mix vendors across agent roles for cost and
+  resilience without changing the serving interface.
+- **On-device agents**. MAX compiles agent models natively for Apple Silicon and
+  ARM CPUs, so agents can reason offline and scale to the cloud when needed.
 
 Learn more about our
 [agentic AI solutions](https://www.modular.com/solutions/agentic?utm_source=llm_handbook)
