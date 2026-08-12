@@ -58,7 +58,7 @@ Without a deliberate harness, a model fails in predictable ways:
 These are mainly runtime problems. A stronger model can reduce some mistakes,
 but a model upgrade does not replace control flow, permissions, or verification.
 
-## Use cases
+## Agent harness use cases
 
 Agent harnesses work best when a task needs several model calls, external
 actions, and feedback from the environment. Common use cases include:
@@ -86,7 +86,7 @@ The boundary between a harness, an agent framework, and an end-user product
 isn't sharp. The following projects are representative rather than ranked, and
 they fall into two rough groups.
 
-### Coding harnesses
+### Coding agent harnesses
 
 These harnesses are generally invoked per task, run in a terminal or editor, and
 scope their actions to a repository and the commands needed to build and test
@@ -126,7 +126,7 @@ trigger real actions on the host or expose sensitive data.
   sessions. A single gateway carries one conversation across a terminal UI,
   Telegram, Discord, Slack, WhatsApp, and Signal.
 
-## Leveraging harnesses with open-source LLMs
+## How to use an agent harness with open-source LLMs
 
 The best-known harnesses ship pointed at models from the vendor that built them,
 but the harness and the model are separable. Many harnesses allow you to connect
