@@ -85,12 +85,13 @@
 
 .bodyContent {
   display: flex;
-  gap: 2rem;
+  gap: 1.5rem;
   margin-top: 1.5rem;
 }
 
+/* Kept narrow so the bar chart gets the remaining width. */
 .input {
-  flex: 0 0 14rem;
+  flex: 0 0 11rem;
 }
 
 .input .title {
@@ -99,25 +100,6 @@
   line-height: 1.75rem;
   font-weight: 400;
   margin-bottom: 1rem;
-}
-
-.note {
-  border: 1px solid var(--Elements-Twilight-30-60);
-  background: #fffbeb;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  margin-top: 1.5rem;
-  padding: 1rem;
-  border-radius: 4px;
-  color: var(--Elements-Twilight-70-20);
-}
-
-.label {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-  color: var(--Elements-Twilight-100-0);
 }
 
 /* ── Bar chart ── */
@@ -146,7 +128,7 @@
 
 .chartColLabel {
   flex-shrink: 0;
-  width: 7rem;
+  width: 5.5rem;
 }
 
 .chartColBar {
@@ -156,7 +138,7 @@
 
 .chartColValue {
   flex-shrink: 0;
-  width: 5rem;
+  width: 4.5rem;
   font-size: 0.75rem;
   font-weight: 400;
   color: var(--Elements-Twilight-60-50);
@@ -165,7 +147,7 @@
 
 .chartColBadge {
   flex-shrink: 0;
-  width: 6.5rem;
+  width: 5.5rem;
   font-size: 0.75rem;
   font-weight: 400;
   color: var(--Elements-Twilight-60-50);
@@ -181,7 +163,7 @@
 
 .chartLabel {
   flex-shrink: 0;
-  width: 7rem;
+  width: 5.5rem;
   font-size: 0.8125rem;
   font-weight: 400;
   color: var(--Elements-Twilight-70-20);
@@ -205,7 +187,7 @@
 
 .chartValue {
   flex-shrink: 0;
-  width: 5rem;
+  width: 4.5rem;
   font-size: 0.8125rem;
   font-weight: 400;
   color: var(--Elements-Twilight-70-20);
@@ -214,7 +196,7 @@
 
 .badge {
   flex-shrink: 0;
-  width: 6.5rem;
+  width: 5.5rem;
   font-size: 0.6875rem;
   font-weight: 400;
   text-align: center;
@@ -262,9 +244,6 @@
    Preserve the quality-loss scale (none/minimal = green, low = nebula,
    moderate/high = neutral); only swap light fills/text for dark-legible ones. */
 
-:global(html[data-theme='dark']) .note {
-  background: rgba(245, 158, 11, 0.1);
-}
 :global(html[data-theme='dark']) .chartBarTrack {
   background: rgba(255, 255, 255, 0.06);
 }

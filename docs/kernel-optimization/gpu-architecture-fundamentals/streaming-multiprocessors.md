@@ -9,7 +9,9 @@ keywords:
     - block residency
 ---
 
-import LinkList from '@site/src/components/LinkList';
+import LinkList from '@site/src/components/LinkList'; import
+WarpSchedulerVisualizer from '@site/src/components/WarpSchedulerVisualizer';
+import SMFloorplan from '@site/src/components/SMFloorplan';
 
 # Streaming multiprocessors
 
@@ -29,7 +31,7 @@ The exact design changes between GPU generations, but an SM typically contains:
   units on AMD GPUs) for integer and floating-point arithmetic
 - [Tensor Cores](/kernel-optimization/gpu-architecture-fundamentals/tensor-cores/)
   for accelerated matrix operations (on modern architectures)
-- A warp scheduler that picks ready warps and issues instructions each cycle
+- Warp schedulers that pick ready warps and issue instructions each cycle
 - A register file, shared memory, and L1 cache. On many architectures, shared
   memory and L1 share on-chip resources and can be configured. For more
   information, see the
@@ -39,6 +41,24 @@ The exact design changes between GPU generations, but an SM typically contains:
 On-chip means physically located on the GPU silicon die itself, right next to
 the compute units. Off-chip means outside the GPU chip, which requires traveling
 across memory interfaces (wires, controllers).
+:::
+
+Some resources are partitioned across four processing blocks, while others are
+shared across the SM. In an H100 SM, each processing block has a dedicated
+scheduler, register file, and execution units. All four processing blocks share
+the L1 and shared memory pool.
+
+<SMFloorplan />
+
+:::note
+A **processing block** (also called an
+[SM sub-partition](https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#streaming-multiprocessor))
+is not the same as a
+[thread block](/kernel-optimization/gpu-architecture-fundamentals/threads-warps-blocks/#thread-blocks).
+A processing block is a fixed hardware division of the SM. A thread block is a
+software grouping of threads that you choose at launch. The GPU assigns a thread
+block to one SM, and that block's warps are then distributed across the SM's
+processing blocks.
 :::
 
 A modern data center GPU has many SMs. For example, the NVIDIA H100 SXM has 132
@@ -62,6 +82,12 @@ SM. The GPU uses this pool of ready work to hide latency and sustain throughput.
 More resident warps only help when they provide useful alternatives. If every
 warp waits on the same bottleneck, or if the kernel already saturates a compute
 pipeline, adding more warps may provide little benefit.
+
+Choose a scenario below and read each column from top to bottom. The warp rows
+show whether each warp is issuing, waiting on memory, or ready. The final row
+shows which warp the scheduler selects.
+
+<WarpSchedulerVisualizer />
 
 ## Block residency
 
