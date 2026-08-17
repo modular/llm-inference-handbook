@@ -3,7 +3,6 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './styles.module.css';
 
 type Architecture = 'Dense' | 'MoE';
-type Modality = 'Text' | 'Multimodal';
 type BackendName = 'vLLM' | 'SGLang';
 
 interface Model {
@@ -18,8 +17,7 @@ interface Model {
   totalParams: string;
   activeParams?: string;
   contextLength: string;
-  modality: Modality;
-  modalityNote?: string;
+  modality: string; // comma-separated list, e.g. 'Text, Image, Video'
   useCase?: string;
   precisions: string[];
   deployment: string[];
@@ -88,6 +86,25 @@ const MODELS: Model[] = [
       'https://docs.sglang.io/cookbook/autoregressive/DeepSeek/DeepSeek-R1',
   },
   {
+    name: 'DeepSeek-V4-Pro-0813',
+    family: 'DeepSeek',
+    company: 'DeepSeek',
+    architecture: 'MoE',
+    released: '2026-08',
+    license: 'MIT',
+    huggingface: 'deepseek-ai/DeepSeek-V4-Pro-0813',
+    totalParams: '1.6T',
+    activeParams: '49B',
+    contextLength: '1M',
+    modality: 'Text',
+    useCase:
+      'Agentic reasoning and coding, with a specific module for speculative decoding (DSpark)',
+    precisions: ['FP4 + FP8 Mixed'],
+    deployment: ['8× B200', '8× B300'],
+    sglangDocs:
+      'https://docs.sglang.io/cookbook/autoregressive/DeepSeek/DeepSeek-V4',
+  },
+  {
     name: 'DeepSeek-V4-Pro',
     family: 'DeepSeek',
     company: 'DeepSeek',
@@ -118,7 +135,7 @@ const MODELS: Model[] = [
     contextLength: '1M',
     modality: 'Text',
     useCase: 'Cost-sensitive coding agents, tool use, and long-context automation',
-    precisions: ['BF16', 'FP8'],
+    precisions: ['FP4 + FP8 Mixed'],
     deployment: ['8× H200', '8× MI325X'],
     vllmDocs: 'https://recipes.vllm.ai/deepseek-ai/DeepSeek-V4-Flash',
     sglangDocs:
@@ -224,8 +241,7 @@ const MODELS: Model[] = [
     totalParams: '310B',
     activeParams: '15B',
     contextLength: '1M',
-    modality: 'Multimodal',
-    modalityNote: 'Text, Image, Video, Audio',
+    modality: 'Text, Image, Video, Audio',
     precisions: ['FP8'],
     deployment: ['8× H100', '4× B200'],
     sglangDocs:
@@ -245,8 +261,7 @@ const MODELS: Model[] = [
     totalParams: '2.8T',
     activeParams: '104B',
     contextLength: '1M',
-    modality: 'Multimodal',
-    modalityNote: 'Text, Image, Video',
+    modality: 'Text, Image, Video',
     useCase: 'Long-horizon coding, knowledge work, and reasoning',
     precisions: ['MXFP4 + MXFP8'],
     deployment: ['2-node 8× H200', '8× B300', '8× MI355X'],
@@ -265,8 +280,7 @@ const MODELS: Model[] = [
     totalParams: '1T',
     activeParams: '32B',
     contextLength: '256K',
-    modality: 'Multimodal',
-    modalityNote: 'Text, Image, Video',
+    modality: 'Text, Image, Video',
     useCase: 'Multimodal long-context agents and visual reasoning',
     precisions: ['INT4'],
     deployment: ['8× H200', '8× B300', '4× MI350X'],
@@ -284,8 +298,7 @@ const MODELS: Model[] = [
     totalParams: '1T',
     activeParams: '32B',
     contextLength: '256K',
-    modality: 'Multimodal',
-    modalityNote: 'Text, Image, Video',
+    modality: 'Text, Image, Video',
     precisions: ['INT4'],
     deployment: ['8× H200', '8× B300', '4× MI350X'],
     sglangDocs:
@@ -361,8 +374,7 @@ const MODELS: Model[] = [
     totalParams: '428B',
     activeParams: '23B',
     contextLength: '1M',
-    modality: 'Multimodal',
-    modalityNote: 'Text, Image, Video',
+    modality: 'Text, Image, Video',
     precisions: ['BF16', 'MXFP8'],
     deployment: ['8× H200', '4× B200', '8× MI300X'],
     vllmDocs: 'https://recipes.vllm.ai/MiniMaxAI/MiniMax-M3',
@@ -387,6 +399,25 @@ const MODELS: Model[] = [
       'https://docs.sglang.io/cookbook/autoregressive/MiniMax/MiniMax-M2.7',
   },
 
+  // ── Muse ──
+  {
+    name: 'Muse-Glimmer-30B',
+    family: 'Muse',
+    company: 'Meta',
+    architecture: 'Dense',
+    released: '2026-08',
+    license: 'Apache 2.0',
+    huggingface: 'meta-models/Muse-Glimmer-30B',
+    totalParams: '30B',
+    contextLength: '131K',
+    modality: 'Text, Image',
+    useCase:
+      'Local coding agents, tool use, and multimodal reasoning on consumer GPUs',
+    precisions: ['BF16'],
+    deployment: ['1× H200', '1× B200'],
+    sglangDocs: 'https://docs.sglang.io/cookbook/autoregressive/Meta/MuseGlimmer',
+  },
+
   // ── Mistral ──
   {
     name: 'Mistral-Medium-3.5-128B',
@@ -398,8 +429,7 @@ const MODELS: Model[] = [
     huggingface: 'mistralai/Mistral-Medium-3.5-128B',
     totalParams: '128B',
     contextLength: '256K',
-    modality: 'Multimodal',
-    modalityNote: 'Text, Image',
+    modality: 'Text, Image',
     precisions: ['FP8'],
     deployment: ['4× H100', '4× H200', '2× B200'],
     vllmDocs: 'https://recipes.vllm.ai/mistralai/Mistral-Medium-3.5-128B',
@@ -418,8 +448,7 @@ const MODELS: Model[] = [
     huggingface: 'google/gemma-4-12B-it',
     totalParams: '11.95B',
     contextLength: '256K',
-    modality: 'Multimodal',
-    modalityNote: 'Text, Image, Audio',
+    modality: 'Text, Image, Audio',
     precisions: ['BF16'],
     deployment: ['1× H100', '1× H200'],
     vllmDocs: 'https://recipes.vllm.ai/Google/gemma-4-12B-it',
@@ -435,8 +464,7 @@ const MODELS: Model[] = [
     huggingface: 'google/gemma-4-31b-it',
     totalParams: '30.7B',
     contextLength: '256K',
-    modality: 'Multimodal',
-    modalityNote: 'Text, Image',
+    modality: 'Text, Image',
     precisions: ['BF16'],
     deployment: ['2× H200', '1x MI325X', '1× TPU v7 Ironwood'],
     vllmDocs: 'https://recipes.vllm.ai/Google/gemma-4-31B-it',
@@ -453,8 +481,7 @@ const MODELS: Model[] = [
     totalParams: '25.2B',
     activeParams: '3.8B',
     contextLength: '256K',
-    modality: 'Multimodal',
-    modalityNote: 'Text, Image',
+    modality: 'Text, Image',
     precisions: ['BF16'],
     deployment: ['1× H200', '1x MI325X', '1× TPU v7 Ironwood'],
     vllmDocs: 'https://recipes.vllm.ai/Google/gemma-4-26B-A4B-it',
@@ -497,6 +524,42 @@ const MODELS: Model[] = [
 
   // ── Qwen ──
   {
+    name: 'Qwen3.8-2.4T-A95B',
+    family: 'Qwen',
+    company: 'Alibaba',
+    architecture: 'MoE',
+    released: '2026-08',
+    license: 'Qwen3.8-Max',
+    licenseUrl: 'https://huggingface.co/Qwen/Qwen3.8-2.4T-A95B/blob/main/LICENSE',
+    huggingface: 'Qwen/Qwen3.8-2.4T-A95B',
+    totalParams: '2.4T',
+    activeParams: '95B',
+    contextLength: '256K',
+    modality: 'Text',
+    useCase:
+      'Frontier coding, research, and long-horizon agentic planning (thinking mode only)',
+    precisions: ['BF16', 'FP8'],
+    deployment: ['2-node 8× H200'],
+    sglangDocs: 'https://docs.sglang.io/cookbook/autoregressive/Qwen/Qwen3.8',
+  },
+  {
+    name: 'Qwen3.8-27B',
+    family: 'Qwen',
+    company: 'Alibaba',
+    architecture: 'Dense',
+    released: '2026-08',
+    license: 'Apache 2.0',
+    huggingface: 'Qwen/Qwen3.8-27B',
+    totalParams: '27B',
+    contextLength: '256K',
+    modality: 'Text, Image, Video',
+    useCase:
+      'Coding and agentic workloads with vision, on a single GPU',
+    precisions: ['BF16'],
+    deployment: ['1× H100', '1× H200'],
+    sglangDocs: 'https://docs.sglang.io/cookbook/autoregressive/Qwen/Qwen3.8-27B',
+  },
+  {
     name: 'Qwen3.6-27B',
     family: 'Qwen',
     company: 'Alibaba',
@@ -506,8 +569,7 @@ const MODELS: Model[] = [
     huggingface: 'Qwen/Qwen3.6-27B',
     totalParams: '27B',
     contextLength: '256K',
-    modality: 'Multimodal',
-    modalityNote: 'Text, Image, Video',
+    modality: 'Text, Image, Video',
     precisions: ['BF16', 'FP8'],
     deployment: ['1× H100', '1× H200'],
     sglangDocs: 'https://docs.sglang.io/cookbook/autoregressive/Qwen/Qwen3.6',
@@ -523,8 +585,7 @@ const MODELS: Model[] = [
     totalParams: '35B',
     activeParams: '3B',
     contextLength: '256K',
-    modality: 'Multimodal',
-    modalityNote: 'Text, Image, Video',
+    modality: 'Text, Image, Video',
     precisions: ['BF16', 'FP8'],
     deployment: ['1× H100', '1× H200'],
     sglangDocs: 'https://docs.sglang.io/cookbook/autoregressive/Qwen/Qwen3.6',
@@ -540,8 +601,7 @@ const MODELS: Model[] = [
     totalParams: '397B',
     activeParams: '17B',
     contextLength: '256K',
-    modality: 'Multimodal',
-    modalityNote: 'Text, Image, Video',
+    modality: 'Text, Image, Video',
     precisions: ['BF16', 'FP8'],
     deployment: ['8× H100', '8× H200', '8× MI300X'],
     sglangDocs: 'https://docs.sglang.io/cookbook/autoregressive/Qwen/Qwen3.5',
@@ -559,6 +619,7 @@ const FAMILIES = [
   'MiMo',
   'MiniMax',
   'Mistral',
+  'Muse',
   'Qwen',
 ] as const;
 type Family = (typeof FAMILIES)[number];
@@ -597,6 +658,7 @@ function ModelExplorer() {
     MiMo: useBaseUrl('/img/model-logos/mimo.webp'),
     MiniMax: useBaseUrl('/img/model-logos/minimax.webp'),
     Mistral: useBaseUrl('/img/model-logos/mistral.webp'),
+    Muse: useBaseUrl('/img/model-logos/muse.webp'),
     Qwen: useBaseUrl('/img/model-logos/qwen.webp'),
   };
   const backends = getBackends(current, logos);
@@ -705,14 +767,7 @@ function ModelExplorer() {
               </div>
               <div className={styles.stat}>
                 <div className={styles.statLabel}>Modality</div>
-                <div className={styles.statValue}>
-                  {current.modality}
-                  {current.modalityNote && (
-                    <span className={styles.statSub}>
-                      {current.modalityNote}
-                    </span>
-                  )}
-                </div>
+                <div className={styles.statValue}>{current.modality}</div>
               </div>
             </div>
 

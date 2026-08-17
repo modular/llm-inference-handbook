@@ -64,8 +64,8 @@ const GPU_DATA: GPU[] = [
     bandwidthDisplay: '3.35 TB/s',
     exampleLLMs: [
       'Gemma-4-31B',
-      'Qwen3.6-35B-A3B',
-      'DeepSeek-V4-Flash',
+      'Qwen3.8-27B',
+      'Muse-Glimmer-30B',
       'MiMo-V2-Flash',
     ],
     notes:
@@ -81,9 +81,7 @@ const GPU_DATA: GPU[] = [
     exampleLLMs: [
       'MiniMax-M3',
       'MiMo-V2.5',
-      'Kimi-K2.6',
-      'Qwen3.5-397B-A17B',
-      'Step 3.5 Flash',
+      'DeepSeek-V4-Flash-0731',
     ],
     notes: 'High memory capacity; designed for frontier-scale LLMs',
   },
@@ -95,10 +93,10 @@ const GPU_DATA: GPU[] = [
     bandwidthGBs: 8000,
     bandwidthDisplay: '8.0 TB/s',
     exampleLLMs: [
-      'DeepSeek-V4-Flash',
-      'DeepSeek-V4-Pro',
+      'DeepSeek-V4-Pro-0813',
+      'Kimi-K3',
+      'Qwen3.8-2.4T-A95B',
       'GLM-5.2',
-      'MiniMax-M3',
       'MiMo-V2.5-Pro',
     ],
     notes:
@@ -126,7 +124,6 @@ const GPU_DATA: GPU[] = [
       'MiniMax-M3',
       'DeepSeek-R1-0528',
       'MiMo-V2.5',
-      'Qwen3.5-397B-A17B',
     ],
     notes: 'Large memory capacity; strong choice for large models',
   },
@@ -140,9 +137,8 @@ const GPU_DATA: GPU[] = [
     exampleLLMs: [
       'Gemma-4-31B',
       'MiniMax-M3',
-      'DeepSeek-V3.2',
+      'DeepSeek-V4-Flash-0731',
       'GLM-5.2',
-      'Qwen3.5-397B-A17B',
     ],
     notes: '3rd Gen CDNA architecture; built for massive multi-GPU clusters',
   },
@@ -153,7 +149,7 @@ const GPU_DATA: GPU[] = [
     vramDisplay: '288 GB',
     bandwidthGBs: 8000,
     bandwidthDisplay: '8.0 TB/s',
-    exampleLLMs: ['GLM-5.2', 'Kimi-K3', 'MiniMax-M3', 'MiMo-V2.5-Pro'],
+    exampleLLMs: ['GLM-5.2', 'Kimi-K3', 'MiniMax-M3', 'Qwen3.8-2.4T-A95B', 'MiMo-V2.5-Pro'],
     notes:
       '4th Gen CDNA architecture; FP4/FP6 support; competes with B200 for the largest open models',
   },

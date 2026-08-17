@@ -247,8 +247,8 @@ improving steadily, with growing support across PyTorch, vLLM, SGLang, and MAX.
 
 Different models perform best on different types of GPUs. The table below maps
 popular NVIDIA and AMD GPUs to suitable open-source LLMs. Some models require
-**multiple GPUs to meet VRAM demands** or you may need optimization techniques
-like [quantization](/model-preparation/llm-quantization/).
+**multiple GPUs or nodes to meet VRAM demands** or you may need optimization
+techniques like [quantization](/model-preparation/llm-quantization/).
 
 <GPUTable />
 
