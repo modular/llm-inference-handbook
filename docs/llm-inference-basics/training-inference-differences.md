@@ -65,7 +65,7 @@ Here is a side-by-side comparison between training and inference:
 | Cost model | Mostly one-time                   | Ongoing and scales with traffic                      |
 | Hardware   | Multi-node clusters               | Smaller clusters, optimized runtimes and cache usage |
 | Time       | Hours to weeks                    | Milliseconds to seconds                              |
-| Tools      | PyTorch, JAX, DeepSpeed, Megatron | vLLM, SGLang, TensorRT-LLM, MAX, LMDeploy            |
+| Tools      | PyTorch, JAX, DeepSpeed, Megatron | vLLM, SGLang, TensorRT LLM, MAX, LMDeploy            |
 
 ## FAQs
 

@@ -4,7 +4,7 @@ description: Learn what LLM inference frameworks do, why raw model execution is 
 keywords:
     - Inference frameworks, inference backends, inference runtimes, inference engines, inference platforms
     - Best inference frameworks, best LLM inference providers, LLM inference benchmark
-    - vLLM, SGLang, LMDeploy, TensorRT-LLM, Hugging Face TGI, llama.cpp, MLC-LLM, Ollama
+    - vLLM, SGLang, LMDeploy, TensorRT LLM, Hugging Face TGI, llama.cpp, MLC-LLM, Ollama
 ---
 
 import Tabs from '@theme/Tabs';
@@ -145,7 +145,7 @@ applications include:
   focusing on delivering high decoding speed and efficient handling of
   concurrent requests. It supports various quantization techniques, making it
   suitable for deploying large models with reduced memory requirements.
-- [TensorRT-LLM](https://github.com/NVIDIA/TensorRT-LLM). An inference backend
+- [TensorRT LLM](https://github.com/NVIDIA/TensorRT-LLM). An inference backend
   that leverages NVIDIA's TensorRT, a high-performance deep learning inference
   library. It is optimized for running large models on NVIDIA GPUs, providing
   fast inference and support for advanced optimizations like quantization.
@@ -329,7 +329,7 @@ Here’s why AI teams often end up using more than one:
 Models, hardware, and workloads vary. The best performance often comes from
 matching each use case with a runtime tailored to that environment.
 
-- **High-throughput, batching**: vLLM, SGLang, MAX, LMDeploy, TensorRT-LLM
+- **High-throughput, batching**: vLLM, SGLang, MAX, LMDeploy, TensorRT LLM
   (tuning needed for better performance)
 - **Edge/mobile deployment**: MLC-LLM, llama.cpp
 - **Local experimentation or single-user scenario**: Ollama and llama.cpp

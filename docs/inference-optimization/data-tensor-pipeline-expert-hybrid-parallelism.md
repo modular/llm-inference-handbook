@@ -7,6 +7,8 @@ keywords:
     - Speed up LLM inference
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 import LinkList from '@site/src/components/LinkList';
 
 # Data, tensor, pipeline, expert and hybrid parallelisms
@@ -192,6 +194,89 @@ hybrid parallelism plan, it’s essential to benchmark different configurations
 based on your specific model size, hardware setup, and inference requirements.
 There’s no one-size-fits-all setup. The optimal strategy is often found through
 tuning and experimentation.
+
+## How to configure parallelism
+
+Inference frameworks expose these strategies as server flags. The examples below
+all describe the same 8-GPU node: first a single tensor-parallel replica across
+four GPUs, then the hybrid TP=4 with DP=2 layout, then expert parallelism for an
+MoE model.
+
+<Tabs groupId="inference-framework">
+<TabItem value="max" label="MAX">
+
+```bash
+# TP=4: one replica sharded across four GPUs
+max serve --model meta-llama/Llama-3.3-70B-Instruct \
+  --devices=gpu:0,1,2,3
+
+# TP=4, DP=2: eight GPUs split into two replicas
+max serve --model meta-llama/Llama-3.3-70B-Instruct \
+  --devices=gpu:all \
+  --data-parallel-degree 2
+
+# EP=8: MoE experts sharded across all eight GPUs
+max serve --model deepseek-ai/DeepSeek-V3 \
+  --devices=gpu:all \
+  --ep-size 8
+```
+
+MAX has no separate tensor parallelism flag. `--devices` selects the GPUs,
+`--data-parallel-degree` splits them into replicas, and each replica is
+tensor-parallel across the GPUs it owns. `--ep-size` must be either `1` (no
+expert parallelism) or the total number of GPUs across all nodes.
+
+</TabItem>
+<TabItem value="vllm" label="vLLM">
+
+```bash
+# TP=4: one replica sharded across four GPUs
+vllm serve --model meta-llama/Llama-3.3-70B-Instruct \
+  --tensor-parallel-size 4
+
+# TP=4, DP=2: eight GPUs split into two replicas
+vllm serve --model meta-llama/Llama-3.3-70B-Instruct \
+  --tensor-parallel-size 4 \
+  --data-parallel-size 2
+
+# EP: MoE layers switch from tensor to expert parallelism
+vllm serve --model deepseek-ai/DeepSeek-V3 \
+  --tensor-parallel-size 8 \
+  --enable-expert-parallel
+```
+
+In vLLM, expert parallelism is a toggle rather than a degree. It routes MoE
+layers over the GPUs already claimed by TP and DP. Without
+`--enable-expert-parallel`, MoE layers would use tensor parallelism (a
+TP group of size TP × DP), similar to dense models.
+
+</TabItem>
+<TabItem value="sglang" label="SGLang">
+
+```bash
+# TP=4: one replica sharded across four GPUs
+sglang serve --model-path meta-llama/Llama-3.3-70B-Instruct \
+  --tp-size 4
+
+# TP=4, DP=2: eight GPUs split into two replicas
+sglang serve --model-path meta-llama/Llama-3.3-70B-Instruct \
+  --tp-size 4 \
+  --dp-size 2
+
+# EP=8: MoE experts sharded across all eight GPUs
+sglang serve --model-path deepseek-ai/DeepSeek-V3 \
+  --tp-size 8 \
+  --ep-size 8
+```
+
+Each flag also accepts a longer alias: `--tensor-parallel-size`,
+`--data-parallel-size`, and `--expert-parallel-size`.
+
+</TabItem>
+</Tabs>
+
+Whichever framework you use, benchmark the layout rather
+than assuming the highest degree wins.
 
 <LinkList>
 

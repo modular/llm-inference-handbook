@@ -170,7 +170,7 @@ const PROFILES: Record<ProfileId, Profile> = {
       },
       {
         title: 'Choosing an inference framework',
-        description: 'MAX, vLLM, SGLang, TensorRT-LLM — what fits your needs',
+        description: 'MAX, vLLM, SGLang, TensorRT LLM — what fits your needs',
         href: '/getting-started/choosing-the-right-inference-framework',
       },
       {

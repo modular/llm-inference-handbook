@@ -62,7 +62,7 @@ In the LLM space, people often use **inference server** or
 
 Popular
 [inference frameworks](/getting-started/choosing-the-right-inference-framework/)
-include vLLM, SGLang, MAX, and TensorRT-LLM. They’re designed to maximize GPU
+include vLLM, SGLang, MAX, and TensorRT LLM. They’re designed to maximize GPU
 efficiency while making LLMs easier to deploy at scale.
 
 ## What's the difference between serving and inference?
@@ -71,7 +71,7 @@ Inference is the computation. Serving is the production process that makes that
 computation available to users and applications.
 
 In everyday conversations, people often use the terms interchangeably because
-modern frameworks handle both. Tools like vLLM, SGLang, MAX, and TensorRT-LLM
+modern frameworks handle both. Tools like vLLM, SGLang, MAX, and TensorRT LLM
 not only run inference efficiently but also manage requests and expose APIs. As
 a result, "inference framework" and "serving framework" often refer to the same
 systems.

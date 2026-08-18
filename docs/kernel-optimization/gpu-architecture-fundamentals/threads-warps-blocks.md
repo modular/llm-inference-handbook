@@ -180,12 +180,22 @@ def main() raises:
 index arithmetic is identical. Mojo also exposes `global_idx`, a shorthand that
 computes `block_idx.x * block_dim.x + thread_idx.x` for you, so the same line
 could be written as `var i = global_idx.x`.
+:::note
+The choice of programming model shows up when you customize kernels inside an
+inference framework. vLLM and SGLang both build on the vendor toolchains. Their
+kernels are CUDA C++ for NVIDIA and ROCm/HIP for AMD, alongside
+[Triton](/kernel-optimization/kernel-optimization-tools/#triton-and-python-kernel-dsls)
+and other kernel libraries for some operations. A kernel you write for one
+vendor generally needs a separate variant, and separate tuning, for the other.
+MAX takes a different approach: the same Mojo kernel implementation can target
+both NVIDIA and AMD GPUs.
+:::
 
 To learn about programming NVIDIA GPUs, see the
 [CUDA Programming Guide](https://docs.nvidia.com/cuda/cuda-programming-guide/02-basics/intro-to-cuda-cpp.html).
 
 To learn about programming any GPU, see the
-[Mojo GPU programming guide](https://mojolang.org/docs/manual/gpu/fundamentals/).
+[Mojo GPU programming guide](https://docs.modular.com/gpu/intro-tutorial/).
 
 ## How the hierarchy affects kernel performance
 
@@ -211,5 +221,5 @@ answers.
 
 - [CUDA C++ Programming Guide](https://docs.nvidia.com/cuda/cuda-programming-guide/index.html)
 - [AMD ROCm HIP programming model](https://rocm.docs.amd.com/projects/HIP/en/latest/understand/programming_model.html)
-- [Mojo GPU programming fundamentals](https://mojolang.org/docs/manual/gpu/fundamentals/)
+- [Mojo GPU programming fundamentals](https://docs.modular.com/gpu/intro-tutorial/)
 </LinkList>

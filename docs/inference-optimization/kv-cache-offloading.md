@@ -177,6 +177,6 @@ distributed systems such as Mooncake and ValKey.
 
 - [LMCache Documentation](https://docs.lmcache.ai/)
 - [NVIDIA GH200 Superchip Accelerates Inference by 2x in Multiturn Interactions with Llama Models](https://developer.nvidia.com/blog/nvidia-gh200-superchip-accelerates-inference-by-2x-in-multiturn-interactions-with-llama-models/)
-- [5x Faster Time to First Token with NVIDIA TensorRT-LLM KV Cache Early Reuse](https://developer.nvidia.com/blog/5x-faster-time-to-first-token-with-nvidia-tensorrt-llm-kv-cache-early-reuse/)
+- [5x Faster Time to First Token with NVIDIA TensorRT LLM KV Cache Early Reuse](https://developer.nvidia.com/blog/5x-faster-time-to-first-token-with-nvidia-tensorrt-llm-kv-cache-early-reuse/)
 - [KV Cache Offloading for Context-Intensive Tasks](https://arxiv.org/abs/2604.08426)
 </LinkList>

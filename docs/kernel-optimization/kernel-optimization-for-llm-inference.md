@@ -101,7 +101,7 @@ Both matter. They just solve fundamentally different problems.
 ## Why most teams never touch this layer
 
 Most AI engineers never write a GPU kernel, and for good reason. Inference
-frameworks like vLLM, SGLang, and TensorRT-LLM abstract away all low-level
+frameworks like vLLM, SGLang, and TensorRT LLM abstract away all low-level
 execution.
 
 This means you can simply:
@@ -148,7 +148,7 @@ adopted after it proved its value.
 ### The performance ceiling is real
 
 High-level frameworks are, in a way, orchestration layers built on top of
-collections of kernels. vLLM, SGLang, and TensorRT-LLM all ultimately dispatch
+collections of kernels. vLLM, SGLang, and TensorRT LLM all ultimately dispatch
 kernels for the actual computation. This means inference speed cannot exceed
 what the underlying kernels allow.
 

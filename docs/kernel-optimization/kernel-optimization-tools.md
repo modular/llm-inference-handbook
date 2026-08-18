@@ -55,7 +55,7 @@ This layer covers operations such as:
 - Neural network primitives in cuDNN
 - Increasingly, fused attention and other common deep learning patterns
 
-This is why frameworks like PyTorch, TensorRT-LLM, and many inference stacks
+This is why frameworks like PyTorch, TensorRT LLM, and many inference stacks
 rely on them under the hood. They inherit years of architecture-specific tuning
 work (e.g., Ampere, Hopper) that most teams could never justify doing
 themselves.
