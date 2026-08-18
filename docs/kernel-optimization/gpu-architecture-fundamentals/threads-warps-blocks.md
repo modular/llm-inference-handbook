@@ -180,6 +180,7 @@ def main() raises:
 index arithmetic is identical. Mojo also exposes `global_idx`, a shorthand that
 computes `block_idx.x * block_dim.x + thread_idx.x` for you, so the same line
 could be written as `var i = global_idx.x`.
+
 :::note
 The choice of programming model shows up when you customize kernels inside an
 inference framework. vLLM and SGLang both build on the vendor toolchains. Their
