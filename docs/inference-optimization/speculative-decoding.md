@@ -126,7 +126,7 @@ accepting each drafted token at a preset probability instead of running a real
 draft model. For example, a
 [BentoML benchmark](https://www.bentoml.com/blog/3x-faster-llm-inference-with-speculative-decoding)
 used a patched vLLM setup for this purpose;
-[Modular MAX supports speculative decoding](https://docs.modular.com/max/serve/speculative-decoding/)
+[Modular MAX supports speculative decoding](https://max.modular.com/serve/speculative-decoding/)
 and exposes a `--synthetic-acceptance-rate` knob for the same kind of controlled
 test.
 
