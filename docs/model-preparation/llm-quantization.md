@@ -253,7 +253,7 @@ max serve --model meta-llama/Llama-3.1-8B-Instruct \
 `float16`, `bfloat16`), low-precision floating-point formats (`float8_e4m3fn`,
 `float4_e2m1fnx2`), the GGUF integer formats (`q4_0`, `q4_k`, `q6_k`), and
 `gptq` for GPTQ checkpoints. For more information, see
-[Quantization in the MAX documentation](https://docs.modular.com/develop/quantize/).
+[Quantization in the MAX documentation](https://max.modular.com/develop/quantize/).
 
 </TabItem>
 <TabItem value="vllm" label="vLLM">
