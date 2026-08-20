@@ -368,7 +368,6 @@ def syncwarp(mask: Int = -1):
     elif is_amd_gpu():
         llvm_intrinsic["llvm.amdgcn.wave.barrier", NoneType]()
     elif is_apple_gpu():
-        # simdgroup_barrier(mem_flags::mem_none)
         llvm_intrinsic["llvm.air.simdgroup.barrier", NoneType](
             Int32(0), Int32(4)
         )
