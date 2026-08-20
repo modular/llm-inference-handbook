@@ -222,5 +222,5 @@ answers.
 
 - [CUDA C++ Programming Guide](https://docs.nvidia.com/cuda/cuda-programming-guide/index.html)
 - [AMD ROCm HIP programming model](https://rocm.docs.amd.com/projects/HIP/en/latest/understand/programming_model.html)
-- [Mojo GPU programming fundamentals](https://docs.modular.com/gpu/intro-tutorial/)
+- [Mojo GPU programming fundamentals](https://max.modular.com/gpu/fundamentals/)
 </LinkList>
