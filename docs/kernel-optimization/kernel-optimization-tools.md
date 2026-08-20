@@ -308,7 +308,7 @@ That's why the AI community keeps searching for something better: the high
 performance of hand-written kernels, without the expertise barrier and hardware
 dependency that makes them impractical to scale.
 
-## Mojo and MAX: a full-stack attempt
+## Mojo and MAX: a full-stack approach
 
 So far, every layer in the stack forces certain tradeoffs:
 
