@@ -321,7 +321,7 @@ So far, every layer in the stack forces certain tradeoffs:
 - Custom kernels give you full control, but at a high cost in time, expertise,
   and portability.
 
-Modular's attempt with [Mojo](https://mojolang.ort) and
+Modular's attempt with [Mojo](https://mojolang.org) and
 [MAX](https://max.modular.com) takes a different approach.
 Instead of treating kernels, compilers, and runtimes as separate layers, they
 combine them as a single, vertically integrated system.
