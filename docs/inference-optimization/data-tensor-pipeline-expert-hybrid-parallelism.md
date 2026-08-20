@@ -269,7 +269,7 @@ sglang serve --model-path deepseek-ai/DeepSeek-V3 \
   --ep-size 8
 ```
 
-Each flag also accepts a longer alias: `--tensor-parallel-size`,
+In SGLang, each flag also accepts a longer alias: `--tensor-parallel-size`,
 `--data-parallel-size`, and `--expert-parallel-size`.
 
 </TabItem>
