@@ -100,13 +100,6 @@ function QuantizationVisualizer() {
                 onChange={(e) => handleParamsChange(Number(e.target.value))}
               />
             </FormItem>
-            <div className={styles.note}>
-              <div className={styles.label}>Note:</div>
-              <div>
-                Memory shown covers model weights only. Actual usage can be much
-                higher due to KV cache, activations, and framework overhead
-              </div>
-            </div>
           </div>
           <div className={styles.chart}>
             <div className={styles.chartTitle}>Weights memory by format</div>

@@ -10,7 +10,8 @@ keywords:
     - Shared memory bank conflicts
 ---
 
-import LinkList from '@site/src/components/LinkList';
+import LinkList from '@site/src/components/LinkList'; import
+MemoryHierarchyExplorer from '@site/src/components/MemoryHierarchyExplorer';
 
 # GPU memory hierarchy
 
@@ -20,6 +21,12 @@ provides much more capacity off-chip. Most
 [GPU kernel optimization techniques](/kernel-optimization/kernel-optimization-for-llm-inference/)
 come down to moving less data or reusing data at a faster level of this
 hierarchy.
+
+Each step down the hierarchy buys capacity but moves data farther from compute.
+Select a tier below to see how the physical location changes the group that can
+reuse the same data.
+
+<MemoryHierarchyExplorer />
 
 ## Registers
 

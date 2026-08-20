@@ -1,0 +1,205 @@
+.container {
+  overflow: hidden;
+  margin: 1.5rem 0;
+  border: 1px solid var(--Elements-Twilight-20-70);
+  border-radius: 4px;
+}
+
+.header {
+  padding: 1.25rem 1.5rem;
+  background: var(--Elements-Twilight-5-90);
+}
+
+.headerTitle {
+  color: var(--Elements-Twilight-100-0);
+  font-size: 1.2rem;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+}
+
+.headerDescription {
+  margin-top: 0.25rem;
+  color: var(--Elements-Twilight-70-20);
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 12rem;
+  gap: 1rem;
+  align-items: start;
+  padding: 1.25rem 1.5rem;
+}
+
+/* ── Floorplan ── */
+
+.floorplan {
+  min-width: 0;
+  padding: 0.6rem;
+  border: 1px dashed var(--Elements-Twilight-40-60);
+  border-radius: 4px;
+  background: var(--Elements-Twilight-1-90);
+}
+
+.smLabel {
+  margin-bottom: 0.5rem;
+  color: var(--Elements-Twilight-60-40);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.blocks {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.4rem;
+}
+
+.block {
+  min-width: 0;
+  padding: 0.35rem;
+  border: 1px solid var(--Elements-Twilight-30-60);
+  border-radius: 3px;
+}
+
+.blockLabel {
+  margin-bottom: 0.3rem;
+  color: var(--Elements-Twilight-60-50);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.625rem;
+}
+
+.lanes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.25rem;
+}
+
+/* ── Clickable units ── */
+
+.region {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  margin-bottom: 0.25rem;
+  padding: 0.3rem 0.35rem;
+  overflow: hidden;
+  border: 1px solid var(--Elements-Twilight-30-60);
+  border-radius: 3px;
+  background: var(--Elements-Twilight-0-100);
+  color: var(--Elements-Twilight-70-20);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.6875rem;
+  line-height: 1.25;
+  text-align: left;
+  text-overflow: ellipsis;
+  transition:
+    border-color 150ms ease,
+    background 150ms ease,
+    color 150ms ease;
+}
+
+.lanes .region {
+  margin-bottom: 0;
+}
+
+.region:hover:not(.regionActive) {
+  border-color: var(--Elements-Neb-Ultra);
+}
+
+.region:focus-visible {
+  outline: 2px solid var(--Elements-Neb-Ultra);
+  outline-offset: 1px;
+}
+
+.regionActive {
+  border-color: var(--Elements-Neb-Ultra);
+  background: var(--Elements-Neb-Ultra);
+  color: var(--Elements-Twilight-0-100);
+}
+
+.sub {
+  color: var(--Elements-Twilight-60-50);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.625rem;
+}
+
+.regionActive .sub {
+  color: inherit;
+  opacity: 0.85;
+}
+
+/* The two shared units sit below the blocks, spanning the whole SM. */
+.floorplan > .region {
+  margin-top: 0.4rem;
+  margin-bottom: 0;
+}
+
+/* ── Readout ── */
+
+/* Type scale mirrors the readout in MemoryHierarchyExplorer so the two
+   GPU architecture components read as one system. */
+.readout {
+  padding: 1rem;
+  border: 1px solid var(--Elements-Twilight-20-70);
+  border-radius: 4px;
+  background: var(--Elements-Twilight-1-90);
+}
+
+.readoutName {
+  color: var(--Elements-Twilight-100-0);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.readoutCount {
+  margin-top: 0.2rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--Elements-Twilight-20-70);
+  color: var(--Elements-Neb-Ultra);
+  font-size: 0.6875rem;
+}
+
+.readoutRole {
+  margin: 0.6rem 0 0;
+  color: var(--Elements-Twilight-70-20);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.note {
+  padding: 0.7rem 1.5rem;
+  border-top: 1px solid var(--Elements-Twilight-20-70);
+  background: var(--Elements-Twilight-1-90);
+  color: var(--Elements-Twilight-60-50);
+  font-size: 0.6875rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 800px) {
+  .body {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .header,
+  .body,
+  .note {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  .blocks {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Dark mode ── */
+
+:global(html[data-theme='dark']) .region:hover:not(.regionActive) {
+  background: rgba(255, 255, 255, 0.04);
+}

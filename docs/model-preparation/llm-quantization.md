@@ -91,7 +91,8 @@ not activated parameters per token.
 
 <QuantizationVisualizer />
 
-This calculator estimates **weight memory only**. Use the
+This calculator estimates **weight memory only**. Actual usage can be much
+higher due to KV cache, activations, and framework overhead. Use the
 [GPU memory calculator](/getting-started/calculating-gpu-memory-for-llms/) to
 estimate your overall requirements.
 

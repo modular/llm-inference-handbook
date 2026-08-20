@@ -113,6 +113,12 @@ concepts directly:
   Estimate how much memory the KV cache consumes.
 - [GPU Execution and Memory Map](/kernel-optimization/gpu-architecture-fundamentals/):
   Visualize how threads, warps, SMs, and the GPU memory hierarchy fit together.
+- [GPU Memory Explorer](/kernel-optimization/gpu-architecture-fundamentals/gpu-memory/):
+  Understand different memory tiers and see how reuse scope changes as data moves.
+- [Streaming Multiprocessor Explorer](/kernel-optimization/gpu-architecture-fundamentals/streaming-multiprocessors/#what-an-sm-contains):
+  Explore the units inside an SM and see how many of each an H100 has.
+- [Warp Scheduler Visualizer](/kernel-optimization/gpu-architecture-fundamentals/streaming-multiprocessors/#how-warp-scheduling-hides-latency):
+  Compare too few, enough, and extra resident warps on a scheduler timeline.
 
 ## Contributing
 
