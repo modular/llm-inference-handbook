@@ -119,7 +119,7 @@ but different tools may define or calculate metrics in different ways.
 Many inference frameworks ship their own benchmarking scripts, commands, and
 usage guidelines, such as [vLLM](https://docs.vllm.ai/en/latest/benchmarking/),
 [SGLang](https://docs.sglang.ai/developer_guide/benchmark_and_profiling.html#),
-and [MAX](https://docs.modular.com/serve/benchmark/). For example, you can run a
+and [MAX](https://max.modular.com/serve/benchmark/). For example, you can run a
 command with each of them to start a benchmark like this:
 
 <Tabs groupId="inference-framework">
