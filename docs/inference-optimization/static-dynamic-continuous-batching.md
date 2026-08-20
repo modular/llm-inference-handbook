@@ -102,7 +102,7 @@ to finish.
 
 Major
 [inference frameworks](/getting-started/choosing-the-right-inference-framework/)
-such as vLLM, SGLang, MAX, TensorRT-LLM (in-flight batching) and LMDeploy
+such as vLLM, SGLang, MAX, TensorRT LLM (in-flight batching) and LMDeploy
 (persistent batching) all support continuous batching or similar mechanisms. For
 memory management in long or mixed-length batches, see
 [PagedAttention](/inference-optimization/pagedattention/).

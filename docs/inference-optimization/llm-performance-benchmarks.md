@@ -5,6 +5,9 @@ keywords:
     - LLM benchmarks, LLM performance benchmarks, LLM performance metrics, inference benchmarks
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # LLM performance benchmarks
 
 You’ve probably seen LLM leaderboards. Those neatly formatted ranking tables
@@ -52,7 +55,7 @@ Here are situations where custom benchmarking makes sense:
   best LLMs, benchmarks reveal how they differ in throughput, latency, and cost
   under your workload.
 - **Evaluating inference frameworks**. Frameworks like vLLM, SGLang, MAX,
-  TensorRT-LLM, and Hugging Face TGI provide different inference optimizations.
+  TensorRT LLM, and Hugging Face TGI provide different inference optimizations.
   Benchmarks help you see which delivers the best trade-off for your setup.
 - **Testing infrastructure changes**. Moving from A10G to H100 GPUs, or
   switching from on-prem to cloud, will affect performance. Benchmarks confirm
@@ -111,31 +114,64 @@ performance benchmarking. These tools focus on inference-level metrics such as
 throughput and latency. They provide detailed insights into model performance,
 but different tools may define or calculate metrics in different ways.
 
-### Framework-specific benchmark scripts
+### Built-in framework benchmarking tools
 
-Some inference frameworks like
-[vLLM](https://github.com/vllm-project/vllm/tree/main/benchmarks) and
-[SGLang](https://docs.sglang.ai/developer_guide/benchmark_and_profiling.html#)
-offer their own benchmarking scripts, commands, and usage guidelines. They are
-helpful for quick experiments and understanding performance with the
-optimizations from that specific framework. However, always pay close attention
-to their default parameters and configurations. Results may look strong but
-might not reflect your production setup.
+Many inference frameworks ship their own benchmarking scripts, commands, and
+usage guidelines, such as [vLLM](https://docs.vllm.ai/en/latest/benchmarking/),
+[SGLang](https://docs.sglang.ai/developer_guide/benchmark_and_profiling.html#),
+and [MAX](https://max.modular.com/serve/benchmark/). For example, you can run a
+command with each of them to start a benchmark like this:
 
-### End-to-end benchmarking with MAX
+<Tabs groupId="inference-framework">
+<TabItem value="max" label="MAX">
 
-MAX includes `benchmark_serving.py`, a script for measuring the end-to-end
-performance of an LLM serving endpoint—throughput, latency, and resource
-utilization. It builds on vLLM's measurement methodology so results stay
-comparable across backends.
+```bash
+max benchmark \
+  --backend modular \
+  --model meta-llama/Llama-3.1-8B-Instruct \
+  --endpoint /v1/chat/completions \
+  --dataset-name sonnet \
+  --num-prompts 500
+```
 
-With it, you can:
+</TabItem>
+<TabItem value="vllm" label="vLLM">
 
-- Benchmark any OpenAI-compatible HTTP endpoint, including hosted services.
-- Test both chat and completion APIs.
-- Measure detailed latency metrics across different request patterns.
-- Compare serving backends, such as vLLM and MAX, under a consistent
-  methodology.
+```bash
+vllm bench serve \
+  --backend vllm \
+  --model meta-llama/Llama-3.1-8B-Instruct \
+  --endpoint /v1/completions \
+  --dataset-name sharegpt \
+  --dataset-path <data_path>/ShareGPT_Data.json \
+  --num-prompts 500
+```
+
+</TabItem>
+<TabItem value="sglang" label="SGLang">
+
+```bash
+python3 -m sglang.bench_serving \
+  --backend sglang \
+  --model-path meta-llama/Llama-3.1-8B-Instruct \
+  --dataset-name random \
+  --random-input-len 256 \
+  --random-output-len 32 \
+  --max-concurrency 16 \
+  --num-prompts 500
+```
+
+</TabItem>
+</Tabs>
+
+:::note
+Launch a server first before you run the above commands.
+:::
+
+They are helpful for quick experiments and for understanding performance with
+the optimizations of that specific framework. However, always pay close
+attention to their default parameters and configurations. Results may look
+strong but might not reflect your production setup.
 
 ## What metrics should you benchmark
 
@@ -167,7 +203,7 @@ to control include:
 - **Server parameters**: parallelism (e.g., data, tensor and expert), caching
   strategies, memory allocation
 - **Client parameters**: request rate, concurrency limits, batch sizes, timeouts
-- **Framework differences**: optimizations in vLLM, SGLang, MAX, TensorRT-LLM,
+- **Framework differences**: optimizations in vLLM, SGLang, MAX, TensorRT LLM,
   TGI, etc.
 - **Workload variations**: model choice, input sequence length, output length,
   request distribution

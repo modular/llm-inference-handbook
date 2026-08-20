@@ -121,7 +121,7 @@ FlashAttention provides major improvements in both speed and scalability:
 Currently, FlashAttention is widely used in:
 
 - Training frameworks (PyTorch, DeepSpeed)
-- Inference engines (vLLM, SGLang, Hugging Face TGI, TensorRT-LLM)
+- Inference engines (vLLM, SGLang, MAX, TensorRT LLM)
 - Model architectures that support long context
 
 ## FlashAttention version comparison
@@ -161,9 +161,7 @@ Recent PyTorch versions automatically dispatch to FlashAttention via
 [the API reference](https://docs.pytorch.org/docs/stable/backends.html#torch.backends.cuda.can_use_flash_attention)
 to learn more.
 
-Many inference frameworks have already integrated FlashAttention, including
-[vLLM](https://docs.vllm.ai/en/latest/getting_started/quickstart/#on-attention-backends)
-and [SGLang](https://docs.sglang.ai/advanced_features/attention_backend.html),
+Many inference frameworks have already integrated FlashAttention,
 but their versions may be different depending on their release cycle.
 
 For FlashAttention-4 specifically, the official repository documents a separate

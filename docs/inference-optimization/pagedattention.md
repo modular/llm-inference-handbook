@@ -2,7 +2,7 @@
 sidebar_position: 3
 description: Improve LLM memory usage with block-based KV cache storage via PagedAttention.
 keywords:
-    - vLLM, Hugging Face TGI, TensorRT-LLM
+    - vLLM, Hugging Face TGI, TensorRT LLM
     - PagedAttention
     - KV cache, KV cache optimization, KV caching
     - LLM inference optimization, LLM inference optimization techniques
