@@ -321,8 +321,8 @@ So far, every layer in the stack forces certain tradeoffs:
 - Custom kernels give you full control, but at a high cost in time, expertise,
   and portability.
 
-Modular's attempt with [Mojo](https://mojolang.org) and
-[MAX](https://max.modular.com) takes a different approach.
+Modular's approach with [Mojo](https://mojolang.org) and
+[MAX](https://max.modular.com) is different.
 Instead of treating kernels, compilers, and runtimes as separate layers, they
 combine them as a single, vertically integrated system.
 
@@ -351,8 +351,8 @@ following without requiring separate implementations per vendor.
 - Tensor core instructions
 - Memory hierarchy details
 
-As shown in the code below, a warp synchronization primitive can be compiled
-differently depending on the hardware target:
+As shown in the code below, a warp synchronization primitive in Mojo can be
+compiled differently depending on the hardware target:
 
 ```mojo title="🔥 Mojo"
 # Compile-time warp synchronization per hardware
@@ -377,8 +377,8 @@ def syncwarp(mask: Int = -1):
         ]()
 ```
 
-MAX is the execution and compilation layer underneath. It handles the full
-inference path:
+MAX is the execution and compilation layer built on top of Mojo. It handles
+the full inference path:
 
 - Model definition (with a PyTorch-like API)
 - Graph compilation (via MLIR)
@@ -388,16 +388,9 @@ Instead of stitching together PyTorch, vLLM, CUDA, and custom kernels, MAX
 provides one stack from model graph to GPU kernel. This allows optimization
 across layers, not just within one.
 
-Note that Mojo and MAX are maturing, and the ecosystem around them is a fraction
-of what CUDA has accumulated over fifteen years. However, they are different in
-kind from what came before. The right way to read Mojo and MAX is not as a
-settled winner. It is better to see them as a serious attempt to close the gap
-that older tools leave open: too much fragmentation, too much rewrite work, and
-too much coupling between peak performance and one specific backend.
-
 For teams navigating mixed GPU fleets, rising hardware costs, or the maintenance
-burden of hand-written CUDA kernels, it is worth understanding what this stack
-can do.
+burden of hand-written CUDA kernels, it’s worth understanding what
+[MAX](https://max.modular.com) can do.
 
 ## How should you choose among these tools
 
