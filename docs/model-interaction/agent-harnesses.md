@@ -13,16 +13,17 @@ import LinkList from '@site/src/components/LinkList';
 
 # Agent harnesses
 
-An agent harness is the system around the model that turns it into an agent. It
-maintains state, exposes tools, executes approved actions, returns observations,
-and decides whether the model should keep going. Those jobs typically live in
-the control loop, the tool interface, the context assembled for each turn, the
-checks on what the model produced, and the rules about what it's allowed to
-touch.
+An agent harness is a system that wraps one or more AI models and enables them
+to interact with the user and their environment. It can hold long-running
+conversations with a model and carry out actions with other programs when the
+model requests them.
 
-A harness doesn't make the model inherently more intelligent. It gives the model
-an environment where useful work can happen safely and repeatedly. The relation
-is often summarized as:
+The harness maintains conversation state, exposes available tools, executes
+approved actions, returns observations, and decides whether to prompt the model
+again or stop. This work typically takes place in an intelligent control loop,
+but the harness doesn’t necessarily make the model inherently more intelligent.
+It gives the model information about the environment where useful work can
+happen safely and repeatedly. The relation is often summarized as:
 
 > Agent = Model + Harness
 
@@ -166,36 +167,6 @@ choosing a server.
 Open models also change capacity planning. Long context and several concurrent
 agent sessions can consume more GPU memory than the model weights suggest. Test
 with realistic trajectories and tool output before setting production limits.
-
-## Serving agentic workloads with MAX
-
-A harness turns one task into a chain of planning, reasoning, execution, and
-verification calls, so latency compounds with every step.
-[MAX](https://www.modular.com/open-source/max?utm_source=llm_handbook) is built
-for that pattern:
-
-- **Predictable multi-step latency**. Compiled inference and continuous batching
-  keep each step in the loop fast, so a 30-step task doesn't accumulate delay.
-- **Faster tool calls**.
-  [Tool calling](https://docs.modular.com/serve/function-calling/) is
-  compiler-optimized, and the time saved on each round trip adds up across an
-  agentic loop.
-- **Structured output at compiler speed**. Constrained decoding is compiled into
-  the graph, so the JSON, function signatures, and typed tool calls a harness
-  depends on stay both valid and fast.
-- **Hardware-portable agents**. The same containers run on NVIDIA, AMD and other
-  accelerators, so you can mix vendors across agent roles for cost and
-  resilience without changing the serving interface.
-- **On-device agents**. MAX compiles agent models natively for Apple Silicon and
-  ARM CPUs, so agents can reason offline and scale to the cloud when needed.
-
-Learn more about our
-[agentic AI solutions](https://www.modular.com/solutions/agentic?utm_source=llm_handbook)
-or discuss a deployment for a specific harness and workload.
-
-<div style={{ margin: '3rem 0' }}>
-<a className="btn-outline" href="https://www.modular.com/request-demo?utm_source=llm_handbook">Talk to us</a>
-</div>
 
 ## FAQs
 
