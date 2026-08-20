@@ -352,7 +352,7 @@ following without requiring separate implementations per vendor.
 - Memory hierarchy details
 
 As shown in the code below, a warp synchronization primitive can be compiled
-differently depending on the target (NVIDIA vs. AMD):
+differently depending on the hardware target:
 
 ```mojo title="🔥 Mojo"
 # Compile-time warp synchronization per hardware
