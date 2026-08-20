@@ -20,9 +20,9 @@ model requests them.
 
 The harness maintains conversation state, exposes available tools, executes
 approved actions, returns observations, and decides whether to prompt the model
-again or stop. This work typically takes place in an intelligent control loop,
-but the harness doesn’t necessarily make the model inherently more intelligent.
-It gives the model information about the environment where useful work can
+again or stop. This work typically takes place in an iterative control loop. The
+harness doesn't make the model more capable as the weights are unchanged, but it
+gives the model information about its environment, so that useful work can
 happen safely and repeatedly. The relation is often summarized as:
 
 > Agent = Model + Harness
