@@ -237,7 +237,7 @@ time managing low-level machinery directly.
 
 At a high level, a Triton kernel looks like this:
 
-```python
+```python title="🐍 Python"
 @triton.jit
 def add_kernel(x_ptr, y_ptr, output_ptr, n, BLOCK_SIZE: tl.constexpr):
     pid = tl.program_id(0)
@@ -308,7 +308,7 @@ That's why the AI community keeps searching for something better: the high
 performance of hand-written kernels, without the expertise barrier and hardware
 dependency that makes them impractical to scale.
 
-## Mojo and MAX: a full-stack attempt
+## Mojo and MAX: a full-stack approach
 
 So far, every layer in the stack forces certain tradeoffs:
 
@@ -321,8 +321,8 @@ So far, every layer in the stack forces certain tradeoffs:
 - Custom kernels give you full control, but at a high cost in time, expertise,
   and portability.
 
-Modular's attempt with [Mojo](https://www.modular.com/open-source/mojo) and
-[MAX](https://www.modular.com/open-source/max) takes a different approach.
+Modular's approach with [Mojo](https://mojolang.org) and
+[MAX](https://max.modular.com) is different.
 Instead of treating kernels, compilers, and runtimes as separate layers, they
 combine them as a single, vertically integrated system.
 
@@ -351,30 +351,34 @@ following without requiring separate implementations per vendor.
 - Tensor core instructions
 - Memory hierarchy details
 
-As shown in the code below, a warp synchronization primitive can be compiled
-differently depending on the target (NVIDIA vs. AMD):
+As shown in the code below, a warp synchronization primitive in Mojo can be
+compiled differently depending on the hardware target:
 
-```mojo
+```mojo title="🔥 Mojo"
 # Compile-time warp synchronization per hardware
 
 @always_inline("nodebug")
-fn syncwarp(mask: Int = -1):
-    """Synchronizes threads within a warp using a barrier."""
-
-    @parameter
-    if is_nvidia_gpu():
+def syncwarp(mask: Int = -1):
+    comptime if is_nvidia_gpu():
         __mlir_op.`nvvm.bar.warp.sync`(
-            __mlir_op.`index.casts`[_type = __mlir_type.i32](
-                mask._mlir_value
+            __mlir_op.`index.casts`[_type=__mlir_type.i32](
+                mask.__mlir_index__()
             )
         )
     elif is_amd_gpu():
-        # In AMD GPU this is a nop (everything executed in lock-step).
-        return
+        llvm_intrinsic["llvm.amdgcn.wave.barrier", NoneType]()
+    elif is_apple_gpu():
+        llvm_intrinsic["llvm.air.simdgroup.barrier", NoneType](
+            Int32(0), Int32(4)
+        )
+    else:
+        CompilationTarget.unsupported_target_error[
+            operation=__get_current_function_name()
+        ]()
 ```
 
-MAX is the execution and compilation layer underneath. It handles the full
-inference path:
+MAX is the execution and compilation layer built on top of Mojo. It handles
+the full inference path:
 
 - Model definition (with a PyTorch-like API)
 - Graph compilation (via MLIR)
@@ -384,16 +388,9 @@ Instead of stitching together PyTorch, vLLM, CUDA, and custom kernels, MAX
 provides one stack from model graph to GPU kernel. This allows optimization
 across layers, not just within one.
 
-Note that Mojo and MAX are maturing, and the ecosystem around them is a fraction
-of what CUDA has accumulated over fifteen years. However, they are different in
-kind from what came before. The right way to read Mojo and MAX is not as a
-settled winner. It is better to see them as a serious attempt to close the gap
-that older tools leave open: too much fragmentation, too much rewrite work, and
-too much coupling between peak performance and one specific backend.
-
 For teams navigating mixed GPU fleets, rising hardware costs, or the maintenance
-burden of hand-written CUDA kernels, it is worth understanding what this stack
-can do.
+burden of hand-written CUDA kernels, it’s worth understanding what
+[MAX](https://max.modular.com) can do.
 
 ## How should you choose among these tools
 
