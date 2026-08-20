@@ -237,7 +237,7 @@ time managing low-level machinery directly.
 
 At a high level, a Triton kernel looks like this:
 
-```python
+```python title="🐍 Python"
 @triton.jit
 def add_kernel(x_ptr, y_ptr, output_ptr, n, BLOCK_SIZE: tl.constexpr):
     pid = tl.program_id(0)
@@ -321,8 +321,8 @@ So far, every layer in the stack forces certain tradeoffs:
 - Custom kernels give you full control, but at a high cost in time, expertise,
   and portability.
 
-Modular's attempt with [Mojo](https://www.modular.com/open-source/mojo) and
-[MAX](https://www.modular.com/open-source/max) takes a different approach.
+Modular's attempt with [Mojo](https://mojolang.ort) and
+[MAX](https://max.modular.com) takes a different approach.
 Instead of treating kernels, compilers, and runtimes as separate layers, they
 combine them as a single, vertically integrated system.
 
@@ -354,23 +354,28 @@ following without requiring separate implementations per vendor.
 As shown in the code below, a warp synchronization primitive can be compiled
 differently depending on the target (NVIDIA vs. AMD):
 
-```mojo
+```mojo title="🔥 Mojo"
 # Compile-time warp synchronization per hardware
 
 @always_inline("nodebug")
-fn syncwarp(mask: Int = -1):
-    """Synchronizes threads within a warp using a barrier."""
-
-    @parameter
-    if is_nvidia_gpu():
+def syncwarp(mask: Int = -1):
+    comptime if is_nvidia_gpu():
         __mlir_op.`nvvm.bar.warp.sync`(
-            __mlir_op.`index.casts`[_type = __mlir_type.i32](
-                mask._mlir_value
+            __mlir_op.`index.casts`[_type=__mlir_type.i32](
+                mask.__mlir_index__()
             )
         )
     elif is_amd_gpu():
-        # In AMD GPU this is a nop (everything executed in lock-step).
-        return
+        llvm_intrinsic["llvm.amdgcn.wave.barrier", NoneType]()
+    elif is_apple_gpu():
+        # simdgroup_barrier(mem_flags::mem_none)
+        llvm_intrinsic["llvm.air.simdgroup.barrier", NoneType](
+            Int32(0), Int32(4)
+        )
+    else:
+        CompilationTarget.unsupported_target_error[
+            operation=__get_current_function_name()
+        ]()
 ```
 
 MAX is the execution and compilation layer underneath. It handles the full
