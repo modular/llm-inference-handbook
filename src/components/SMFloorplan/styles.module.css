@@ -139,8 +139,10 @@
 
 /* ── Readout ── */
 
+/* Type scale mirrors the readout in MemoryHierarchyExplorer so the two
+   GPU architecture components read as one system. */
 .readout {
-  padding: 0.85rem 1rem;
+  padding: 1rem;
   border: 1px solid var(--Elements-Twilight-20-70);
   border-radius: 4px;
   background: var(--Elements-Twilight-1-90);
@@ -148,9 +150,9 @@
 
 .readoutName {
   color: var(--Elements-Twilight-100-0);
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   font-weight: 600;
-  line-height: 1.3;
+  line-height: 1.25;
 }
 
 .readoutCount {
@@ -158,14 +160,14 @@
   padding-bottom: 0.6rem;
   border-bottom: 1px solid var(--Elements-Twilight-20-70);
   color: var(--Elements-Neb-Ultra);
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
 }
 
 .readoutRole {
   margin: 0.6rem 0 0;
   color: var(--Elements-Twilight-70-20);
-  font-size: 0.8125rem;
-  line-height: 1.45;
+  font-size: 0.75rem;
+  line-height: 1.5;
 }
 
 .note {

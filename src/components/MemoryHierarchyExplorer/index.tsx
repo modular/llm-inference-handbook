@@ -82,17 +82,15 @@ export default function MemoryHierarchyExplorer() {
   return (
     <div className={styles.container} style={levelStyle}>
       <div className={styles.header}>
-        <div>
-          <div className={styles.headerTitle}>GPU Memory Explorer</div>
-          <div className={styles.headerDescription}>
-            Select a memory space to see where data lives and how far reuse can
-            reach.
-          </div>
+        <div className={styles.headerTitle}>GPU Memory Explorer</div>
+        <div className={styles.headerDescription}>
+          Select a memory space to see where data lives and how far reuse can
+          reach.
         </div>
         <div className={styles.direction} aria-hidden="true">
-          <span>closer to compute</span>
+          <span>Closer to compute</span>
           <span className={styles.directionLine} />
-          <span>farther from compute</span>
+          <span>Farther from compute</span>
         </div>
       </div>
 

@@ -107,7 +107,13 @@
   font-size: 0.6875rem;
 }
 
+.rule + .rule {
+  margin-top: 0.35rem;
+  align-items: flex-start;
+}
+
 .ruleLabel {
+  flex-shrink: 0;
   margin-right: 0.1rem;
   color: var(--Elements-Twilight-70-20);
   font-weight: 500;

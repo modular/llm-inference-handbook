@@ -83,7 +83,7 @@ export default function SMFloorplan() {
 
       <div className={styles.body}>
         <div className={styles.floorplan}>
-          <div className={styles.smLabel}>One SM</div>
+          <div className={styles.smLabel}>One NVIDIA H100 SM</div>
 
           <div className={styles.blocks}>
             {BLOCKS.map((block) => (
@@ -121,9 +121,9 @@ export default function SMFloorplan() {
       </div>
 
       <div className={styles.note}>
-        This is a simplified floorplan. An SM also contains load/store units, special
-        function units, texture units, and instruction caches, and the exact mix
-        changes with every GPU generation.
+        This is a simplified floorplan. An SM also contains load/store units,
+        special function units, texture units, and instruction caches, and the
+        exact mix changes with every GPU generation.
       </div>
     </div>
   )

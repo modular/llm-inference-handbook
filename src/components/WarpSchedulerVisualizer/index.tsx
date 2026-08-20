@@ -59,9 +59,11 @@ export default function WarpSchedulerVisualizer() {
       <div className={styles.header}>
         <div className={styles.headerTitle}>Warp Scheduler Visualizer</div>
         <div className={styles.headerDescription}>
-          Learn how warp scheduling hides memory latency. One scheduler chooses
-          one ready warp per cycle. More resident warps give the scheduler more
-          work to choose from.
+          A scheduler issues at most one instruction per cycle, and can only
+          pick a warp that is ready. A warp that reads memory isn&rsquo;t ready
+          again until its data arrives &mdash; tens of cycles on an L1 hit,
+          hundreds on an HBM miss, fixed at {MEMORY_WAIT} here. More resident
+          warps give the scheduler something to run in those gaps.
         </div>
       </div>
 
@@ -100,6 +102,16 @@ export default function WarpSchedulerVisualizer() {
           <span className={styles.ruleArrow}>→</span>
           <span className={`${styles.ruleStep} ${styles.ruleReady}`}>
             ready again
+          </span>
+        </div>
+
+        <div className={styles.rule}>
+          <span className={styles.ruleLabel}>Each scheduler picks</span>
+          <span>
+            <strong>at most one warp per cycle</strong>, so a warp that turns
+            ready while the scheduler is busy has to wait its turn. A warp
+            picked the moment it turns ready shows Issue, so Ready only marks a
+            cycle spent waiting for a free slot.
           </span>
         </div>
 
@@ -183,11 +195,11 @@ export default function WarpSchedulerVisualizer() {
         </div>
 
         <div className={styles.note}>
-          Simplified model: the timeline starts with every resident warp ready.
-          Real memory waits can last hundreds of cycles, and instruction
-          dependencies create other stalls. This timeline also doesn't mean an
-          SM issues only one warp instruction per cycle: the one-per-cycle limit
-          belongs to a single scheduler, and an SM has several.
+          This is a simplified model: the timeline starts with every resident warp
+          ready, every warp waits the same number of cycles, and real kernels stall
+          on instruction dependencies too, not memory alone. The
+          one-instruction-per-cycle limit belongs to a single scheduler, not to
+          the whole SM. An H100 SM has four, each with its own issue slot.
         </div>
       </div>
     </div>

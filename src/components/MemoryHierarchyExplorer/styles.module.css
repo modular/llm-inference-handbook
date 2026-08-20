@@ -8,10 +8,6 @@
 }
 
 .header {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 1.5rem;
   padding: 1.25rem 1.5rem;
   background: var(--Elements-Twilight-5-90);
 }
@@ -30,11 +26,14 @@
   line-height: 1.4;
 }
 
+/* Its own full-width row, but capped and centred so the two ends read as a
+   pair instead of drifting to opposite edges. */
 .direction {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  min-width: 16rem;
+  max-width: 400px;
+  margin: 0.9rem auto 0;
   color: var(--Elements-Twilight-60-50);
   font-size: 0.6875rem;
   white-space: nowrap;
@@ -455,14 +454,6 @@
 }
 
 @media (max-width: 800px) {
-  .header {
-    align-items: flex-start;
-  }
-
-  .direction {
-    display: none;
-  }
-
   .body {
     grid-template-columns: 1fr;
   }
