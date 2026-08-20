@@ -196,7 +196,7 @@ To learn about programming NVIDIA GPUs, see the
 [CUDA Programming Guide](https://docs.nvidia.com/cuda/cuda-programming-guide/02-basics/intro-to-cuda-cpp.html).
 
 To learn about programming any GPU, see the
-[Mojo GPU programming guide](https://docs.modular.com/gpu/intro-tutorial/).
+[Mojo GPU programming guide](https://max.modular.com/gpu/intro-tutorial/).
 
 ## How the hierarchy affects kernel performance
 
