@@ -1,5 +1,5 @@
 ---
-sidebar_position: 7
+sidebar_position: 8
 description: LLM inference parameters are request-time settings that control randomness, output length, repetition, stopping behavior, reproducibility, and structured generation.
 keywords:
     - LLM inference parameters
