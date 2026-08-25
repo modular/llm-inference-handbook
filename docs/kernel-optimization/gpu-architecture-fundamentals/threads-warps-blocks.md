@@ -6,10 +6,11 @@ keywords:
     - CUDA warps
     - thread blocks
     - CUDA grids
-    - SIMT execution
+    - SIMT execution, warp divergence
 ---
 
-import LinkList from '@site/src/components/LinkList';
+import LinkList from '@site/src/components/LinkList'; import
+WarpDivergenceVisualizer from '@site/src/components/WarpDivergenceVisualizer';
 
 # GPU threads, warps, blocks, and grids
 
@@ -54,6 +55,8 @@ has a different active-thread mask so that only the threads on the current path
 are active. This is called **warp divergence**, and it lowers efficiency when
 the divergent paths contain substantial work, since threads off the current
 path sit idle.
+
+<WarpDivergenceVisualizer />
 
 ## Thread blocks
 
