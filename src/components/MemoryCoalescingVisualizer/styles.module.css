@@ -1,6 +1,5 @@
 .container {
   --coalesce-used: var(--Elements-Neb-Ultra);
-  --coalesce-waste-line: var(--Elements-Twilight-60-50);
   --coalesce-waste-fill: var(--Elements-Twilight-30-60);
 
   overflow: hidden;
@@ -147,9 +146,11 @@
   stroke-width: 1;
 }
 
+/* Twilight-40-60 and Twilight-30-60 both resolve to Twilight60 in dark mode, so
+   the outline needs a token that stays lighter than the unused-slot fill. */
 .sector {
   fill: transparent;
-  stroke: var(--Elements-Twilight-40-60);
+  stroke: var(--Elements-Twilight-60-50);
   transition: stroke 150ms ease;
 }
 
@@ -183,7 +184,6 @@
 }
 
 .swatch {
-  box-sizing: border-box;
   width: 0.7rem;
   height: 0.7rem;
   border-radius: 2px;
@@ -194,7 +194,6 @@
 }
 
 .swatchWaste {
-  border: 1px solid var(--coalesce-waste-line);
   background: var(--coalesce-waste-fill);
 }
 

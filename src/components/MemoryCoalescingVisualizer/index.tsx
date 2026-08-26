@@ -14,6 +14,11 @@ const SCATTERED = [
   215, 220, 228, 282, 295, 301, 307, 313, 333, 350, 359, 362, 375, 378
 ]
 
+/** The scatter lands in this many distinct sectors; derived so the copy can't drift. */
+const SCATTERED_SECTORS = SCATTERED.map((i) =>
+  Math.floor((i * BYTES_PER_ELEMENT) / SECTOR_BYTES)
+).filter((sector, i, all) => all.indexOf(sector) === i).length
+
 type Pattern = {
   id: string
   label: string
@@ -53,8 +58,8 @@ const PATTERNS: Pattern[] = [
     label: 'Scattered',
     expr: 'a[idx[tid]]',
     index: (tid) => SCATTERED[tid],
-    title: 'Scattered indices need 28 sectors',
-    text: 'The 32 indices touch 28 separate sectors. The GPU transfers 896 bytes to return 128 useful bytes, so most of the transferred data goes unused.'
+    title: `Scattered indices need ${SCATTERED_SECTORS} sectors`,
+    text: `The ${WARP} indices touch ${SCATTERED_SECTORS} separate sectors. The GPU transfers ${SCATTERED_SECTORS * SECTOR_BYTES} bytes to return ${BYTES_REQUESTED} useful bytes, so most of the transferred data goes unused.`
   }
 ]
 
@@ -176,6 +181,10 @@ export default function MemoryCoalescingVisualizer() {
 
             return (
               <g key={sector}>
+                {/* On the group, not the rect: the slots are drawn on top. */}
+                <title>
+                  {`Bytes ${sector * SECTOR_BYTES}\u2013${(sector + 1) * SECTOR_BYTES - 1} \u00b7 ${used} of ${ELEMENTS_PER_SECTOR} elements used`}
+                </title>
                 <rect
                   className={styles.sector}
                   x={sectorX(column)}
@@ -183,11 +192,7 @@ export default function MemoryCoalescingVisualizer() {
                   width={sectorW}
                   height={SECTOR_H}
                   rx="3"
-                >
-                  <title>
-                    {`Bytes ${sector * SECTOR_BYTES}–${(sector + 1) * SECTOR_BYTES - 1} · ${used} of ${ELEMENTS_PER_SECTOR} elements used`}
-                  </title>
-                </rect>
+                />
 
                 {showSlots ? (
                   slotsUsed[column].map((isUsed, slot) => (

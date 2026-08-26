@@ -196,11 +196,11 @@ Thread 31 → bytes 124–127
 The GPU fetches 128 bytes, and the warp uses all 128 bytes. This is a fully
 coalesced access, assuming the first address has suitable alignment.
 
-Now consider a strided access where every thread reads from a different
-32-byte sector. The warp still requests only 128 useful bytes, but the GPU may
-need 32 sectors to serve the load:
+Now consider a large stride, where every thread reads from a different 32-byte
+sector. The warp still requests only 128 useful bytes, but the GPU may need 32
+sectors to serve the load:
 
-```text
+```bash
 32 sectors × 32 bytes = 1,024 bytes fetched
 ```
 
