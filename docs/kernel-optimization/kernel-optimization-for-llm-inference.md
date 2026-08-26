@@ -8,7 +8,8 @@ keywords:
     - Triton
 ---
 
-import LinkList from '@site/src/components/LinkList';
+import LinkList from '@site/src/components/LinkList'; import
+KernelFusionVisualizer from '@site/src/components/KernelFusionVisualizer';
 
 # Kernel optimization for LLM inference
 
@@ -221,6 +222,8 @@ With fusion:
 - Multiple operations are combined into a single kernel
 - Intermediate results can often stay in fast on-chip memory
 - You avoid unnecessary global memory reads/writes
+
+<KernelFusionVisualizer />
 
 <LinkList>
 

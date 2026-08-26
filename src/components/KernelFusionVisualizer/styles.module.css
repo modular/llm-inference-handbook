@@ -1,0 +1,276 @@
+.container {
+  --fusion-load: var(--Elements-Neb-Ultra);
+  --fusion-store: #f59e0b;
+  --fusion-compute-fill: var(--Elements-Neb-20-Alpha);
+  --fusion-compute-line: var(--Elements-Neb-Ultra);
+
+  overflow: hidden;
+  margin: 1.5rem 0;
+  border: 1px solid var(--Elements-Twilight-20-70);
+  border-radius: 4px;
+}
+
+.header {
+  padding: 1.25rem 1.5rem;
+  background: var(--Elements-Twilight-5-90);
+}
+
+.headerTitle {
+  color: var(--Elements-Twilight-100-0);
+  font-size: 1.2rem;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+}
+
+.headerDescription {
+  margin-top: 0.25rem;
+  color: var(--Elements-Twilight-70-20);
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.body {
+  padding: 1.25rem 1.5rem;
+}
+
+/* ── Expression + replay ── */
+
+.topRow {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.expr {
+  padding: 0.3rem 0.6rem;
+  border: 1px solid var(--Elements-Twilight-20-70);
+  border-radius: 4px;
+  background: var(--Elements-Twilight-1-90);
+  color: var(--Elements-Twilight-70-20);
+  font-size: 0.75rem;
+}
+
+.replay {
+  flex-shrink: 0;
+  padding: 0.35rem 0.85rem;
+  border: 1px solid var(--Elements-Twilight-20-70);
+  border-radius: 4px;
+  background: var(--Elements-Twilight-0-100);
+  color: var(--Elements-Twilight-70-20);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.75rem;
+  transition:
+    border-color 150ms ease,
+    color 150ms ease;
+}
+
+.replay:hover {
+  border-color: var(--Elements-Neb-Ultra);
+  color: var(--Elements-Neb-Ultra);
+}
+
+.replay:focus-visible {
+  outline: 2px solid var(--Elements-Neb-Ultra);
+  outline-offset: 2px;
+}
+
+/* ── Panels ── */
+
+.panels {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 0.9rem;
+}
+
+.panel {
+  min-width: 0;
+  padding: 0.65rem 0.75rem 0.55rem;
+  border: 1px solid var(--Elements-Twilight-20-70);
+  border-radius: 4px;
+  background: var(--Elements-Twilight-1-90);
+}
+
+.panelHead {
+  color: var(--Elements-Twilight-100-0);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.stage {
+  display: block;
+  width: 100%;
+  margin-top: 0.35rem;
+}
+
+.caption {
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+  justify-content: space-between;
+  color: var(--Elements-Twilight-60-50);
+  font-size: 0.6875rem;
+}
+
+.trips {
+  color: var(--Elements-Twilight-100-0);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── SVG parts ── */
+
+.band {
+  fill: var(--Elements-Twilight-0-100);
+  stroke: var(--Elements-Twilight-20-70);
+}
+
+.bandLabel {
+  fill: var(--Elements-Twilight-60-50);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+}
+
+.rail {
+  stroke: var(--Elements-Twilight-30-60);
+  stroke-dasharray: 3 3;
+  stroke-width: 1;
+}
+
+.chainArrow {
+  fill: var(--Elements-Twilight-60-50);
+  font-size: 15px;
+  text-anchor: middle;
+}
+
+.opBox {
+  fill: var(--Elements-Twilight-1-90);
+  stroke: var(--Elements-Twilight-30-60);
+  transition:
+    fill 120ms ease,
+    stroke 120ms ease;
+}
+
+.opDone {
+  stroke: var(--fusion-compute-line);
+}
+
+.opActive {
+  fill: var(--fusion-compute-fill);
+  stroke: var(--fusion-compute-line);
+  stroke-width: 1.5;
+}
+
+.opLabel {
+  fill: var(--Elements-Twilight-70-20);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  text-anchor: middle;
+  transition: fill 120ms ease;
+}
+
+.opLabelActive {
+  fill: var(--fusion-compute-line);
+}
+
+.idleLabel {
+  fill: var(--Elements-Twilight-60-50);
+  font-size: 11px;
+  text-anchor: middle;
+}
+
+.packet {
+  stroke: none;
+}
+
+.load {
+  fill: var(--fusion-load);
+}
+
+.store {
+  fill: var(--fusion-store);
+}
+
+/* ── Legend ── */
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.15rem;
+  margin-top: 0.75rem;
+}
+
+.legendItem {
+  display: flex;
+  gap: 0.35rem;
+  align-items: center;
+  color: var(--Elements-Twilight-60-50);
+  font-size: 0.6875rem;
+}
+
+.swatch {
+  box-sizing: border-box;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 2px;
+}
+
+.legendItem .load {
+  background: var(--fusion-load);
+}
+
+.legendItem .store {
+  background: var(--fusion-store);
+}
+
+.computeSwatch {
+  border: 1px solid var(--fusion-compute-line);
+  background: var(--fusion-compute-fill);
+}
+
+/* ── Readout ── */
+
+.readout {
+  display: flex;
+  gap: 0.85rem;
+  align-items: center;
+  margin-top: 0.9rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--Elements-Twilight-20-70);
+  border-radius: 4px;
+  background: var(--Elements-Twilight-1-90);
+}
+
+.metricValue {
+  flex-shrink: 0;
+  color: var(--Elements-Twilight-100-0);
+  font-size: 1.6rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.metricText {
+  color: var(--Elements-Twilight-70-20);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 640px) {
+  .header,
+  .body {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  .panels {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Dark mode ── */
+
+/* The alpha tint is near-invisible on the dark band, so lift the compute flash. */
+:global(html[data-theme='dark']) .container {
+  --fusion-compute-fill: rgba(99, 123, 255, 0.24);
+}

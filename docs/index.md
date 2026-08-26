@@ -117,10 +117,16 @@ concepts directly:
   See how a branch splits a warp into serialized passes that leave lanes idle.
 - [GPU Memory Explorer](/kernel-optimization/gpu-architecture-fundamentals/gpu-memory/):
   Understand different memory tiers and see how reuse scope changes as data moves.
+- [Memory Coalescing Visualizer](/kernel-optimization/gpu-architecture-fundamentals/gpu-memory/#memory-coalescing):
+  Compare contiguous, misaligned, strided, and scattered access, and see how
+  many sectors each one forces the GPU to fetch.
 - [Streaming Multiprocessor Explorer](/kernel-optimization/gpu-architecture-fundamentals/streaming-multiprocessors/#what-an-sm-contains):
   Explore the units inside an SM and see how many of each an H100 has.
 - [Warp Scheduler Visualizer](/kernel-optimization/gpu-architecture-fundamentals/streaming-multiprocessors/#how-warp-scheduling-hides-latency):
   Compare too few, enough, and extra resident warps on a scheduler timeline.
+- [Kernel Fusion Visualizer](/kernel-optimization/kernel-optimization-for-llm-inference/#what-is-kernel-fusion):
+  See how separate kernels round-trip every intermediate through HBM, and what
+  fusing them saves.
 
 ## Contributing
 
