@@ -4,6 +4,7 @@ import { useNavbarSecondaryMenu } from '@docusaurus/theme-common/internal';
 import type { PropSidebar } from '@docusaurus/plugin-content-docs';
 import MarketingHeader from './MarketingHeader';
 import headerStyles from './styles';
+import { trackHeaderLinkClick } from './trackHeaderLinkClick';
 
 // The docs sidebar tree isn't reachable via React Context from here (see
 // below), so we borrow it from the secondary-menu "teleport" that Docusaurus's
@@ -72,6 +73,22 @@ export default function MarketingHeaderHost(): JSX.Element {
       />
     );
   }, [shadowRoot, sidebar, activePath]);
+
+  useEffect(() => {
+    if (!shadowRoot) return;
+
+    const onClick: EventListener = (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      const anchor = target.closest('a');
+      if (anchor instanceof HTMLAnchorElement) {
+        trackHeaderLinkClick(anchor);
+      }
+    };
+
+    shadowRoot.addEventListener('click', onClick);
+    return () => shadowRoot.removeEventListener('click', onClick);
+  }, [shadowRoot]);
 
   return (
     <div
