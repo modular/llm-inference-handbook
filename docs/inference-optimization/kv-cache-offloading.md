@@ -2,13 +2,17 @@
 sidebar_position: 8
 description: Learn how KV cache offloading improves LLM inference by reducing GPU memory usage, lowering latency, and cutting compute costs.
 keywords:
-    - KV cache offloading, KV cache, KV caching, LMCache
+    - KV cache offloading, KV cache, KV caching
+    - LMCache, Mooncake, KVBM, HiCache, KV connector
+    - vLLM, SGLang, MAX
     - Distributed inference, distributed LLM inference
     - Inference optimization
     - LLM inference optimization, LLM inference optimization techniques
     - Speed up LLM inference
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 import LinkList from '@site/src/components/LinkList';
 import KVCacheCalculator from '@site/src/components/Calculator/KVCache';
 
@@ -138,44 +142,132 @@ enabling selective KV offloading in production, compare it with a full-attention
 baseline on tasks that match your workload. Track answer quality alongside TTFT,
 TPOT, throughput, GPU memory usage, and host-to-device transfer.
 
-## Offloading the KV cache with LMCache
+## How to offload the KV cache
 
-[LMCache](https://github.com/LMCache/LMCache) is an LLM serving engine extension
-designed to optimize LLM inference by reducing TTFT and increasing throughput,
-especially for long-context workloads. It supports the reuse of KV caches for
-repeated input content (not just prefixes) across different engine instances.
+You almost certainly don't need to build the implementation yourself. Every
+major inference framework now supports KV cache offloading as a built-in
+feature, and a second layer of dedicated KV cache systems exists for the cases
+the framework can't cover on its own.
 
-By storing KV caches in multiple tiers of memory, including GPU, CPU DRAM, and
-local disk, LMCache significantly reduces redundant computation. This improves
-response time and saves GPU cycles, making it ideal for workloads like
-multi-turn QA, RAG, and document-level reasoning.
+### Built-in offloading in your inference framework
 
-In benchmarks, combining LMCache with vLLM has resulted in 3×–10× reductions in
-latency across various use cases.
+vLLM, SGLang, and MAX all support offloading to host memory and disk with no
+extra infrastructure. The mechanism is similar: they extend the existing
+[prefix cache](/inference-optimization/prefix-caching/) so that completed blocks
+are demoted to a larger, slower tier, then promoted back to the GPU when a later
+request hits them. Transfers can run asynchronously on DMA (Direct Memory
+Access) copy engines, so they overlap with model execution rather than stalling
+it.
 
-Several open-source projects have already integrated LMCache to support
-efficient KV cache offloading and reuse:
+Here are some examples:
 
-- [llm-d](https://www.redhat.com/en/about/press-releases/red-hat-launches-llm-d-community-powering-distributed-gen-ai-inference-scale)
-  offloads KV cache data with LMCache from GPU memory to more cost-effective and
-  abundant storage such as CPU memory and network disks.
-- [KServe](https://kserve.github.io/website/docs/next/model-serving/generative-inference/kvcache-offloading)
-  integrates LMCache to reduce inference costs and ensure SLOs for both latency
-  and throughput at scale.
-- [vLLM](https://docs.vllm.ai/en/latest/examples/disaggregated/lmcache/) uses
-  LMCache for CPU offloading, cache sharing between requests, and disaggregated
-  prefilling. This enables better memory management and improves resource
-  efficiency.
+<Tabs groupId="inference-framework">
+<TabItem value="max" label="MAX">
 
-LMCache currently supports offloading KV cache data to a variety of storage
-backends, ranging from local options like CPU memory and the file system, to
-distributed systems such as Mooncake and ValKey.
+```bash
+max serve --model meta-llama/Llama-3.1-8B-Instruct \
+  --kv-connector-config '{"type": "rust_tiered"}'
+```
+
+MAX calls this layer
+[a KV connector](https://max.modular.com/api/python/generated/max.pipelines.lib.KVConnectorConfig/).
+The `rust_tiered` connector tiers evicted blocks across your host memory and
+local disk. Override the budgets explicitly when you want to:
+
+```bash
+max serve --model meta-llama/Llama-3.1-8B-Instruct \
+  --kv-connector-config '{
+    "type": "rust_tiered",
+    "host_offload_max_gb": 128,
+    "disk_offload_dir": "/mnt/kv_cache",
+    "disk_offload_max_gb": 512
+  }'
+```
+
+</TabItem>
+<TabItem value="vllm" label="vLLM">
+
+```bash
+vllm serve --model meta-llama/Llama-3.1-8B-Instruct \
+  --kv-offloading-backend native \
+  --kv-offloading-size 100 # the buffer size in GiB
+```
+
+Recent vLLM versions expose offloading through these two top-level flags. The
+underlying mechanism is the
+[OffloadingConnector](https://docs.vllm.ai/en/stable/features/kv_offloading_usage/),
+which you can configure directly for multi-tier setups:
+
+```bash
+vllm serve --model meta-llama/Llama-3.1-8B-Instruct \
+  --kv-transfer-config '{
+    "kv_connector": "OffloadingConnector",
+    "kv_role": "kv_both",
+    "kv_connector_extra_config": {
+      "cpu_bytes_to_use": 100000000000,
+      "spec_name": "TieringOffloadingSpec",
+      "secondary_tiers": [{"type": "fs", "root_dir": "/mnt/kv_cache"}]
+    }
+  }'
+```
+
+</TabItem>
+<TabItem value="sglang" label="SGLang">
+
+```bash
+sglang serve --model-path meta-llama/Llama-3.1-8B-Instruct \
+  --enable-hierarchical-cache \
+  --hicache-ratio 2 \                     # Host memory ratio (2x GPU memory)
+  --hicache-size 100 \                    # Host memory size in GBs, will override the above ratio
+  --hicache-write-policy write_through \  # Cache write policy from GPU to CPU
+  --hicache-storage-backend               # Optional storage backend
+```
+
+SGLang's offloading layer is called
+[HiCache](https://docs.sglang.io/docs/advanced_features/hicache), which extends
+RadixAttention with a three-tier hierarchical KV caching system.
+
+</TabItem>
+</Tabs>
+
+:::note
+Flag names in this area move quickly, since KV cache offloading is under active
+development across all three frameworks. Check their documentation for the
+version you're running.
+:::
+
+### Dedicated KV cache systems
+
+In addition to framework-native offloading implementations, you can add a
+dedicated KV cache layer for extended features:
+
+- [LMCache](https://github.com/LMCache/LMCache) is a vendor-neutral KV cache
+  management layer designed to optimize LLM inference by reducing TTFT and
+  increasing throughput, especially for long-context workloads. It supports
+  persistent, tiered KV cache offloading to various storage backends including
+  CPU RAM, local disk, Redis, Valkey, Mooncake, and InfiniStore.
+- [Mooncake Store](https://kvcache-ai.github.io/Mooncake/design/store/mooncake-store.html)
+  is a distributed KV cache storage engine designed specifically for LLM
+  inference. It enables inference engines to store, retrieve, and transfer KV
+  caches across GPUs, nodes, and instances, supporting prefill-decode
+  disaggregation and improving cache reuse. It is widely integrated with systems
+  such as vLLM, SGLang, and LMCache.
+- [NVIDIA Dynamo KVBM](https://docs.nvidia.com/dynamo/knowledge-base/modular-components/kvbm/overview)
+  (KV Block Manager) is a unified memory layer to handle memory allocation,
+  management, and remote sharing of KV blocks for inference tasks across
+  heterogeneous and distributed environments.
+
+---
+
+Whichever tool you choose, benchmark it with your workloads and measure cache
+hit rate per tier alongside TTFT and throughput. A correctly configured host
+tier should show a high hit rate and improved TTFT, while a disk tier that hits
+rarely is mostly paying transfer cost for nothing.
 
 <LinkList>
 
 ## Additional resources
 
-- [LMCache Documentation](https://docs.lmcache.ai/)
 - [NVIDIA GH200 Superchip Accelerates Inference by 2x in Multiturn Interactions with Llama Models](https://developer.nvidia.com/blog/nvidia-gh200-superchip-accelerates-inference-by-2x-in-multiturn-interactions-with-llama-models/)
 - [5x Faster Time to First Token with NVIDIA TensorRT LLM KV Cache Early Reuse](https://developer.nvidia.com/blog/5x-faster-time-to-first-token-with-nvidia-tensorrt-llm-kv-cache-early-reuse/)
 - [KV Cache Offloading for Context-Intensive Tasks](https://arxiv.org/abs/2604.08426)
