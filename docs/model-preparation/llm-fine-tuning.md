@@ -113,7 +113,9 @@ Key features:
   ORPO).
 - Highly customizable: edit chat templates, dataset formats, and training
   configs as needed.
-- Compatible with inference tools like Ollama, llama.cpp, and vLLM.
+- Compatible with
+  [inference frameworks](/getting-started/choosing-the-right-inference-framework/)
+  like vLLM, SGLang, and MAX.
 - Runs easily on platforms like Google Colab, Kaggle, and even older consumer
   GPUs.
 

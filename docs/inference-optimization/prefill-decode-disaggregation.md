@@ -85,8 +85,9 @@ Key benefits include:
 
 Several open-source frameworks and projects have already added support for PD
 disaggregation, including
-[SGLang](https://docs.sglang.io/docs/advanced_features/pd_disaggregation),
 [vLLM](https://docs.vllm.ai/en/latest/features/disagg_prefill.html),
+[SGLang](https://docs.sglang.io/docs/advanced_features/pd_disaggregation),
+[MAX](https://max.modular.com/cli/serve/#--pipeline-role-pipeline_role),
 [Dynamo](https://docs.nvidia.com/dynamo/dev/user-guides/disaggregated-serving),
 and [llm-d](https://llm-d.ai/docs/architecture/advanced/disaggregation).
 
