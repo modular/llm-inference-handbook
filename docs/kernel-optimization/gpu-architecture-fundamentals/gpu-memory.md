@@ -185,7 +185,7 @@ thread. The warp requests 128 bytes in total:
 If adjacent threads read adjacent elements, the addresses can fit into four
 adjacent 32-byte sectors:
 
-```bash
+```text
 Thread 0  → bytes 0–3
 Thread 1  → bytes 4–7
 Thread 2  → bytes 8–11
