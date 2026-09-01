@@ -178,7 +178,7 @@ the GPU may fetch the entire 32-byte sector containing those bytes.
 Suppose all 32 threads in a warp load one `float32` value, or 4 bytes per
 thread. The warp requests 128 bytes in total:
 
-```bash
+```text
 32 threads × 4 bytes = 128 bytes
 ```
 
