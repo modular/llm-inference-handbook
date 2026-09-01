@@ -231,7 +231,7 @@ RadixAttention with a three-tier hierarchical KV caching system.
 </Tabs>
 
 :::note
-Flag names in this area move quickly, since KV cache offloading is under active
+These flag names might be outdated, because KV cache offloading is under active
 development across all three frameworks. Check their documentation for the
 version you're running.
 :::
