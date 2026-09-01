@@ -212,9 +212,15 @@ const config: Config = {
       items: [
         {
           href: 'https://www.modular.com/request-demo?utm_source=llm_handbook',
-          label: 'Request a demo',
+          label: 'Request a Demo',
           position: 'right',
-          className: 'navbar-signin-btn',
+          className: 'navbar-demo-btn',
+        },
+        {
+          href: 'https://console.modular.com/signup?utm_source=llm_handbook',
+          label: 'Sign up',
+          position: 'right',
+          className: 'navbar-signup-btn',
         },
       ],
     },
@@ -269,6 +275,13 @@ const config: Config = {
       contextualSearch: true,
       searchPagePath: 'search',
       insights: false,
+      placeholder: 'Search the handbook',
+      translations: {
+        button: {
+          buttonText: 'Search the handbook',
+          buttonAriaLabel: 'Search the handbook',
+        },
+      },
     },
   } satisfies Preset.ThemeConfig,
 

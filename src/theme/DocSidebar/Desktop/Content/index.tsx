@@ -7,7 +7,6 @@ import {
 } from '@docusaurus/theme-common/internal';
 import {translate} from '@docusaurus/Translate';
 import DocSidebarItems from '@theme/DocSidebarItems';
-import SearchBar from '@theme/SearchBar';
 import type {Props} from '@theme/DocSidebar/Desktop/Content';
 
 import styles from './styles.module.css';
@@ -33,8 +32,6 @@ export default function DocSidebarDesktopContent({
   className,
 }: Props): ReactNode {
   const showAnnouncementBar = useShowAnnouncementBar();
-  const topItem = sidebar[0];
-  const restItems = sidebar.slice(1);
 
   return (
     <nav
@@ -50,17 +47,7 @@ export default function DocSidebarDesktopContent({
         className,
       )}>
       <ul className={clsx(ThemeClassNames.docs.docSidebarMenu, 'menu__list')}>
-        {topItem && (
-          <DocSidebarItems items={[topItem]} activePath={path} level={1} />
-        )}
-        {topItem && (
-          <li className={styles.searchBarItem}>
-            <SearchBar />
-          </li>
-        )}
-        {restItems.length > 0 && (
-          <DocSidebarItems items={restItems} activePath={path} level={1} />
-        )}
+        <DocSidebarItems items={sidebar} activePath={path} level={1} />
       </ul>
     </nav>
   );

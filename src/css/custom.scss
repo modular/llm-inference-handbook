@@ -357,8 +357,7 @@ $font-family-monospace:
   --ifm-navbar-height: 64px;
   --ifm-navbar-shadow: none;
   --ifm-alert-shadow: none;
-  // Shared with the navbar's shadow-DOM styles (MarketingHeader) so the
-  // sidebar + doc content align with the navbar's centered content column.
+  // Sidebar + doc content align to this centered content column.
   --content-max-width: 1200px;
   --content-side-padding: 24px;
   --ifm-spacing-horizontal: 24px !important;
@@ -597,6 +596,158 @@ table {
 }
 
 // ============================================================
+// Navbar
+// ============================================================
+
+.navbar {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.navbar__inner {
+  max-width: calc(var(--content-max-width) + var(--content-side-padding) * 2);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--content-side-padding);
+  padding-right: var(--content-side-padding);
+}
+
+.navbar__brand {
+  margin-right: 0;
+
+  .navbar__logo {
+    height: 20px;
+  }
+
+  .navbar__logo--mark {
+    display: none !important;
+  }
+}
+
+@media (max-width: 996px) {
+  .navbar__brand .navbar__logo--wordmark {
+    display: none !important;
+  }
+
+  .navbar__brand .navbar__logo--mark {
+    display: flex !important;
+    align-items: center;
+    height: 24px;
+    width: 24px;
+  }
+}
+
+.navbar-sidebar__brand {
+  .navbar__logo--wordmark {
+    display: none !important;
+  }
+
+  .navbar__logo--mark {
+    display: flex !important;
+    align-items: center;
+    height: 24px;
+    width: 24px;
+  }
+}
+
+.navbar__subtitle {
+  font-size: 20px;
+  line-height: 1em;
+  margin-bottom: -4px;
+}
+
+.navbar__items--right > :last-child {
+  padding-right: 0;
+}
+
+// ============================================================
+// Navbar CTAs
+// ============================================================
+
+.navbar__item.navbar-demo-btn,
+.navbar__item.navbar-signup-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 4px;
+  font-family: var(--ifm-font-family-base);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 17.5px;
+  min-height: 34px;
+  white-space: nowrap;
+  color: var(--Elements-Neb-Ultra) !important;
+  text-decoration: none !important;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
+
+  &:hover {
+    color: var(--Elements-Neb-Ultra) !important;
+    text-decoration: none !important;
+  }
+
+  svg {
+    display: none;
+  }
+}
+
+.navbar__item.navbar-demo-btn {
+  background: transparent;
+  padding: 8px 10px;
+
+  &:hover {
+    background: rgba(99, 123, 255, 0.08);
+  }
+}
+
+.navbar__item.navbar-signup-btn {
+  background: rgba(99, 123, 255, 0.12);
+  padding: 8px 12px;
+
+  &:hover {
+    background: rgba(99, 123, 255, 0.18);
+  }
+}
+
+@media (max-width: 996px) {
+  .navbar__items--right > .navbar__item.navbar-demo-btn,
+  .navbar__items--right > .navbar__item.navbar-signup-btn {
+    display: none;
+  }
+}
+
+.navbar-sidebar {
+  .menu__link.navbar-demo-btn,
+  .menu__link.navbar-signup-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 8px 12px 0;
+    border: 0;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 17.5px;
+    min-height: 34px;
+    white-space: nowrap;
+    color: var(--Elements-Neb-Ultra) !important;
+    text-decoration: none !important;
+  }
+
+  .menu__link.navbar-demo-btn {
+    background: transparent;
+    padding: 8px 10px;
+  }
+
+  .menu__link.navbar-signup-btn {
+    background: rgba(99, 123, 255, 0.12);
+    padding: 8px 12px;
+  }
+}
+
+// ============================================================
 // Sidebar
 // ============================================================
 
@@ -637,38 +788,38 @@ table {
     overflow-y: auto;
     overflow-x: hidden;
   }
+}
 
-  .DocSearch-Button {
-    width: calc(100% - 8px);
-    border: 1px solid var(--Elements-Twilight-20-70);
-    background-color: transparent;
-    border-radius: 2px;
-    padding: 0 12px;
+.navbar .DocSearch-Button {
+  width: 100%;
+  border: 1px solid var(--Elements-Twilight-20-70);
+  background-color: transparent;
+  border-radius: 2px;
+  padding: 0 12px;
 
-    &:hover,
-    &:active,
-    &:focus {
-      border-color: var(--Elements-Neb-Ultra);
-      box-shadow: none;
+  &:hover,
+  &:active,
+  &:focus {
+    border-color: var(--Elements-Neb-Ultra);
+    box-shadow: none;
+  }
+
+  .DocSearch-Button-Container svg {
+    color: var(--Elements-Twilight-60-50);
+    width: 16px;
+    height: 16px;
+  }
+  .DocSearch-Button-Placeholder {
+    color: var(--Elements-Twilight-60-50);
+    font-size: 14px;
+  }
+
+  .DocSearch-Button-Key {
+    &:first-child {
+      margin-left: auto;
     }
-
-    .DocSearch-Button-Container svg {
-      color: var(--Elements-Twilight-60-50);
-      width: 16px;
-      height: 16px;
-    }
-    .DocSearch-Button-Placeholder {
-      color: var(--Elements-Twilight-60-50);
-      font-size: 14px;
-    }
-
-    .DocSearch-Button-Key {
-      &:first-child {
-        margin-left: auto;
-      }
-      &:last-child {
-        margin-right: 0;
-      }
+    &:last-child {
+      margin-right: 0;
     }
   }
 }
@@ -679,7 +830,7 @@ kbd.DocSearch-Button-Key {
   color: var(--Elements-Twilight-60-50);
   background: var(--Elements-Twilight-10-90);
   border: 1px solid var(--Elements-Twilight-20-70);
-  box-shadow: inset -1px -1px rgba(200,200,200,.2);
+  box-shadow: inset -1px -1px rgba(200, 200, 200, 0.2);
 }
 
 // DocSearch dialog
@@ -705,7 +856,6 @@ kbd.DocSearch-Button-Key {
     }
   }
 }
-
 
 nav.menu {
   padding: 16px 0 80px 16px;

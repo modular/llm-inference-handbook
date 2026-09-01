@@ -13,9 +13,4 @@
   .menuWithAnnouncementBar {
     margin-bottom: var(--docusaurus-announcement-bar-height);
   }
-
-  .searchBarItem {
-    list-style: none;
-    margin: 0 0 16px;
-  }
 }
