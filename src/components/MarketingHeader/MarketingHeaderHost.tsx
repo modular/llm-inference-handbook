@@ -78,9 +78,9 @@ export default function MarketingHeaderHost(): JSX.Element {
     if (!shadowRoot) return;
 
     const onClick: EventListener = (event) => {
-      const target = event.target;
-      if (!(target instanceof Element)) return;
-      const anchor = target.closest('a');
+      const first = event.composedPath()[0];
+      const target = first instanceof Element ? first : null;
+      const anchor = target?.closest('a');
       if (anchor instanceof HTMLAnchorElement) {
         trackHeaderLinkClick(anchor);
       }
