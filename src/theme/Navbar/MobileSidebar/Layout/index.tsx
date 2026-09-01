@@ -1,20 +1,69 @@
-import React, {version, type ReactNode} from 'react';
+import React, {type ReactNode} from 'react';
 import clsx from 'clsx';
-import {ThemeClassNames} from '@docusaurus/theme-common';
+import Link from '@docusaurus/Link';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import {ThemeClassNames, useThemeConfig} from '@docusaurus/theme-common';
+import {
+  useNavbarMobileSidebar,
+  useNavbarSecondaryMenu,
+} from '@docusaurus/theme-common/internal';
+import NavbarItem, {type Props as NavbarItemConfig} from '@theme/NavbarItem';
 import type {Props} from '@theme/Navbar/MobileSidebar/Layout';
 
-function inertProps(inert: boolean) {
-  const isBeforeReact19 = parseInt(version!.split('.')[0]!, 10) < 19;
-  if (isBeforeReact19) {
-    return {inert: inert ? '' : undefined} as unknown as {inert: boolean};
-  }
-  return {inert};
+// Pages outside the docs plugin (the search page, 404) never register a
+// secondary menu, so the drawer would otherwise open with an empty panel. Docs
+// are mounted at the site root, so the base URL is the handbook's home.
+function HandbookHomeLink(): ReactNode {
+  const {siteConfig} = useDocusaurusContext();
+  const mobileSidebar = useNavbarMobileSidebar();
+  const href = useBaseUrl('/');
+
+  return (
+    <ul className="menu__list">
+      <li className="menu__list-item">
+        <Link
+          className="menu__link"
+          to={href}
+          onClick={() => mobileSidebar.toggle()}>
+          {siteConfig.title}
+        </Link>
+      </li>
+    </ul>
+  );
 }
 
-export default function NavbarMobileSidebarLayout({
-  header,
-  secondaryMenu,
-}: Props): ReactNode {
+function MobileSidebarCtas(): ReactNode {
+  const items = useThemeConfig().navbar.items as NavbarItemConfig[];
+  const mobileSidebar = useNavbarMobileSidebar();
+
+  if (items.length === 0) {
+    return null;
+  }
+
+  return (
+    <ul className="menu__list navbar-sidebar__ctas">
+      {items.map((item, i) => (
+        <NavbarItem
+          mobile
+          {...item}
+          onClick={() => mobileSidebar.toggle()}
+          key={i}
+        />
+      ))}
+    </ul>
+  );
+}
+
+// Upstream renders this drawer as a two-panel horizontal scroller: navbar items
+// in a primary panel, page-contextual content (the docs sidebar) in a secondary
+// one, with a back button between them. Here the docs sidebar is the only menu
+// and the navbar CTAs are pinned below it, so both the primary panel and its
+// back button are dropped. The secondary menu is read from context rather than
+// the `secondaryMenu` prop because that prop renders the back button.
+export default function NavbarMobileSidebarLayout({header}: Props): ReactNode {
+  const secondaryMenu = useNavbarSecondaryMenu();
+
   return (
     <div
       className={clsx(
@@ -27,11 +76,11 @@ export default function NavbarMobileSidebarLayout({
           className={clsx(
             ThemeClassNames.layout.navbar.mobileSidebar.panel,
             'navbar-sidebar__item menu',
-          )}
-          {...inertProps(false)}>
-          {secondaryMenu}
+          )}>
+          {secondaryMenu.content ?? <HandbookHomeLink />}
         </div>
       </div>
+      <MobileSidebarCtas />
     </div>
   );
 }

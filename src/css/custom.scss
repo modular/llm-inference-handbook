@@ -391,7 +391,7 @@ body {
 .main-wrapper {
   .container {
     // Eliminate giant gutters on mobile
-    @media (width <= 576px) {
+    @media (width <= 996px) {
       max-width: 100%;
       margin: 0;
     }
@@ -623,31 +623,19 @@ table {
   .navbar__logo--mark {
     display: none !important;
   }
-}
 
-@media (max-width: 996px) {
-  .navbar__brand .navbar__logo--wordmark {
-    display: none !important;
-  }
+  @media (max-width: 996px) {
+    .navbar__logo--wordmark {
+      display: none !important;
+    }
 
-  .navbar__brand .navbar__logo--mark {
-    display: flex !important;
-    align-items: center;
-    height: 24px;
-    width: 24px;
-  }
-}
-
-.navbar-sidebar__brand {
-  .navbar__logo--wordmark {
-    display: none !important;
-  }
-
-  .navbar__logo--mark {
-    display: flex !important;
-    align-items: center;
-    height: 24px;
-    width: 24px;
+    .navbar__logo--mark {
+      display: flex !important;
+      align-items: center;
+      height: 22px;
+      width: 22px;
+      margin: 0 12px 0 12px;
+    }
   }
 }
 
@@ -655,10 +643,11 @@ table {
   font-size: 20px;
   line-height: 1em;
   margin-bottom: -4px;
-}
+  padding-right: 24px;
 
-.navbar__items--right > :last-child {
-  padding-right: 0;
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
 }
 
 // ============================================================
@@ -667,26 +656,19 @@ table {
 
 .navbar__item.navbar-demo-btn,
 .navbar__item.navbar-signup-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 0;
-  border-radius: 4px;
-  font-family: var(--ifm-font-family-base);
   font-size: 13px;
-  font-weight: 500;
-  line-height: 17.5px;
-  min-height: 34px;
   white-space: nowrap;
-  color: var(--Elements-Neb-Ultra) !important;
-  text-decoration: none !important;
-  transition:
-    background-color 160ms ease,
-    color 160ms ease;
+  color: var(--Elements-Neb-Ultra);
+  background: var(--Elements-Neb-20-Alpha);
+  border-radius: 4px;
+  padding: 8px 12px;
+
+  @media (max-width: 996px) {
+    display: none;
+  }
 
   &:hover {
-    color: var(--Elements-Neb-Ultra) !important;
-    text-decoration: none !important;
+    background: var(--ifm-menu-color-background-hover);
   }
 
   svg {
@@ -696,45 +678,48 @@ table {
 
 .navbar__item.navbar-demo-btn {
   background: transparent;
-  padding: 8px 10px;
+  margin-right: 4px;
 
   &:hover {
-    background: rgba(99, 123, 255, 0.08);
+    background: var(--Elements-Neb-20-Alpha);
   }
 }
 
-.navbar__item.navbar-signup-btn {
-  background: rgba(99, 123, 255, 0.12);
-  padding: 8px 12px;
-
-  &:hover {
-    background: rgba(99, 123, 255, 0.18);
-  }
-}
-
-@media (max-width: 996px) {
-  .navbar__items--right > .navbar__item.navbar-demo-btn,
-  .navbar__items--right > .navbar__item.navbar-signup-btn {
-    display: none;
-  }
-}
-
+// Mobile menu styles
 .navbar-sidebar {
+  display: flex;
+  flex-direction: column;
+
+  .navbar-sidebar__brand {
+    flex: 0 0 auto;
+    padding: 0 1rem;
+
+    .navbar__logo--wordmark {
+      display: none !important;
+    }
+
+    .navbar__logo--mark {
+      height: 24px;
+      width: 24px;
+      margin: 0;
+    }
+  }
+
   .navbar-sidebar__ctas {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-end;
+    flex-flow: column;
+    width: 100%;
     gap: 8px;
-    list-style: none;
-    margin: auto 0 0;
-    padding: 12px 16px 16px;
-    position: absolute;
-    bottom: 0;
-    background: var(--ifm-navbar-background-color);
+    padding: 12px 8px 16px;
 
     .menu__list-item {
       margin: 0;
+
+      a {
+        width: 100%;
+        padding: 8px 10px;
+        height: 48px;
+      }
 
       svg {
         display: none;
@@ -744,74 +729,31 @@ table {
 
   .menu__link.navbar-demo-btn,
   .menu__link.navbar-signup-btn {
-    display: inline-flex;
-    align-items: center;
     justify-content: center;
-    margin: 0;
-    border: 0;
     border-radius: 4px;
     font-size: 13px;
     font-weight: 500;
-    line-height: 17.5px;
-    min-height: 34px;
     white-space: nowrap;
-    color: var(--Elements-Neb-Ultra) !important;
-    text-decoration: none !important;
+    color: var(--Elements-Neb-Ultra);
+    background: var(--Elements-Neb-20-Alpha);
   }
 
   .menu__link.navbar-demo-btn {
     background: transparent;
-    padding: 8px 10px;
+    &:hover {
+      background: var(--Elements-Neb-20-Alpha);
+    }
   }
-
   .menu__link.navbar-signup-btn {
-    background: rgba(99, 123, 255, 0.12);
-    padding: 8px 12px;
+    &:hover {
+      background: var(--ifm-menu-color-background-hover);
+    }
   }
 }
 
 // ============================================================
-// Sidebar
+// Search
 // ============================================================
-
-// Doc content row (sidebar + main): inset it to match the navbar's
-// centered content column instead of letting the sidebar run flush to
-// the viewport edge. Targets the flex row that directly parents the
-// sidebar, i.e. DocRoot's `docRoot` wrapper (theme-doc-sidebar-container's
-// parent), whose generated class name isn't otherwise addressable.
-@media (min-width: 997px) {
-  :has(> .theme-doc-sidebar-container) {
-    max-width: calc(
-      var(--content-max-width) + (var(--content-side-padding) * 2)
-    );
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: var(--content-side-padding);
-    padding-right: var(--content-side-padding);
-    // Nudge the whole row a bit further left than strict navbar-alignment math
-    // would place it.
-    position: relative;
-    left: -24px;
-  }
-}
-
-// Sidebar panel: match page background. Explicitly cancel the stock
-// theme's border-right (Docusaurus's own docSidebarContainer CSS module
-// also sets one), since it visibly runs the full sticky height of the
-// row — well past the actual menu content — as a stray vertical line.
-.theme-doc-sidebar-container {
-  background-color: var(--ifm-background-color);
-  // !important: the stock docSidebarContainer CSS module sets its own
-  // border-right and is emitted after this rule in the bundled stylesheet,
-  // so equal specificity alone isn't enough to cancel it.
-  border-right: none !important;
-
-  > div {
-    max-height: 100vh;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-}
 
 .navbar .DocSearch-Button {
   width: 100%;
@@ -819,6 +761,11 @@ table {
   background-color: transparent;
   border-radius: 2px;
   padding: 0 12px;
+
+  @media (max-width: 768px) {
+    border: none;
+    padding: 0;
+  }
 
   &:hover,
   &:active,
@@ -831,6 +778,12 @@ table {
     color: var(--Elements-Twilight-60-50);
     width: 16px;
     height: 16px;
+
+    @media (max-width: 768px) {
+      color: var(--Elements-Twilight-70-20);
+      height: 20px;
+      width: 20px;
+    }
   }
   .DocSearch-Button-Placeholder {
     color: var(--Elements-Twilight-60-50);
@@ -877,6 +830,49 @@ kbd.DocSearch-Button-Key {
     .DocSearch-Hit a {
       border-radius: 2px;
     }
+  }
+}
+
+// ============================================================
+// Sidebar
+// ============================================================
+
+// Doc content row (sidebar + main): inset it to match the navbar's
+// centered content column instead of letting the sidebar run flush to
+// the viewport edge. Targets the flex row that directly parents the
+// sidebar, i.e. DocRoot's `docRoot` wrapper (theme-doc-sidebar-container's
+// parent), whose generated class name isn't otherwise addressable.
+@media (min-width: 997px) {
+  :has(> .theme-doc-sidebar-container) {
+    max-width: calc(
+      var(--content-max-width) + (var(--content-side-padding) * 2)
+    );
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--content-side-padding);
+    padding-right: var(--content-side-padding);
+    // Nudge the whole row a bit further left than strict navbar-alignment math
+    // would place it.
+    position: relative;
+    left: -24px;
+  }
+}
+
+// Sidebar panel: match page background. Explicitly cancel the stock
+// theme's border-right (Docusaurus's own docSidebarContainer CSS module
+// also sets one), since it visibly runs the full sticky height of the
+// row — well past the actual menu content — as a stray vertical line.
+.theme-doc-sidebar-container {
+  background-color: var(--ifm-background-color);
+  // !important: the stock docSidebarContainer CSS module sets its own
+  // border-right and is emitted after this rule in the bundled stylesheet,
+  // so equal specificity alone isn't enough to cancel it.
+  border-right: none !important;
+
+  > div {
+    max-height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 }
 
