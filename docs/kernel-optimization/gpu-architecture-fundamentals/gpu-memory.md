@@ -200,7 +200,7 @@ Now consider a large stride, where every thread reads from a different 32-byte
 sector. The warp still requests only 128 useful bytes, but the GPU may need 32
 sectors to serve the load:
 
-```bash
+```text
 32 sectors × 32 bytes = 1,024 bytes fetched
 ```
 
