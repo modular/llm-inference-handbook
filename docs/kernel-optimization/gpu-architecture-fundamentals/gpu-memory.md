@@ -12,6 +12,8 @@ keywords:
 
 import LinkList from '@site/src/components/LinkList'; import
 MemoryHierarchyExplorer from '@site/src/components/MemoryHierarchyExplorer';
+import MemoryCoalescingVisualizer from
+'@site/src/components/MemoryCoalescingVisualizer';
 
 # GPU memory hierarchy
 
@@ -154,6 +156,71 @@ remain on one GPU.
 HBM is large but slow relative to on-chip memory. A single HBM access takes
 hundreds of cycles. This is why kernel optimization focuses on minimizing
 traffic between HBM and compute units.
+
+## Memory coalescing
+
+Memory coalescing describes how efficiently the memory requests from one warp
+fit into hardware memory transactions. A warp executes one load instruction,
+but the GPU doesn't fetch each requested value as a separate operation.
+Instead, the GPU groups the addresses from all active threads into transactions
+that cover fixed-size regions of memory.
+
+On current NVIDIA GPUs, global memory loads are serviced in 32-byte sectors.
+The fewer sectors a warp needs for one instruction, the better the access is
+coalesced.
+
+:::note
+A sector is a 32-byte aligned region of memory that NVIDIA GPUs use as a
+transfer unit for global memory loads. Even when a thread needs only 4 bytes,
+the GPU may fetch the entire 32-byte sector containing those bytes.
+:::
+
+Suppose all 32 threads in a warp load one `float32` value, or 4 bytes per
+thread. The warp requests 128 bytes in total:
+
+```text
+32 threads × 4 bytes = 128 bytes
+```
+
+If adjacent threads read adjacent elements, the addresses can fit into four
+adjacent 32-byte sectors:
+
+```text
+Thread 0  → bytes 0–3
+Thread 1  → bytes 4–7
+Thread 2  → bytes 8–11
+...
+Thread 31 → bytes 124–127
+```
+
+The GPU fetches 128 bytes, and the warp uses all 128 bytes. This is a fully
+coalesced access, assuming the first address has suitable alignment.
+
+Now consider a large stride, where every thread reads from a different 32-byte
+sector. The warp still requests only 128 useful bytes, but the GPU may need 32
+sectors to serve the load:
+
+```text
+32 sectors × 32 bytes = 1,024 bytes fetched
+```
+
+Only one eighth of the transferred data is useful for that instruction. The
+remaining bytes consume bandwidth without contributing values to the warp.
+Caches may help on later accesses, but they don't make the original address
+pattern coalesced.
+
+Try each pattern below and compare the number of sectors required by one load:
+
+<MemoryCoalescingVisualizer />
+
+Good coalescing usually comes from mapping adjacent threads to adjacent tensor
+elements. Alignment matters too: an otherwise consecutive 128-byte request can
+cross a sector boundary and require an extra transaction.
+
+Efficient memory access is especially important for LLM inference because many
+kernels move far more data than they compute on. Poor coalescing wastes HBM
+bandwidth and can reduce token throughput even when the amount of arithmetic
+stays the same.
 
 ## The memory pyramid
 
