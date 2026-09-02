@@ -211,8 +211,8 @@ const config: Config = {
       },
       items: [
         {
-          href: 'https://www.modular.com/request-demo?utm_source=llm_handbook',
-          label: 'Request a demo',
+          href: 'https://console.modular.com/signup?utm_source=llm_handbook',
+          label: 'Sign up',
           position: 'right',
           className: 'navbar-btn-primary'
         }
