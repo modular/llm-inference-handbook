@@ -705,8 +705,19 @@ table {
     }
   }
 
+  // Upstream sizes this as `height: 100% - navbar height`, which assumes it is
+  // the drawer's only child. It now shares the column with the CTAs below, so it
+  // has to flex instead and own the scrolling for the long docs tree.
+  .navbar-sidebar__items {
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
   .navbar-sidebar__ctas {
     display: flex;
+    flex: 0 0 auto;
     flex-flow: column;
     width: 100%;
     gap: 8px;

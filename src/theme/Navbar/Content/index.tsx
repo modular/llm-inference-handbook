@@ -96,7 +96,7 @@ export default function NavbarContent(): ReactNode {
           <Group
             gap={rem(12)}
             wrap="nowrap"
-            className="-ml-2 mr-6 mt-0.5 flex-1 sm:flex-none navbar__subtitle"
+            className="flex-1 sm:flex-none navbar__subtitle"
           >
             <Text unstyled p={0} m={0}>
               /
