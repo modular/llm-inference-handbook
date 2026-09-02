@@ -640,13 +640,34 @@ table {
 }
 
 .navbar__subtitle {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 12px;
+  // Absorb the leftover navbar width on the narrowest screens. 640px is the
+  // `sm` breakpoint from dls/tailwindTheme, kept so this matches the utility
+  // classes it replaced.
+  flex: 1;
   font-size: 20px;
   line-height: 1em;
   margin-bottom: -4px;
   padding-right: 24px;
 
+  @media (min-width: 640px) {
+    flex: none;
+  }
+
   @media (max-width: 768px) {
     font-size: 16px;
+  }
+
+  a {
+    color: var(--Black);
+
+    &:hover {
+      color: var(--Black);
+      text-decoration: none;
+    }
   }
 }
 
@@ -654,21 +675,37 @@ table {
 // Navbar CTAs
 // ============================================================
 
-.navbar__item.navbar-demo-btn,
-.navbar__item.navbar-signup-btn {
+// Shared by the desktop CTAs and their counterparts in the mobile drawer, which
+// render as different elements (.navbar__item vs .menu__link).
+@mixin cta-button {
   font-size: 13px;
   white-space: nowrap;
   color: var(--Elements-Neb-Ultra);
   background: var(--Elements-Neb-20-Alpha);
   border-radius: 4px;
+}
+
+@mixin cta-button-primary-hover {
+  &:hover {
+    background: var(--Elements-Neb-30-Alpha);
+  }
+}
+
+@mixin cta-button-secondary {
+  background: transparent;
+
+  &:hover {
+    background: var(--Elements-Neb-20-Alpha);
+  }
+}
+
+.navbar__item.navbar-demo-btn,
+.navbar__item.navbar-signup-btn {
+  @include cta-button;
   padding: 8px 12px;
 
   @media (max-width: 996px) {
     display: none;
-  }
-
-  &:hover {
-    background: var(--ifm-menu-color-background-hover);
   }
 
   svg {
@@ -676,13 +713,13 @@ table {
   }
 }
 
-.navbar__item.navbar-demo-btn {
-  background: transparent;
-  margin-right: 4px;
+.navbar__item.navbar-signup-btn {
+  @include cta-button-primary-hover;
+}
 
-  &:hover {
-    background: var(--Elements-Neb-20-Alpha);
-  }
+.navbar__item.navbar-demo-btn {
+  @include cta-button-secondary;
+  margin-right: 4px;
 }
 
 // Mobile menu styles
@@ -740,25 +777,17 @@ table {
 
   .menu__link.navbar-demo-btn,
   .menu__link.navbar-signup-btn {
+    @include cta-button;
     justify-content: center;
-    border-radius: 4px;
-    font-size: 13px;
     font-weight: 500;
-    white-space: nowrap;
-    color: var(--Elements-Neb-Ultra);
-    background: var(--Elements-Neb-20-Alpha);
   }
 
   .menu__link.navbar-demo-btn {
-    background: transparent;
-    &:hover {
-      background: var(--Elements-Neb-20-Alpha);
-    }
+    @include cta-button-secondary;
   }
+
   .menu__link.navbar-signup-btn {
-    &:hover {
-      background: var(--ifm-menu-color-background-hover);
-    }
+    @include cta-button-primary-hover;
   }
 }
 

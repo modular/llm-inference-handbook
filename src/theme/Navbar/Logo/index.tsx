@@ -2,39 +2,28 @@ import React, { type ReactNode } from 'react'
 import Link from '@docusaurus/Link'
 import useBaseUrl from '@docusaurus/useBaseUrl'
 import { useThemeConfig } from '@docusaurus/theme-common'
-import ThemedImage from '@theme/ThemedImage'
 
 export default function NavbarLogo(): ReactNode {
-  const {
-    navbar: { logo }
-  } = useThemeConfig()
-  const wordmarkLight = useBaseUrl(logo?.src ?? 'images/modular-logo-black.svg')
-  const wordmarkDark = useBaseUrl(
-    logo?.srcDark ?? logo?.src ?? 'images/modular-logo-white.svg'
-  )
+  const { navbar } = useThemeConfig()
+  // Always configured; see themeConfig.navbar.logo in docusaurus.config.ts.
+  const logo = navbar.logo!
+  const wordmark = useBaseUrl(logo.src)
   const brandmark = useBaseUrl('images/modular-brandmark-dark.svg')
 
   return (
-    <Link
-      className="navbar__brand"
-      href={logo?.href ?? 'https://www.modular.com'}
-      target={logo?.target}
-    >
+    <Link className="navbar__brand" href={logo.href} target={logo.target}>
       <div className="navbar__logo navbar__logo--wordmark">
-        <ThemedImage
-          sources={{ light: wordmarkLight, dark: wordmarkDark }}
-          alt={logo?.alt ?? 'Modular'}
-          width={logo?.width}
-          height={logo?.height}
+        <img
+          src={wordmark}
+          alt={logo.alt}
+          width={logo.width}
+          height={logo.height}
         />
       </div>
+      {/* Sized by CSS, which renders it at different sizes in the navbar and
+          the mobile drawer. */}
       <div className="navbar__logo navbar__logo--mark">
-        <img
-          src={brandmark}
-          alt={logo?.alt ?? 'Modular'}
-          width={24}
-          height={24}
-        />
+        <img src={brandmark} alt={logo.alt} />
       </div>
     </Link>
   )

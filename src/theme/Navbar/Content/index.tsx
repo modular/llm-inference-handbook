@@ -22,8 +22,8 @@ import NavbarMobileSidebarToggle from '@theme/Navbar/MobileSidebar/Toggle'
 import NavbarLogo from '@theme/Navbar/Logo'
 import NavbarSearch from '@theme/Navbar/Search'
 import Link from '@docusaurus/Link'
+import useBaseUrl from '@docusaurus/useBaseUrl'
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
-import { Group, rem, Text } from '@mantine/core'
 
 function useNavbarItems() {
   return useThemeConfig().navbar.items as NavbarItemConfig[]
@@ -86,6 +86,7 @@ export default function NavbarContent(): ReactNode {
   const [leftItems, rightItems] = splitNavbarItems(items)
   const searchBarItem = items.find((item) => item.type === 'search')
   const { siteConfig } = useDocusaurusContext()
+  const handbookHref = useBaseUrl('/')
 
   return (
     <NavbarContentLayout
@@ -93,21 +94,10 @@ export default function NavbarContent(): ReactNode {
         <>
           {!mobileSidebar.disabled && <NavbarMobileSidebarToggle />}
           <NavbarLogo />
-          <Group
-            gap={rem(12)}
-            wrap="nowrap"
-            className="flex-1 sm:flex-none navbar__subtitle"
-          >
-            <Text unstyled p={0} m={0}>
-              /
-            </Text>{' '}
-            <Link
-              href="/"
-              className="text-black hover:text-black hover:no-underline"
-            >
-              {siteConfig.title}
-            </Link>
-          </Group>
+          <div className="navbar__subtitle">
+            <span aria-hidden="true">/</span>
+            <Link to={handbookHref}>{siteConfig.title}</Link>
+          </div>
           <NavbarItems items={leftItems} />
         </>
       }
