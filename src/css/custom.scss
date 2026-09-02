@@ -699,8 +699,8 @@ table {
   }
 }
 
-.navbar__item.navbar-demo-btn,
-.navbar__item.navbar-signup-btn {
+.navbar__item.navbar-btn-secondary,
+.navbar__item.navbar-btn-primary {
   @include cta-button;
   padding: 8px 12px;
 
@@ -713,11 +713,11 @@ table {
   }
 }
 
-.navbar__item.navbar-signup-btn {
+.navbar__item.navbar-btn-primary {
   @include cta-button-primary-hover;
 }
 
-.navbar__item.navbar-demo-btn {
+.navbar__item.navbar-btn-secondary {
   @include cta-button-secondary;
   margin-right: 4px;
 }
@@ -775,18 +775,18 @@ table {
     }
   }
 
-  .menu__link.navbar-demo-btn,
-  .menu__link.navbar-signup-btn {
+  .menu__link.navbar-btn-secondary,
+  .menu__link.navbar-btn-primary {
     @include cta-button;
     justify-content: center;
     font-weight: 500;
   }
 
-  .menu__link.navbar-demo-btn {
+  .menu__link.navbar-btn-secondary {
     @include cta-button-secondary;
   }
 
-  .menu__link.navbar-signup-btn {
+  .menu__link.navbar-btn-primary {
     @include cta-button-primary-hover;
   }
 }

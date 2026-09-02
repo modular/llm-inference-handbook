@@ -212,15 +212,9 @@ const config: Config = {
       items: [
         {
           href: 'https://www.modular.com/request-demo?utm_source=llm_handbook',
-          label: 'Request a Demo',
+          label: 'Request a demo',
           position: 'right',
-          className: 'navbar-demo-btn'
-        },
-        {
-          href: 'https://console.modular.com/signup?utm_source=llm_handbook',
-          label: 'Sign up',
-          position: 'right',
-          className: 'navbar-signup-btn'
+          className: 'navbar-btn-primary'
         }
       ]
     },
