@@ -28,19 +28,7 @@ const config: Config = {
     format: 'mdx'
   },
 
-  // Pre-paint script that forces the Handbook to light mode before hydration.
-  // Theme plumbing remains in the codebase so dark mode can be restored later,
-  // but the shipped site should not expose or honor user/system theme toggles.
   headTags: [
-    {
-      tagName: 'script',
-      attributes: { 'data-mantine-script': 'true' },
-      innerHTML: `try {
-  window.localStorage.setItem("theme", "light");
-  document.documentElement.setAttribute("data-theme", "light");
-  document.documentElement.setAttribute("data-mantine-color-scheme", "light");
-} catch (e) {}`
-    },
     {
       tagName: 'script',
       attributes: {
@@ -221,7 +209,8 @@ const config: Config = {
     footer: {
       logo: {
         alt: 'Modular',
-        src: 'images/modular-logo-white.svg',
+        src: 'images/modular-logo-black.svg',
+        srcDark: 'images/modular-logo-white.svg',
         href: 'https://www.modular.com'
       },
       links: [
@@ -255,12 +244,12 @@ const config: Config = {
     prism: {
       additionalLanguages: ['bash'],
       theme: prismThemes.github,
-      darkTheme: prismThemes.github
+      darkTheme: prismThemes.oneDark
     },
     colorMode: {
       defaultMode: 'light',
-      disableSwitch: true,
-      respectPrefersColorScheme: false
+      disableSwitch: false,
+      respectPrefersColorScheme: true
     },
     algolia: {
       appId: 'YKT8GOY8JO',

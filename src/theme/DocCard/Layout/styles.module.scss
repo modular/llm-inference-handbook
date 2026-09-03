@@ -9,7 +9,6 @@
   border-radius: 4px;
   box-shadow: none;
   background: var(--ifm-background-color);
-  color: var(--ifm-font-color-base);
   text-decoration: none;
   transition:
     border-color 160ms ease,
@@ -28,13 +27,14 @@
 }
 
 .cardTitle {
+  color: inherit;
   margin: 0;
   font-size: 1rem;
   line-height: 1.35;
 }
 
 .cardTitleLink {
-  color: var(--Elements-Neb-Ultra);
+  color: inherit;
   text-decoration: none;
   text-underline-offset: 2px;
 

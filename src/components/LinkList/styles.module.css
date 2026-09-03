@@ -12,12 +12,6 @@
   margin-bottom: 1rem;
 }
 
-.section a {
-  color: var(--Elements-Neb-Ultra);
-  text-decoration: none;
-  transition: color 0.2s ease-in-out;
-}
-
 .section ul {
   list-style: none;
   margin-bottom: 0;
@@ -45,13 +39,4 @@
   padding-left: 1.75rem;
   margin-left: -1.75rem;
   transition: background-color 0.2s ease-in-out;
-}
-
-.section ul li a:hover {
-  color: var(--Elements-Neb-Ultra);
-  text-decoration: underline;
-}
-
-.section ul li a:hover::before {
-  background-color: var(--Elements-Neb-Ultra);
 }
