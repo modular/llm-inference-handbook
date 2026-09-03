@@ -264,6 +264,9 @@ const config: Config = {
     },
     algolia: {
       appId: 'YKT8GOY8JO',
+      // DocSearch runs in the browser, so this key ships to the client and must
+      // stay read-only (search ACL). Never replace it with an admin or
+      // write-capable key.
       apiKey: 'afcc1015b8a021c0e5bd3292da05d2cb',
       indexName: 'inference-handbook',
       contextualSearch: true,
