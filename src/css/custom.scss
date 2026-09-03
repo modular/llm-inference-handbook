@@ -30,7 +30,7 @@
     font-family: var(--ifm-font-family-base);
     font-size: 0.9375rem;
     font-weight: 500;
-    color: #fff !important;
+    color: var(--Color-White) !important;
     text-decoration: none !important;
     white-space: nowrap;
     background: var(--gradient-ember);
@@ -38,7 +38,7 @@
 
     &:hover {
       opacity: 0.9;
-      color: #fff !important;
+      color: var(--Color-White) !important;
       text-decoration: none !important;
     }
 
@@ -239,10 +239,10 @@ $font-family-monospace:
   --ifm-toc-border-color: var(--Elements-Twilight-20-70);
   --ifm-toc-link-color: var(--Elements-Twilight-60-40);
 
-  // Alert
-  --color-alert-bg-note: #deedfb33;
-  --color-alert-bg-caution: #ed810c11;
-  --color-alert-bg-warning: #ffe2e244;
+  // Alert — alpha suffixes match docsite light-mode admonition washes
+  --color-alert-bg-note: #{$Blue20}33;
+  --color-alert-bg-caution: #{$Orange120}11;
+  --color-alert-bg-warning: #{$Red20}44;
   --color-alert-color-note: var(--Elements-Blue-120-100);
   --color-alert-border-color-note: var(--Elements-Blue-120-100);
   --color-collapsible-chevron: var(--Elements-Blue-120-100);
@@ -271,7 +271,7 @@ $font-family-monospace:
   --ifm-color-primary-lightest: var(--Elements-Neb-Ultra);
 
   // Links — DLS dark uses a lighter nebula blue for contrast
-  --ifm-link-color: #8199ff;
+  --ifm-link-color: var(--color-mod-light-blue);
 
   // Sidebar menu
   --ifm-menu-color: var(--Elements-Twilight-20);
@@ -280,14 +280,14 @@ $font-family-monospace:
   --ifm-menu-color-background-active: var(--Elements-Twilight-70);
   --ifm-menu-link-sublist-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24"><path fill="%239a9eaa" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path></svg>');
   --ifm-menu-link-sublist-icon-filter: none;
-  --menu-color-border: #637bff3c;
+  --menu-color-border: var(--color-mod-nebula-60);
 
   // Navbar — same surface as the page, matching DLS
   --ifm-navbar-background-color: var(--Elements-Twilight-0-90);
 
   // Code blocks
   --docusaurus-highlighted-code-line-bg: rgba(240, 247, 87, 0.1);
-  --color-code: #e5e9ef;
+  --color-code: var(--Elements-Twilight-80-20);
   --color-code-bg: var(--Elements-Twilight-80);
   --color-code-block-bg: var(--Elements-Twilight-80);
   --color-code-border: #3c4051;
@@ -335,7 +335,7 @@ $font-family-monospace:
 // ============================================================
 :root {
   // Ember gradients — general-purpose brand gradients
-  --gradient-ember: linear-gradient(105deg, #fd2b01 5%, #ed810c 100%);
+  --gradient-ember: linear-gradient(105deg, #fd2b01 5%, #{$Orange120} 100%);
   --gradient-ember-wash: linear-gradient(
     90deg,
     transparent 0%,
@@ -347,6 +347,10 @@ $font-family-monospace:
     transparent 0%,
     var(--Elements-Neb-20-Alpha) 100%
   );
+
+  // Website specials used by dark-mode overrides below
+  --color-mod-light-blue: #8199ff;
+  --color-mod-nebula-60: #637bff3c;
 
   --inter: 'Inter';
   --roboto: 'Roboto Mono';
