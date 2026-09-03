@@ -357,8 +357,7 @@ $font-family-monospace:
   --ifm-navbar-height: 64px;
   --ifm-navbar-shadow: none;
   --ifm-alert-shadow: none;
-  // Shared with the navbar's shadow-DOM styles (MarketingHeader) so the
-  // sidebar + doc content align with the navbar's centered content column.
+  // Sidebar + doc content align to this centered content column.
   --content-max-width: 1200px;
   --content-side-padding: 24px;
   --ifm-spacing-horizontal: 24px !important;
@@ -392,7 +391,7 @@ body {
 .main-wrapper {
   .container {
     // Eliminate giant gutters on mobile
-    @media (width <= 576px) {
+    @media (width <= 996px) {
       max-width: 100%;
       margin: 0;
     }
@@ -597,6 +596,294 @@ table {
 }
 
 // ============================================================
+// Navbar
+// ============================================================
+
+.navbar {
+  padding-left: 0;
+  padding-right: 0;
+  border-bottom: 1px solid var(--Elements-Twilight-20-70);
+}
+
+// This container applies to the header nav only, not the mobile menu
+.navbar__inner {
+  max-width: calc(var(--content-max-width) + var(--content-side-padding) * 2);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--content-side-padding);
+  padding-right: var(--content-side-padding);
+
+  .navbar__brand {
+    margin-right: 0;
+
+    .navbar__logo {
+      height: 20px;
+    }
+
+    .navbar__logo--mark {
+      display: none !important;
+    }
+
+    @media (max-width: 996px) {
+      .navbar__logo--wordmark {
+        display: none !important;
+      }
+
+      .navbar__logo--mark {
+        display: flex !important;
+        align-items: center;
+        height: 22px;
+        width: 22px;
+        margin: 0 12px 0 12px;
+      }
+    }
+  }
+}
+
+.navbar__subtitle {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 12px;
+  // Absorb the leftover navbar width on the narrowest screens. 640px is the
+  // `sm` breakpoint from dls/tailwindTheme, kept so this matches the utility
+  // classes it replaced.
+  flex: 1;
+  font-size: 20px;
+  line-height: 1em;
+  margin-bottom: -4px;
+  padding-right: 24px;
+
+  @media (min-width: 640px) {
+    flex: none;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
+
+  a {
+    color: var(--Black);
+
+    &:hover {
+      color: var(--Black);
+      text-decoration: none;
+    }
+  }
+}
+
+// ============================================================
+// Navbar CTAs
+// ============================================================
+
+// Shared by the desktop CTAs and their counterparts in the mobile drawer, which
+// render as different elements (.navbar__item vs .menu__link).
+@mixin cta-button {
+  font-size: 13px;
+  white-space: nowrap;
+  color: var(--Elements-Neb-Ultra);
+  background: var(--Elements-Neb-20-Alpha);
+  border-radius: 4px;
+}
+
+@mixin cta-button-primary-hover {
+  &:hover {
+    background: var(--Elements-Neb-30-Alpha);
+  }
+}
+
+@mixin cta-button-secondary {
+  background: transparent;
+
+  &:hover {
+    background: var(--Elements-Neb-20-Alpha);
+  }
+}
+
+.navbar__item.navbar-btn-secondary,
+.navbar__item.navbar-btn-primary {
+  @include cta-button;
+  padding: 8px 12px;
+
+  @media (max-width: 996px) {
+    display: none;
+  }
+
+  svg {
+    display: none;
+  }
+}
+
+.navbar__item.navbar-btn-primary {
+  @include cta-button-primary-hover;
+}
+
+.navbar__item.navbar-btn-secondary {
+  @include cta-button-secondary;
+  margin-right: 4px;
+}
+
+// Mobile menu styles
+.navbar-sidebar {
+  display: flex;
+  flex-direction: column;
+
+  .navbar-sidebar__brand {
+    flex: 0 0 auto;
+    padding: 0 1rem;
+    border-bottom: 1px solid var(--ifm-toc-border-color);
+
+    .navbar__logo--wordmark {
+      height: 20px;
+      margin: 0;
+    }
+
+    .navbar__logo--mark {
+      display: none !important;
+    }
+  }
+
+  .sidebar-home-link {
+    margin: 4px 0 24px;
+    > .menu__link {
+      color: var(--Black);
+      font-size: 20px;
+      background-color: transparent !important;
+    }
+  }
+
+  // Upstream sizes this as `height: 100% - navbar height`, which assumes it is
+  // the drawer's only child. It now shares the column with the CTAs below, so it
+  // has to flex instead and own the scrolling for the long docs tree.
+  .navbar-sidebar__items {
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  .navbar-sidebar__ctas {
+    display: flex;
+    flex: 0 0 auto;
+    flex-flow: column;
+    width: 100%;
+    gap: 8px;
+    padding: 12px 8px 16px;
+
+    .menu__list-item {
+      margin: 0;
+
+      a {
+        width: 100%;
+        padding: 8px 10px;
+        height: 48px;
+      }
+
+      svg {
+        display: none;
+      }
+    }
+  }
+
+  .menu__link.navbar-btn-secondary,
+  .menu__link.navbar-btn-primary {
+    @include cta-button;
+    justify-content: center;
+    font-weight: 500;
+  }
+
+  .menu__link.navbar-btn-secondary {
+    @include cta-button-secondary;
+  }
+
+  .menu__link.navbar-btn-primary {
+    @include cta-button-primary-hover;
+  }
+}
+
+// ============================================================
+// Search
+// ============================================================
+
+.navbar .DocSearch-Button {
+  width: 100%;
+  border: 1px solid var(--ifm-toc-border-color);
+  background-color: transparent;
+  border-radius: 2px;
+  padding: 0 12px;
+
+  @media (max-width: 768px) {
+    border: none;
+    padding: 0;
+  }
+
+  &:hover,
+  &:active,
+  &:focus {
+    border-color: var(--Elements-Neb-Ultra);
+    box-shadow: none;
+  }
+
+  .DocSearch-Button-Container svg {
+    color: var(--Elements-Twilight-60-50);
+    width: 16px;
+    height: 16px;
+
+    @media (max-width: 768px) {
+      color: var(--Elements-Twilight-70-20);
+      height: 20px;
+      width: 20px;
+    }
+  }
+  .DocSearch-Button-Placeholder {
+    color: var(--Elements-Twilight-60-50);
+    font-size: 14px;
+  }
+
+  .DocSearch-Button-Key {
+    &:first-child {
+      margin-left: auto;
+    }
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+kbd.DocSearch-Commands-Key,
+kbd.DocSearch-Button-Key {
+  padding: 0;
+  color: var(--Elements-Twilight-60-50);
+  background: var(--Elements-Twilight-10-90);
+  border: 1px solid var(--ifm-toc-border-color);
+  box-shadow: inset -1px -1px rgba(200, 200, 200, 0.2);
+}
+
+// DocSearch dialog
+.DocSearch {
+  .DocSearch-Modal {
+    border-radius: 2px;
+    .DocSearch-Form {
+      border: 1px solid var(--Elements-Neb-Ultra);
+      box-shadow: none;
+      border-radius: 2px;
+
+      svg {
+        height: 20px;
+        width: 20px;
+      }
+    }
+    .DocSearch-Input {
+      font-size: 1.1rem;
+    }
+    .DocSearch-Hit,
+    .DocSearch-Hit a {
+      border-radius: 2px;
+    }
+  }
+}
+
+// ============================================================
 // Sidebar
 // ============================================================
 
@@ -688,23 +975,6 @@ nav.menu {
     padding-left: 8px;
   }
 
-  .sidebar-top-level-link {
-    border-bottom: 1px solid var(--Elements-Twilight-20-70);
-    margin-bottom: 24px;
-    padding-bottom: 16px;
-
-    > .menu__link {
-      font-size: 16px;
-      font-weight: 600;
-      border: none !important;
-
-      &.menu__link--active,
-      &:hover {
-        background-color: transparent !important;
-      }
-    }
-  }
-
   // Bold top-level category labels
   .theme-doc-sidebar-item-category-level-1
     > .menu__list-item-collapsible
@@ -776,6 +1046,12 @@ nav.menu {
         font-size: 14px;
       }
     }
+  }
+
+  .sidebar-home-link {
+    // This link exists for the mobile menu only,
+    // so we hide it on the desktop sidebar.
+    display: none;
   }
 }
 

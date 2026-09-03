@@ -1,10 +1,10 @@
-import type { Config } from '@docusaurus/types';
-import type * as Preset from '@docusaurus/preset-classic';
-import remarkMath from 'remark-math';
-import rehypeKatex from 'rehype-katex';
-import { themes as prismThemes } from 'prism-react-renderer';
+import type { Config } from '@docusaurus/types'
+import type * as Preset from '@docusaurus/preset-classic'
+import remarkMath from 'remark-math'
+import rehypeKatex from 'rehype-katex'
+import { themes as prismThemes } from 'prism-react-renderer'
 
-const tailwindConfig = require('./src/plugins/tailwind-config');
+const tailwindConfig = require('./src/plugins/tailwind-config')
 
 const config: Config = {
   title: 'LLM Inference Handbook',
@@ -21,11 +21,11 @@ const config: Config = {
 
   i18n: {
     defaultLocale: 'en',
-    locales: ['en'],
+    locales: ['en']
   },
 
   markdown: {
-    format: 'mdx',
+    format: 'mdx'
   },
 
   // Pre-paint script that forces the Handbook to light mode before hydration.
@@ -39,21 +39,21 @@ const config: Config = {
   window.localStorage.setItem("theme", "light");
   document.documentElement.setAttribute("data-theme", "light");
   document.documentElement.setAttribute("data-mantine-color-scheme", "light");
-} catch (e) {}`,
+} catch (e) {}`
     },
     {
       tagName: 'script',
       attributes: {
-        src: '/gtm-init.js',
-      },
-    },
+        src: '/gtm-init.js'
+      }
+    }
   ],
 
   scripts: [
     {
       src: '/customerio.js',
-      defer: true,
-    },
+      defer: true
+    }
   ],
 
   plugins: [
@@ -91,8 +91,8 @@ const config: Config = {
           'For the complete documentation index, see <a href="/llms.txt">llms.txt</a>.',
         containerSelector: '.doc-actions',
         copyButtonText: 'Copy as Markdown',
-        copiedButtonText: 'Copied!',
-      },
+        copiedButtonText: 'Copied!'
+      }
     ],
     [
       'docusaurus-plugin-llms',
@@ -111,7 +111,7 @@ const config: Config = {
           '**/README.md',
           '**/img/**',
           'adr/**',
-          'index.md',
+          'index.md'
         ],
         includeOrder: [
           'getting-started/**/*',
@@ -120,10 +120,10 @@ const config: Config = {
           'kernel-optimization/**/*',
           'model-preparation/**/*',
           'model-interaction/**/*',
-          'infrastructure-and-operations/**/*',
+          'infrastructure-and-operations/**/*'
         ],
-        includeUnmatchedLast: true,
-      },
+        includeUnmatchedLast: true
+      }
     ],
     [
       '@docusaurus/plugin-content-docs',
@@ -137,24 +137,24 @@ const config: Config = {
         remarkPlugins: [remarkMath],
         rehypePlugins: [rehypeKatex],
         sidebarItemsGenerator: async (args) => {
-          const { defaultSidebarItemsGenerator } = args;
-          const items = await defaultSidebarItemsGenerator(args);
+          const { defaultSidebarItemsGenerator } = args
+          const items = await defaultSidebarItemsGenerator(args)
 
           return items.map((item) => {
             if (item.customProps?.collapsed !== undefined) {
               return {
                 ...item,
-                collapsed: Boolean(item.customProps?.collapsed),
-              };
+                collapsed: Boolean(item.customProps?.collapsed)
+              }
             }
-            return item;
-          });
+            return item
+          })
         },
         admonitions: {
           keywords: ['experiment'],
-          extendDefaults: true,
-        },
-      },
+          extendDefaults: true
+        }
+      }
     ],
     function gtmNoScriptPlugin() {
       return {
@@ -165,13 +165,13 @@ const config: Config = {
               {
                 tagName: 'noscript',
                 innerHTML:
-                  '<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NP3FRS6S" height="0" width="0" style="display:none;visibility:hidden"></iframe>',
-              },
-            ],
-          };
-        },
-      };
-    },
+                  '<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NP3FRS6S" height="0" width="0" style="display:none;visibility:hidden"></iframe>'
+              }
+            ]
+          }
+        }
+      }
+    }
   ],
 
   presets: [
@@ -180,11 +180,11 @@ const config: Config = {
       {
         docs: false,
         theme: {
-          customCss: ['./src/css/custom.scss'],
+          customCss: ['./src/css/custom.scss']
         },
-        blog: false,
-      } satisfies Preset.Options,
-    ],
+        blog: false
+      } satisfies Preset.Options
+    ]
   ],
 
   stylesheets: [
@@ -193,8 +193,8 @@ const config: Config = {
       type: 'text/css',
       integrity:
         'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM',
-      crossorigin: 'anonymous',
-    },
+      crossorigin: 'anonymous'
+    }
   ],
 
   themeConfig: {
@@ -207,61 +207,79 @@ const config: Config = {
         href: 'https://www.modular.com',
         target: '_self',
         width: 104,
-        height: 16,
+        height: 16
       },
       items: [
         {
-          href: 'https://www.modular.com/request-demo?utm_source=llm_handbook',
-          label: 'Request a demo',
+          href: 'https://console.modular.com/signup?utm_source=llm_handbook',
+          label: 'Sign up',
           position: 'right',
-          className: 'navbar-signin-btn',
-        },
-      ],
+          className: 'navbar-btn-primary'
+        }
+      ]
     },
     footer: {
       logo: {
         alt: 'Modular',
         src: 'images/modular-logo-white.svg',
-        href: 'https://www.modular.com',
+        href: 'https://www.modular.com'
       },
       links: [
         {
           items: [
             {
               label: 'Models',
-              href: 'https://www.modular.com/models',
+              href: 'https://www.modular.com/models'
             },
             {
               label: 'Blog',
-              href: 'https://www.modular.com/blog',
+              href: 'https://www.modular.com/blog'
             },
             {
               label: 'Community',
-              href: 'https://www.modular.com/community',
+              href: 'https://www.modular.com/community'
             },
             {
               label: 'GitHub',
-              href: 'https://github.com/modular/llm-inference-handbook',
+              href: 'https://github.com/modular/llm-inference-handbook'
             },
             {
               label: 'Contact',
-              href: 'https://www.modular.com/request-demo?utm_source=llm_handbook',
-            },
-          ],
-        },
+              href: 'https://www.modular.com/request-demo?utm_source=llm_handbook'
+            }
+          ]
+        }
       ],
-      copyright: `© ${new Date().getFullYear()} Modular Inc`,
+      copyright: `© ${new Date().getFullYear()} Modular Inc`
     },
     prism: {
       additionalLanguages: ['bash'],
       theme: prismThemes.github,
-      darkTheme: prismThemes.github,
+      darkTheme: prismThemes.github
     },
     colorMode: {
       defaultMode: 'light',
       disableSwitch: true,
-      respectPrefersColorScheme: false,
+      respectPrefersColorScheme: false
     },
+    algolia: {
+      appId: 'YKT8GOY8JO',
+      // DocSearch runs in the browser, so this key ships to the client and must
+      // stay read-only (search ACL). Never replace it with an admin or
+      // write-capable key.
+      apiKey: 'afcc1015b8a021c0e5bd3292da05d2cb',
+      indexName: 'inference-handbook',
+      contextualSearch: true,
+      searchPagePath: 'search',
+      insights: false,
+      placeholder: 'Search the handbook',
+      translations: {
+        button: {
+          buttonText: 'Search the handbook',
+          buttonAriaLabel: 'Search the handbook'
+        }
+      }
+    }
   } satisfies Preset.ThemeConfig,
 
   future: {
@@ -272,9 +290,9 @@ const config: Config = {
       swcJsMinimizer: true,
       swcHtmlMinimizer: true,
       lightningCssMinimizer: true,
-      mdxCrossCompilerCache: true,
-    },
-  },
-};
+      mdxCrossCompilerCache: true
+    }
+  }
+}
 
-export default config;
+export default config
