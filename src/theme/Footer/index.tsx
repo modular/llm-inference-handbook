@@ -6,7 +6,7 @@ import styles from './styles.module.scss';
 
 declare global {
   interface Window {
-    Cookiebot?: { show: () => void };
+    Cookiebot?: { renew: () => void };
   }
 }
 
@@ -53,7 +53,7 @@ export default function Footer(): JSX.Element | null {
           <button
             type="button"
             className={`${styles.link} ${styles.privacyButton}`}
-            onClick={() => window.Cookiebot?.show()}
+            onClick={() => window.Cookiebot?.renew()}
           >
             Privacy settings
           </button>

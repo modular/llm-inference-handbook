@@ -1002,6 +1002,11 @@ html[data-has-hydrated='true'] .max-serve-api-wrapper {
 // ============================================================
 // CookiebotDialog overrides
 // ============================================================
+
+#CookiebotWidget {
+  display: none !important;
+}
+
 #CybotCookiebotDialog {
   border: 1px solid var(--Elements-Twilight-50) !important;
   background-color: var(--Elements-Twilight-0-90) !important;
