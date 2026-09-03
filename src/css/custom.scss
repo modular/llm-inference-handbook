@@ -253,10 +253,10 @@ $font-family-monospace:
 // ============================================================
 @mixin darkModeCloud {
   @include darkMode;
-  @include darkModeNeutral;
 
-  // Page chrome
+  // Page chrome — twilight values match MAX DLS dark mode
   --ifm-background-color: var(--Elements-Twilight-0-90) !important;
+  --ifm-background-surface-color: var(--Elements-Twilight-0-90);
   --mantine-color-body: var(--Elements-Twilight-0-90);
   --ifm-font-color-base: var(--Color-White);
   --ifm-heading-color: var(--Color-White);
@@ -270,50 +270,51 @@ $font-family-monospace:
   --ifm-color-primary-lighter: var(--Elements-Neb-Ultra);
   --ifm-color-primary-lightest: var(--Elements-Neb-Ultra);
 
-  // Links
-  --ifm-link-color: var(--Elements-Neb-Ultra);
+  // Links — DLS dark uses a lighter nebula blue for contrast
+  --ifm-link-color: #8199ff;
 
-  // Sidebar menu — near-white text for readability
-  --ifm-menu-color: #{$TwilightNeutral20};
+  // Sidebar menu
+  --ifm-menu-color: var(--Elements-Twilight-20);
   --ifm-menu-color-active: var(--Color-White);
-  --ifm-menu-color-background-hover: #{$TwilightNeutral80};
-  --ifm-menu-color-background-active: #{$TwilightNeutral80};
-  --ifm-menu-link-sublist-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24"><path fill="%239a9a9a" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path></svg>');
+  --ifm-menu-color-background-hover: var(--Elements-Twilight-80);
+  --ifm-menu-color-background-active: var(--Elements-Twilight-70);
+  --ifm-menu-link-sublist-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24"><path fill="%239a9eaa" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path></svg>');
   --ifm-menu-link-sublist-icon-filter: none;
   --menu-color-border: #637bff3c;
 
-  // Navbar — darker than body per Figma (Twilight-0-100 = #020c13 in dark)
-  --ifm-navbar-background-color: var(--Elements-Twilight-0-100);
+  // Navbar — same surface as the page, matching DLS
+  --ifm-navbar-background-color: var(--Elements-Twilight-0-90);
 
   // Code blocks
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
-  --color-code: var(--Elements-Twilight-100-0);
+  --docusaurus-highlighted-code-line-bg: rgba(240, 247, 87, 0.1);
+  --color-code: #e5e9ef;
   --color-code-bg: var(--Elements-Twilight-80);
   --color-code-block-bg: var(--Elements-Twilight-80);
-  --color-code-border: var(--Elements-Twilight-70);
-  --color-code-title-bg: var(--Elements-Twilight-70);
-  --color-code-highlight-bg: var(--Elements-Twilight-70);
+  --color-code-border: #3c4051;
+  --color-code-title-bg: #484d62;
+  --color-code-highlight-bg: rgba(240, 247, 87, 0.1);
 
   // API docs
   --color-api-box-background: var(--Elements-Neb-60-Alpha);
 
   // Cards
-  --color-card-bg: var(--Elements-Twilight-80);
-  --color-card-border: var(--Elements-Twilight-70);
+  --color-card-bg: var(--Elements-Twilight-0-100);
+  --color-card-border: var(--Elements-Twilight-20-70);
 
   // Breadcrumbs
-  --ifm-breadcrumb-color: #{$TwilightNeutral40};
-  --ifm-breadcrumb-color-active: #{$TwilightNeutral40};
+  --ifm-breadcrumb-color: var(--Elements-Twilight-40);
+  --ifm-breadcrumb-color-active: var(--Elements-Twilight-40);
 
   // TOC
   --ifm-toc-border-color: var(--Elements-Twilight-20-70);
+  --ifm-toc-link-color: var(--Elements-Twilight-60-40);
 
   // Alert
   --color-alert-bg-note: var(--Elements-Blue-20-Alpha);
-  --color-alert-bg-caution: none;
-  --color-alert-bg-warning: none;
+  --color-alert-bg-caution: var(--Elements-Orange-20-Alpha);
+  --color-alert-bg-warning: var(--Elements-Red-20-Alpha);
   --color-alert-color-note: var(--Elements-Blue-120-100);
-  --color-alert-border-color-note: none !important;
+  --color-alert-border-color-note: var(--Elements-Blue-120-100);
   --color-collapsible-chevron: var(--Elements-Twilight-20);
 }
 
@@ -376,12 +377,6 @@ body {
   // Prevent Mantine default styles from clobbering our background/color.
   background-color: unset;
   color: unset;
-}
-
-// Keep color-mode plumbing available in code, but hide user-facing controls
-// while the Handbook is intentionally forced to light mode.
-[class*='colorModeToggle'] {
-  display: none !important;
 }
 
 // ============================================================
@@ -603,6 +598,10 @@ table {
   padding-left: 0;
   padding-right: 0;
   border-bottom: 1px solid var(--Elements-Twilight-20-70);
+}
+
+.navbar__items--right {
+  gap: 8px;
 }
 
 // This container applies to the header nav only, not the mobile menu
@@ -859,8 +858,34 @@ kbd.DocSearch-Button-Key {
   box-shadow: inset -1px -1px rgba(200, 200, 200, 0.2);
 }
 
+html[data-theme='dark'] {
+  kbd.DocSearch-Commands-Key,
+  kbd.DocSearch-Button-Key {
+    box-shadow: inset -1px -1px rgba(0, 0, 0, 0.35);
+  }
+}
+
 // DocSearch dialog
 .DocSearch {
+  --docsearch-text-color: var(--ifm-font-color-base);
+  --docsearch-muted-color: var(--Elements-Twilight-60-50);
+  --docsearch-hit-color: var(--Black);
+  --docsearch-hit-active-color: var(--Color-White);
+  --docsearch-modal-background: var(--Elements-Twilight-0-100);
+  --docsearch-footer-background: var(--Elements-Twilight-0-90);
+  --docsearch-hit-background: var(--Elements-Twilight-5-80);
+  --docsearch-highlight-color: var(--Elements-Neb-Ultra);
+  --docsearch-searchbox-background: var(--Elements-Twilight-5-80);
+  --docsearch-searchbox-focus-background: var(--Elements-Twilight-5-80);
+  --docsearch-searchbox-shadow: none;
+  --docsearch-container-background: color-mix(
+    in srgb,
+    var(--Elements-Twilight-40-60),
+    transparent 60%
+  );
+  --docsearch-key-gradient: var(--Elements-Twilight-10-90);
+  --docsearch-logo-color: var(--Elements-Twilight-60-50);
+
   .DocSearch-Modal {
     border-radius: 2px;
     .DocSearch-Form {
@@ -880,6 +905,29 @@ kbd.DocSearch-Button-Key {
     .DocSearch-Hit a {
       border-radius: 2px;
     }
+  }
+}
+
+// Color mode toggle — inherit twilight text so the icon stays visible
+.navbar [class*='toggleButton'] {
+  color: var(--Elements-Twilight-70-20);
+
+  &:hover {
+    background: var(--ifm-menu-color-background-hover);
+    color: var(--Elements-Twilight-100-0);
+  }
+}
+
+// Docusaurus pins the search container to the right edge below 996px,
+// which overlays the color-mode toggle. Keep both in the flex row so
+// the toggle stays immediately to the left of search.
+@media (max-width: 996px) {
+  .navbar [class*='navbarSearchContainer'] {
+    position: static;
+  }
+
+  .navbar [class*='colorModeToggle'] {
+    flex-shrink: 0;
   }
 }
 
@@ -1218,8 +1266,8 @@ nav.menu {
   border: 0;
 }
 
-// Mantine Alert overrides (admonitions) — Light mode only
-html[data-theme='light'] .mantine-Alert-root {
+// Mantine Alert overrides (admonitions)
+.mantine-Alert-root {
   --alert-bd: 0.5px solid var(--alert-color) !important;
 
   &[data-admonition-type='note'],
