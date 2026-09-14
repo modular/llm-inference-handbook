@@ -27,7 +27,10 @@ MCP uses a client-server architecture with the following components:
 - **MCP protocol**: This is the transport layer that enables communication
   between the host and servers, regardless of how many servers are connected.
 
-<Diagram name="mcp-architecture" alt="Model Context Protocol architecture connecting MCP clients, servers, and resources" />
+<figure>
+  <Diagram name="mcp-architecture" alt="Model Context Protocol architecture connecting MCP clients, servers, and resources" />
+  <figcaption><b>Figure 1.</b> MCP host, clients, servers, and backends.</figcaption>
+</figure>
 
 When your AI assistant needs to access external data or tools, here's what
 happens at a high level:

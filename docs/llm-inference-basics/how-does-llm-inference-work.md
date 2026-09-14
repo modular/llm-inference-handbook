@@ -182,7 +182,10 @@ measures the latency from prompt submission to first token generation. More
 details will be covered in the
 [inference optimization](/inference-optimization/) chapter.
 
-<Diagram name="llm-inference-prefill" alt="LLM inference prefill pipeline showing tokenization, prefill, decode, and detokenization stages within Time to First Token (TTFT)" />
+<figure>
+  <Diagram name="llm-inference-prefill" alt="LLM inference prefill pipeline showing tokenization, prefill, decode, and detokenization stages within Time to First Token (TTFT)" />
+  <figcaption><b>Figure 1.</b> The prefill stage and Time to First Token.</figcaption>
+</figure>
 
 ### Decode
 
@@ -266,7 +269,11 @@ again (it happens under the hood and users don’t see it). In other words,
 continuity is maintained by reconstructing the context through the input prompt
 each time.
 
-<Diagram name="context-window" alt="How the conversation context grows across turns, increasing tokens processed" />
+<figure>
+  <Diagram name="context-window" alt="How the conversation context grows across turns, increasing tokens processed" />
+  <figcaption><b>Figure 2.</b> The context window grows with every conversation
+  turn.</figcaption>
+</figure>
 
 This running text history is called the context window, which has a maximum
 length (e.g., 8K, 32K, or 128K tokens).

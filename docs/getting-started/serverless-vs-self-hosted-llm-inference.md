@@ -110,9 +110,9 @@ cheaper over time, thanks to:
 
   <figure>
   <img src={require('./img/gpt-cost-drop.png').default} alt="OpenAI API cost drop over time" />
-  <figcaption>
-      Image source: <a href="https://x.com/eladgil/status/1827521805755806107">davidtsong</a>
-  </figcaption>
+  <figcaption><b>Figure 1.</b> Token cost of GPT-4-level models over time.
+  Source: <cite><a
+  href="https://x.com/eladgil/status/1827521805755806107">davidtsong</a></cite>.</figcaption>
   </figure>
 
 - GPU hardware is becoming more efficient and affordable.

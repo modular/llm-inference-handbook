@@ -95,7 +95,11 @@ Key metrics to measure latency:
     system throughput and steady-state performance (e.g., aggregate streaming
     speed).
 
-<Diagram name="llm-inference-ttft-latency" alt="Time to first token and end-to-end latency across the inference pipeline" />
+<figure>
+  <Diagram name="llm-inference-ttft-latency" alt="Time to first token and end-to-end latency across the inference pipeline" />
+  <figcaption><b>Figure 1.</b> TTFT versus end-to-end latency in the inference
+  pipeline.</figcaption>
+</figure>
 
 Acceptable latency depends on the use case. For example, a chatbot might require
 a TTFT under 500 milliseconds to feel responsive, while a code completion tool
