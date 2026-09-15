@@ -67,6 +67,7 @@ const GPU_DATA: GPU[] = [
       'Qwen3.8-27B',
       'Muse-Glimmer-30B',
       'MiMo-V2-Flash',
+      'GLM-5.3-Flash',
     ],
     notes:
       'Optimized for transformer inference; native FP8 support; excellent throughput at scale',
@@ -81,7 +82,9 @@ const GPU_DATA: GPU[] = [
     exampleLLMs: [
       'MiniMax-M3',
       'MiMo-V2.5',
-      'DeepSeek-V4-Flash-0731',
+      'DeepSeek-V4.1-Flash',
+      'Ling-3.0-flash',
+      'Qwen3.8-Flash-Next',
     ],
     notes: 'High memory capacity; designed for frontier-scale LLMs',
   },
@@ -96,7 +99,7 @@ const GPU_DATA: GPU[] = [
       'DeepSeek-V4-Pro-0813',
       'Kimi-K3',
       'Qwen3.8-2.4T-A95B',
-      'GLM-5.2',
+      'GLM-5.3',
       'MiMo-V2.5-Pro',
     ],
     notes:
@@ -137,8 +140,8 @@ const GPU_DATA: GPU[] = [
     exampleLLMs: [
       'Gemma-4-31B',
       'MiniMax-M3',
-      'DeepSeek-V4-Flash-0731',
-      'GLM-5.2',
+      'DeepSeek-V4.1-Flash',
+      'GLM-5.3',
     ],
     notes: '3rd Gen CDNA architecture; built for massive multi-GPU clusters',
   },
@@ -149,7 +152,13 @@ const GPU_DATA: GPU[] = [
     vramDisplay: '288 GB',
     bandwidthGBs: 8000,
     bandwidthDisplay: '8.0 TB/s',
-    exampleLLMs: ['GLM-5.2', 'Kimi-K3', 'MiniMax-M3', 'Qwen3.8-2.4T-A95B', 'MiMo-V2.5-Pro'],
+    exampleLLMs: [
+      'GLM-5.3',
+      'Kimi-K3',
+      'MiniMax-M3',
+      'Qwen3.8-2.4T-A95B',
+      'MiMo-V2.5-Pro',
+    ],
     notes:
       '4th Gen CDNA architecture; FP4/FP6 support; competes with B200 for the largest open models',
   },

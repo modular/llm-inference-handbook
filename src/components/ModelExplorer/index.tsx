@@ -86,6 +86,26 @@ const MODELS: Model[] = [
       'https://docs.sglang.io/cookbook/autoregressive/DeepSeek/DeepSeek-R1',
   },
   {
+    name: 'DeepSeek-V4.1-Flash',
+    family: 'DeepSeek',
+    company: 'DeepSeek',
+    architecture: 'MoE',
+    released: '2026-09',
+    license: 'MIT',
+    huggingface: 'deepseek-ai/DeepSeek-V4.1-Flash',
+    totalParams: '552B',
+    activeParams: '8B / 16B',
+    contextLength: '1M',
+    modality: 'Text, Image',
+    useCase:
+      'Multimodal (image + text) agentic and input-heavy workloads (FP4 KV cache cuts memory to ~1/4 of V4-Flash)',
+    precisions: ['FP4 + FP8 Mixed'],
+    deployment: ['8× H200', '4× B200', '4× MI350X'],
+    vllmDocs: 'https://recipes.vllm.ai/deepseek-ai/DeepSeek-V4.1-Flash',
+    sglangDocs:
+      'https://docs.sglang.io/cookbook/autoregressive/DeepSeek/DeepSeek-V4_1',
+  },
+  {
     name: 'DeepSeek-V4-Pro-0813',
     family: 'DeepSeek',
     company: 'DeepSeek',
@@ -160,6 +180,46 @@ const MODELS: Model[] = [
   },
 
   // ── GLM ──
+  {
+    name: 'GLM-5.3',
+    family: 'GLM',
+    company: 'Zhipu AI',
+    architecture: 'MoE',
+    released: '2026-08',
+    license: 'GLM-5.3 License',
+    licenseUrl: 'https://huggingface.co/zai-org/GLM-5.3/blob/main/LICENSE',
+    huggingface: 'zai-org/GLM-5.3',
+    totalParams: '753B',
+    activeParams: '40B',
+    contextLength: '1M',
+    modality: 'Text',
+    useCase:
+      'Complex coding and long-horizon agent tasks',
+    precisions: ['BF16', 'FP8'],
+    deployment: ['8× H200', '8× B200', '8× MI355X'],
+    vllmDocs: 'https://recipes.vllm.ai/zai-org/GLM-5.3',
+    sglangDocs: 'https://docs.sglang.io/cookbook/autoregressive/GLM/GLM-5.3',
+  },
+  {
+    name: 'GLM-5.3-Flash',
+    family: 'GLM',
+    company: 'Zhipu AI',
+    architecture: 'MoE',
+    released: '2026-08',
+    license: 'MIT',
+    huggingface: 'zai-org/GLM-5.3-Flash',
+    totalParams: '320B',
+    activeParams: '18B',
+    contextLength: '1M',
+    modality: 'Text, Image, Video',
+    useCase:
+      'Cost-efficient multimodal coding and agent workloads',
+    precisions: ['BF16', 'FP8'],
+    deployment: ['8× H100', '8× MI355X'],
+    vllmDocs: 'https://recipes.vllm.ai/zai-org/GLM-5.3-Flash',
+    sglangDocs:
+      'https://docs.sglang.io/cookbook/autoregressive/GLM/GLM-5.3-Flash',
+  },
   {
     name: 'GLM-5.2',
     family: 'GLM',
@@ -324,6 +384,26 @@ const MODELS: Model[] = [
   },
 
   // ── Ling ──
+  {
+    name: 'Ling-3.0-flash',
+    family: 'Ling',
+    company: 'InclusionAI',
+    architecture: 'MoE',
+    released: '2026-08',
+    license: 'MIT',
+    huggingface: 'inclusionAI/Ling-3.0-flash',
+    totalParams: '124B',
+    activeParams: '5.1B',
+    contextLength: '256K',
+    modality: 'Text',
+    useCase:
+      'Production coding and deep-research agents',
+    precisions: ['BF16', 'FP8', 'FP4', 'INT4'],
+    deployment: ['4× H200', '4× MI300X'],
+    vllmDocs: 'https://recipes.vllm.ai/inclusionAI/Ling-3.0-flash',
+    sglangDocs:
+      'https://docs.sglang.io/cookbook/autoregressive/InclusionAI/Ling-3.0-flash',
+  },
   {
     name: 'Ling-2.6-1T',
     family: 'Ling',
@@ -543,6 +623,27 @@ const MODELS: Model[] = [
     sglangDocs: 'https://docs.sglang.io/cookbook/autoregressive/Qwen/Qwen3.8',
   },
   {
+    name: 'Qwen3.8-Flash-Next',
+    family: 'Qwen',
+    company: 'Alibaba',
+    architecture: 'MoE',
+    released: '2026-08',
+    license: 'Qwen Community 1.0',
+    licenseUrl: 'https://huggingface.co/Qwen/Qwen3.8-Flash-Next/blob/main/LICENSE',
+    huggingface: 'Qwen/Qwen3.8-Flash-Next',
+    totalParams: '125B',
+    activeParams: '6B',
+    contextLength: '256K',
+    modality: 'Text, Image, Video',
+    useCase:
+      'Agentic coding and multimodal long-context tasks',
+    precisions: ['BF16', 'FP8'],
+    deployment: ['4× H100', '4× H200'],
+    vllmDocs: 'https://recipes.vllm.ai/Qwen/Qwen3.8-Flash-Next',
+    sglangDocs:
+      'https://docs.sglang.io/cookbook/autoregressive/Qwen/Qwen3.8-Flash-Next',
+  },
+  {
     name: 'Qwen3.8-27B',
     family: 'Qwen',
     company: 'Alibaba',
@@ -624,19 +725,23 @@ const FAMILIES = [
 ] as const;
 type Family = (typeof FAMILIES)[number];
 
+// Sort by family name, then newest release first — the same order the list renders in.
+function sortModels(models: Model[]) {
+  return models.slice().sort((a, b) => {
+    const fam = a.family.localeCompare(b.family, 'en', {
+      sensitivity: 'base',
+    });
+    if (fam !== 0) return fam;
+    return b.released.localeCompare(a.released);
+  });
+}
+
+// Default selection: the first model shown in the list (newest model of the first family).
+const DEFAULT_MODEL = sortModels(MODELS)[0].name;
+
 function ModelExplorer() {
   const [family, setFamily] = useState<Family>('All');
-  const [selected, setSelected] = useState<string>('DeepSeek-V4-Pro');
-
-  function sortModels(models: Model[]) {
-    return models.slice().sort((a, b) => {
-      const fam = a.family.localeCompare(b.family, 'en', {
-        sensitivity: 'base',
-      });
-      if (fam !== 0) return fam;
-      return b.released.localeCompare(a.released);
-    });
-  }
+  const [selected, setSelected] = useState<string>(DEFAULT_MODEL);
 
   const visibleModels = sortModels(
     family === 'All' ? MODELS : MODELS.filter((m) => m.family === family)
