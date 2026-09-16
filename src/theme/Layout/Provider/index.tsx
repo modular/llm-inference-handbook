@@ -10,11 +10,33 @@ import {
 } from '@docusaurus/theme-common/internal';
 import { DocsPreferredVersionContextProvider } from '@docusaurus/plugin-content-docs/client';
 import type { Props } from '@theme/Layout/Provider';
-import { MantineProvider, useMantineColorScheme } from '@mantine/core';
+import {
+  MantineProvider,
+  useMantineColorScheme,
+  type MantineColorSchemeManager,
+} from '@mantine/core';
 import '@mantine/core/styles.css';
 import { Notifications } from '@mantine/notifications';
 import '@mantine/notifications/styles.css';
 import theme, { cssVariablesResolver } from '@site/dls/handbookTheme';
+
+// Docusaurus owns color-mode persistence and cross-tab synchronization. Read
+// its pre-paint result during hydration without creating a competing Mantine
+// localStorage key or storage-event listener.
+const docusaurusColorSchemeManager: MantineColorSchemeManager = {
+  get: (defaultColorScheme) => {
+    if (typeof document === 'undefined') return defaultColorScheme;
+
+    const colorScheme = document.documentElement.dataset.theme;
+    return colorScheme === 'light' || colorScheme === 'dark'
+      ? colorScheme
+      : defaultColorScheme;
+  },
+  set: () => {},
+  subscribe: () => {},
+  unsubscribe: () => {},
+  clear: () => {},
+};
 
 function MantineProviderWithTheme({
   children,
@@ -23,6 +45,7 @@ function MantineProviderWithTheme({
 }): ReactNode {
   return (
     <MantineProvider
+      colorSchemeManager={docusaurusColorSchemeManager}
       defaultColorScheme="light"
       theme={theme(
         'Inter',
