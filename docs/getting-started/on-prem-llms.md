@@ -8,11 +8,12 @@ keywords:
 
 # On-prem LLM deployments
 
-On-prem LLM deployment is a popular choice for teams that need tighter control
-over data, infrastructure, and cost. Unlike serverless inference APIs, you own
-the full stack, from GPUs and networking to scaling and monitoring. Enterprises
-typically adopt this pattern in private data centers or air-gapped environments,
-often with open-source models.
+On-prem LLM deployment gives teams control over data, infrastructure, and cost.
+You manage the
+[full LLM infrastructure stack](/infrastructure-and-operations/what-is-llm-inference-infrastructure/),
+from GPUs and networking to scaling and monitoring. Enterprises typically adopt
+this pattern in private data centers or air-gapped environments, often with
+open-source models.
 
 This kind of freedom brings advantages, but also serious engineering challenges.
 
