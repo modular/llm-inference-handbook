@@ -95,9 +95,9 @@ techniques:
 
 <figure>
   <img src={require('./img/flashattention-diagram.png').default} alt="FlashAttention tiling diagram" />
-  <figcaption>
-    FlashAttention uses tiling to prevent materialization of the large N×N attention matrix on HBM. <a href="https://arxiv.org/abs/2205.14135">Image source</a>
-  </figcaption>
+  <figcaption><b>Figure 1.</b> FlashAttention tiling keeps attention blocks in
+  SRAM. Source: <cite><a href="https://arxiv.org/abs/2205.14135">FlashAttention:
+  Fast and Memory-Efficient Exact Attention with IO-Awareness</a></cite>.</figcaption>
 </figure>
 
 Simply put, FlashAttention makes the attention computation more efficient. It

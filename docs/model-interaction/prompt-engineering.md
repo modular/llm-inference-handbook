@@ -438,9 +438,10 @@ inference.
 
 <figure>
   <img src={require('./img/chain-of-thought-cot-prompting-example.png').default} alt="Chain-of-thought prompting example" />
-  <figcaption>
-    Image source: <a href="https://arxiv.org/abs/2201.11903">Chain-of-Thought Prompting Elicits Reasoning in Large Language Models</a>
-  </figcaption>
+  <figcaption><b>Figure 1.</b> Standard prompting versus chain-of-thought
+  prompting. Source: <cite><a
+  href="https://arxiv.org/abs/2201.11903">Chain-of-Thought Prompting Elicits
+  Reasoning in Large Language Models</a></cite>.</figcaption>
 </figure>
 
 However, there are a few trade-offs for inference systems:

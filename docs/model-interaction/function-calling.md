@@ -13,7 +13,11 @@ data or an action outside the model itself. When you ask the model to do
 something that requires one of these tools, it can call that tool and use the
 result in its response.
 
-<Diagram name="function-calling-diagram" alt="Function calling: the LLM emits a function call routed to external APIs" />
+<figure>
+  <Diagram name="function-calling-diagram" alt="Function calling: the LLM emits a function call routed to external APIs" />
+  <figcaption><b>Figure 1.</b> The LLM emits function calls routed to external
+  APIs.</figcaption>
+</figure>
 
 Here is a specific example:
 

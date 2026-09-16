@@ -82,7 +82,10 @@ At a high level, speculative decoding runs in a loop:
 5. The process repeats: the draft model proposes the next *K tokens* based on
    this new extended sequence.
 
-<Diagram name="spec-decoding" alt="Speculative decoding: draft model proposes tokens the target model verifies in parallel" />
+<figure>
+  <Diagram name="spec-decoding" alt="Speculative decoding: draft model proposes tokens the target model verifies in parallel" />
+  <figcaption><b>Figure 1.</b> One iteration of speculative decoding.</figcaption>
+</figure>
 
 ## Understanding the performance of speculative decoding
 
@@ -153,7 +156,7 @@ H100 GPUs.
 
 <figure>
   <img src={require('./img/tp-1-spec-decoding.png').default} alt="Speculative decoding benchmark on a single H100 GPU" />
-  <figcaption>Llama-3.3-70B-Instruct served with vLLM on a single H100 GPU</figcaption>
+  <figcaption><b>Figure 2.</b> Llama-3.3-70B-Instruct served with vLLM on a single H100 GPU.</figcaption>
 </figure>
 
 With TP = 1, the total throughput plateaued earlier (around 20–30 concurrent
@@ -163,7 +166,7 @@ Per Output Token (TPOT) improved by roughly 2×.
 
 <figure>
   <img src={require('./img/tp-2-spec-decoding.png').default} alt="Speculative decoding benchmark on two H100 GPUs" />
-  <figcaption>Llama-3.3-70B-Instruct served with vLLM on 2 H100 GPUs</figcaption>
+  <figcaption><b>Figure 3.</b> Llama-3.3-70B-Instruct served with vLLM on 2 H100 GPUs.</figcaption>
 </figure>
 
 With TP = 2, the performance of speculative decoding improved, showing clear
