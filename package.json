@@ -34,7 +34,7 @@
     "docusaurus-markdown-source-plugin": "github:modular/markdown_docusaurus_plugin#348c3b122df767a003daea07050f78bd56f636ff",
     "docusaurus-plugin-llms": "^0.4.0",
     "docusaurus-plugin-sass": "^0.2.6",
-    "postcss": "^8.4.39",
+    "postcss": "^8.5.18",
     "postcss-import": "^16.1.0",
     "prism-react-renderer": "^2.1.0",
     "prismjs": "^1.29.0",
