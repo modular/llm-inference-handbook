@@ -42,10 +42,10 @@ Key advantages of serverless APIs include:
 
 ## Self-hosted LLM inference
 
-Self-hosted LLM inference means deploying and managing your own LLM
-infrastructure, whether on cloud GPUs, private VPCs, or on-prem servers. It
-gives you full control over how models are deployed, optimized, and scaled,
-critical for enterprises to build long-term competitive advantage.
+Self-hosted LLM inference means deploying and managing your own
+[LLM infrastructure](/infrastructure-and-operations/what-is-llm-inference-infrastructure/),
+whether you use cloud GPUs, private VPCs, or on-prem servers. You control how
+models are deployed, optimized, and scaled to meet application requirements.
 
 Key benefits of self-hosting include:
 
@@ -157,8 +157,10 @@ That’s when it’s time to go beyond APIs and start owning your inference.
 
 ## What do I need to solve if I choose self-hosting?
 
-Self-hosting LLMs gives you full control and flexibility, but also comes with
-operational responsibilities beyond just spinning up GPU servers, such as:
+Self-hosting gives you control over the
+[LLM inference stack](/infrastructure-and-operations/what-is-llm-inference-infrastructure/)
+and responsibility for operating it. Beyond provisioning GPU servers, you need
+to account for:
 
 - **DevOps time for setup and maintenance**: Setting up infrastructure, managing
   deployments, and keeping systems running smoothly.
