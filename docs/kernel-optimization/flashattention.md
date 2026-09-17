@@ -94,7 +94,7 @@ techniques:
   - All operations happen in fast SRAM
 
 <figure>
-  <img src={require('./img/flashattention-diagram.png').default} alt="FlashAttention tiling diagram" />
+  <img src={require('./img/flashattention-diagram.png').default} alt="" />
   <figcaption><b>Figure 1.</b> FlashAttention tiling keeps attention blocks in
   SRAM. Source: <cite><a href="https://arxiv.org/abs/2205.14135">FlashAttention:
   Fast and Memory-Efficient Exact Attention with IO-Awareness</a></cite>.</figcaption>

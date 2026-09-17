@@ -72,7 +72,7 @@ Here’s how it typically works:
    and model outputs stay within your environment.
 
 <figure>
-  <Diagram name="bring-your-own-cloud-byoc-diagram" alt="Bring-your-own-cloud: vendor-managed control plane and customer-VPC data plane" />
+  <Diagram name="bring-your-own-cloud-byoc-diagram" alt="" />
   <figcaption><b>Figure 1.</b> Vendor-managed control plane and customer-managed
   data plane.</figcaption>
 </figure>

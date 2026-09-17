@@ -96,7 +96,7 @@ Key metrics to measure latency:
     speed).
 
 <figure>
-  <Diagram name="llm-inference-ttft-latency" alt="Time to first token and end-to-end latency across the inference pipeline" />
+  <Diagram name="llm-inference-ttft-latency" alt="" />
   <figcaption><b>Figure 1.</b> TTFT versus end-to-end latency in the inference
   pipeline.</figcaption>
 </figure>

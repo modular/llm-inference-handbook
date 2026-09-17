@@ -321,7 +321,7 @@ about the model’s architecture, size, and capabilities. Once you know how to
 read them, it becomes much easier to compare models and choose the right one.
 
 <figure>
-  <Diagram name="llm-naming" alt="Anatomy of an LLM name: series, size, activation, quantization, and precision" />
+  <Diagram name="llm-naming" alt="" />
   <figcaption><b>Figure 1.</b> Anatomy of an LLM name.</figcaption>
 </figure>
 

@@ -14,7 +14,7 @@ something that requires one of these tools, it can call that tool and use the
 result in its response.
 
 <figure>
-  <Diagram name="function-calling-diagram" alt="Function calling: the LLM emits a function call routed to external APIs" />
+  <Diagram name="function-calling-diagram" alt="" />
   <figcaption><b>Figure 1.</b> The LLM emits function calls routed to external
   APIs.</figcaption>
 </figure>

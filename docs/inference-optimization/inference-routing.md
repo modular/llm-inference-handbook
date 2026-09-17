@@ -178,7 +178,7 @@ A KV cache utilization-aware router can steer new requests toward workers with
 enough memory headroom.
 
 <figure>
-  <Diagram name="kv-cache-util-lb" alt="KV-cache utilization-aware load balancer routing to workers by load" />
+  <Diagram name="kv-cache-util-lb" alt="" />
   <figcaption><b>Figure 1.</b> Routing requests to the worker with the most
   headroom.</figcaption>
 </figure>
@@ -204,7 +204,7 @@ local and easy to find. In a distributed deployment, each worker has its own
 cache, so the router needs some way to preserve cache locality across requests.
 
 <figure>
-  <Diagram name="prefix-caching-aware-routing" alt="Prefix-cache-aware router sending requests to workers that already cache the prefix" />
+  <Diagram name="prefix-caching-aware-routing" alt="" />
   <figcaption><b>Figure 2.</b> Routing requests to workers that already cache
   their prefix.</figcaption>
 </figure>

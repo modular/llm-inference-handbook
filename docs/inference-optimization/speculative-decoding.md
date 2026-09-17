@@ -83,7 +83,7 @@ At a high level, speculative decoding runs in a loop:
    this new extended sequence.
 
 <figure>
-  <Diagram name="spec-decoding" alt="Speculative decoding: draft model proposes tokens the target model verifies in parallel" />
+  <Diagram name="spec-decoding" alt="" />
   <figcaption><b>Figure 1.</b> One iteration of speculative decoding.</figcaption>
 </figure>
 
@@ -155,7 +155,7 @@ parallelism (TP) configurations, serving Llama-3.3-70B-Instruct with vLLM on
 H100 GPUs.
 
 <figure>
-  <img src={require('./img/tp-1-spec-decoding.png').default} alt="Speculative decoding benchmark on a single H100 GPU" />
+  <img src={require('./img/tp-1-spec-decoding.png').default} alt="" />
   <figcaption><b>Figure 2.</b> Llama-3.3-70B-Instruct served with vLLM on a single H100 GPU.</figcaption>
 </figure>
 
@@ -165,7 +165,7 @@ the draft and target models might bring overhead at higher loads. Still, Time
 Per Output Token (TPOT) improved by roughly 2×.
 
 <figure>
-  <img src={require('./img/tp-2-spec-decoding.png').default} alt="Speculative decoding benchmark on two H100 GPUs" />
+  <img src={require('./img/tp-2-spec-decoding.png').default} alt="" />
   <figcaption><b>Figure 3.</b> Llama-3.3-70B-Instruct served with vLLM on 2 H100 GPUs.</figcaption>
 </figure>
 

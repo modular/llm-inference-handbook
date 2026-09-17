@@ -106,10 +106,10 @@ cheaper over time, thanks to:
 
 - Ongoing API price cuts due to increased competition. This trend is evident
   from providers like OpenAI, which have significantly reduced token prices over
-  time as shown in the image below.
+  time, as figure 1 shows.
 
   <figure>
-  <img src={require('./img/gpt-cost-drop.png').default} alt="OpenAI API cost drop over time" />
+  <img src={require('./img/gpt-cost-drop.png').default} alt="" />
   <figcaption><b>Figure 1.</b> Token cost of GPT-4-level models over time.
   Source: <cite><a
   href="https://x.com/eladgil/status/1827521805755806107">davidtsong</a></cite>.</figcaption>

@@ -41,7 +41,7 @@ until a fixed number of requests arrive and then processes them together as a
 single batch.
 
 <figure>
-  <Diagram name="static-batching" alt="Static batching: fixed batch windows where short requests wait for the batch to finish" />
+  <Diagram name="static-batching" alt="" />
   <figcaption><b>Figure 1.</b> Static batching: fixed-size batches processed one
   after another.</figcaption>
 </figure>
@@ -68,7 +68,7 @@ limit sooner, it launches immediately. This is like a bus that leaves on a
 strict schedule or whenever it’s full, whichever happens first.
 
 <figure>
-  <Diagram name="dynamic-batching" alt="Dynamic batching: variable batches formed as requests arrive" />
+  <Diagram name="dynamic-batching" alt="" />
   <figcaption><b>Figure 2.</b> Dynamic batching: batch size varies with
   arrivals.</figcaption>
 </figure>
@@ -95,7 +95,7 @@ assembly line where, as soon as one item is finished (no matter how long it
 takes), a new item is added to keep the line running at full capacity.
 
 <figure>
-  <img src={require('./img/continuous-batching-diagram.png').default} alt="Continuous batching: freed token slots are filled immediately by new sequences" />
+  <img src={require('./img/continuous-batching-diagram.png').default} alt="" />
   <figcaption><b>Figure 3.</b> Generating seven sequences with continuous
   batching. Source: <cite><a
   href="https://www.anyscale.com/blog/continuous-batching-llm-inference">Anyscale</a></cite>.</figcaption>

@@ -28,7 +28,7 @@ MCP uses a client-server architecture with the following components:
   between the host and servers, regardless of how many servers are connected.
 
 <figure>
-  <Diagram name="mcp-architecture" alt="Model Context Protocol architecture connecting MCP clients, servers, and resources" />
+  <Diagram name="mcp-architecture" alt="" />
   <figcaption><b>Figure 1.</b> MCP host, clients, servers, and backends.</figcaption>
 </figure>
 

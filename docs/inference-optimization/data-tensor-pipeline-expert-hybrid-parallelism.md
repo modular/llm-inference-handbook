@@ -33,7 +33,7 @@ with each replica processing a different microbatch at the same time. This
 approach allows more requests to be processed concurrently.
 
 <figure>
-  <Diagram name="dp" alt="Data parallelism: a full model replica on each GPU" />
+  <Diagram name="dp" alt="" />
   <figcaption><b>Figure 1.</b> Data parallelism: a full model replica on each
   GPU.</figcaption>
 </figure>
@@ -80,7 +80,7 @@ intermediate results using collective communication operations such as
 all-reduce or all-gather, depending on how the tensors are partitioned.
 
 <figure>
-  <Diagram name="tp-inference" alt="Tensor parallelism: model layers split across GPUs" />
+  <Diagram name="tp-inference" alt="" />
   <figcaption><b>Figure 2.</b> Tensor parallelism: every layer sharded across GPUs.</figcaption>
 </figure>
 
@@ -118,7 +118,7 @@ for the next. For instance, in a four-way pipeline, each device processes a
 quarter of the model’s layers.
 
 <figure>
-  <Diagram name="pp-diagram" alt="Pipeline parallelism: consecutive layers on each GPU" />
+  <Diagram name="pp-diagram" alt="" />
   <figcaption><b>Figure 3.</b> Pipeline parallelism: consecutive layers assigned
   to each GPU.</figcaption>
 </figure>
@@ -135,7 +135,7 @@ stage that follows. Stage boundaries should therefore balance execution time and
 memory demand, not only the number of layers.
 
 <figure>
-  <Diagram name="pp-batching" alt="Pipeline parallelism microbatch schedule filling the pipeline across iterations" />
+  <Diagram name="pp-batching" alt="" />
   <figcaption><b>Figure 4.</b> Microbatches filling a four-stage pipeline over
   iterations.</figcaption>
 </figure>
@@ -162,7 +162,7 @@ activated for each token. Instead of duplicating all experts across every device
 devices.
 
 <figure>
-  <Diagram name="ep-inference" alt="Expert parallelism: a router dispatches requests to experts across GPUs" />
+  <Diagram name="ep-inference" alt="" />
   <figcaption><b>Figure 5.</b> Expert parallelism: experts distributed across
   GPUs.</figcaption>
 </figure>
@@ -183,11 +183,11 @@ For certain models, relying on a single parallelism strategy is often not
 enough. Hybrid parallelism combines two or more parallelism techniques to
 achieve better scalability, efficiency, and hardware utilization.
 
-A typical hybrid setup might look like this (combining data parallelism and
-tensor parallelism):
+Figure 6 illustrates what a typical hybrid setup might look like (when
+combining data parallelism and tensor parallelism).
 
 <figure>
-  <Diagram name="dptp" alt="Tensor parallelism within two data-parallel model replicas" />
+  <Diagram name="dptp" alt="" />
   <figcaption><b>Figure 6.</b> Hybrid parallelism with TP=4 and DP=2.</figcaption>
 </figure>
 
@@ -196,15 +196,15 @@ GPUs (TP=4), then replicate that setup to the remaining ones using data
 parallelism (DP=2).
 
 Note that this is only one of the possible combinations, each with advantages
-and disadvantages. In the above example, tensor parallelism introduces
+and disadvantages. In figure 6, tensor parallelism introduces
 communication overhead between GPUs, especially during inference. Therefore,
 using a high TP degree doesn't always translate to better performance.
 
 An alternative configuration is to reduce tensor parallelism and increase data
-parallelism. For example, you can set TP=2 and DP=4:
+parallelism. For example, you can set TP=2 and DP=4, as shown in figure 7.
 
 <figure>
-  <Diagram name="dp4tp2" alt="Tensor parallelism (2) combined with data parallelism (4) across eight GPUs" />
+  <Diagram name="dp4tp2" alt="" />
   <figcaption><b>Figure 7.</b> Hybrid parallelism with TP=2 and DP=4.</figcaption>
 </figure>
 

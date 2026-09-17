@@ -437,7 +437,7 @@ improves performance on tasks such as math problems, reasoning, and logical
 inference.
 
 <figure>
-  <img src={require('./img/chain-of-thought-cot-prompting-example.png').default} alt="Chain-of-thought prompting example" />
+  <img src={require('./img/chain-of-thought-cot-prompting-example.png').default} alt="" />
   <figcaption><b>Figure 1.</b> Standard prompting versus chain-of-thought
   prompting. Source: <cite><a
   href="https://arxiv.org/abs/2201.11903">Chain-of-Thought Prompting Elicits
