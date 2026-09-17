@@ -40,7 +40,11 @@ The simplest form of batching is **static batching**. Here, the server waits
 until a fixed number of requests arrive and then processes them together as a
 single batch.
 
-<Diagram name="static-batching" alt="Static batching: fixed batch windows where short requests wait for the batch to finish" />
+<figure>
+  <Diagram name="static-batching" alt="" />
+  <figcaption><b>Figure 1.</b> Static batching: fixed-size batches processed one
+  after another.</figcaption>
+</figure>
 
 While static batching is easy to implement, it has notable downsides.
 
@@ -63,7 +67,11 @@ whatever requests have arrived in that time frame. If the batch reaches its size
 limit sooner, it launches immediately. This is like a bus that leaves on a
 strict schedule or whenever it’s full, whichever happens first.
 
-<Diagram name="dynamic-batching" alt="Dynamic batching: variable batches formed as requests arrive" />
+<figure>
+  <Diagram name="dynamic-batching" alt="" />
+  <figcaption><b>Figure 2.</b> Dynamic batching: batch size varies with
+  arrivals.</figcaption>
+</figure>
 
 Dynamic batching helps balance throughput and latency. It ensures that early
 requests aren’t delayed indefinitely by later ones. However, because some
@@ -87,10 +95,10 @@ assembly line where, as soon as one item is finished (no matter how long it
 takes), a new item is added to keep the line running at full capacity.
 
 <figure>
-  <img src={require('./img/continuous-batching-diagram.png').default} alt="Continuous batching: freed token slots are filled immediately by new sequences" />
-  <figcaption>
-    Generating seven sequences with continuous batching. On the first iteration (left), each sequence generates a token (blue) from its prompt (yellow). Over time (right), sequences complete at different iterations by emitting an end-of-sequence token (red), at which point new sequences are inserted. [Image source](https://www.anyscale.com/blog/continuous-batching-llm-inference)
-  </figcaption>
+  <img src={require('./img/continuous-batching-diagram.png').default} alt="" />
+  <figcaption><b>Figure 3.</b> Generating seven sequences with continuous
+  batching. Source: <cite><a
+  href="https://www.anyscale.com/blog/continuous-batching-llm-inference">Anyscale</a></cite>.</figcaption>
 </figure>
 
 This technique uses iteration-level scheduling, meaning the batch composition

@@ -39,7 +39,11 @@ steps:
   weights and accessing an ever-growing KV cache. Therefore, decode requires
   fast memory access but lower compute.
 
-<Diagram name="llm-inference-flow" alt="End-to-end LLM inference flow from tokenization through decode to output" />
+<figure>
+  <Diagram name="llm-inference-flow" alt="" />
+  <figcaption><b>Figure 1.</b> End-to-end LLM inference flow from prompt to
+  output.</figcaption>
+</figure>
 
 For a long time, the standard way of doing inference was to run these two steps
 together. On the surface, this might seem straightforward.
@@ -53,18 +57,23 @@ Since prefill primarily determines the TTFT and decode impacts ITL, collocating
 them makes it difficult to optimize both metrics simultaneously.
 
 <figure>
-  <img src={require('./img/pd-disaggregation-results.png').default} alt="Latency increase from co-locating prefill and decode" />
-  <figcaption>
-    Latency increase by co-locating prefill and decode. <a href="https://arxiv.org/pdf/2401.09670">Image source</a>
-  </figcaption>
+  <img src={require('./img/pd-disaggregation-results.png').default} alt="" />
+  <figcaption><b>Figure 2.</b> Latency increase from co-locating prefill and
+  decode. Source: <cite><a href="https://arxiv.org/abs/2401.09670">DistServe:
+  Disaggregating Prefill and Decoding for Goodput-optimized Large Language Model
+  Serving</a></cite>.</figcaption>
 </figure>
 
 ## Why disaggregation makes sense
 
 The idea of PD disaggregation is simple: separate these two very different tasks
-so they don’t get in each other’s way. Here is an example architecture:
+so they don’t get in each other’s way. Figure 3 shows an example architecture.
 
-<Diagram name="pd-disaggregation" alt="Prefill-decode disaggregation architecture: an orchestrator routes a user or agent request to compute-bound prefill nodes that process the whole prompt at once and emit the first token, then transfer the KV cache to memory-bandwidth-bound decode nodes that generate the remaining tokens one at a time" />
+<figure>
+  <Diagram name="pd-disaggregation" alt="" />
+  <figcaption><b>Figure 3.</b> An example prefill-decode disaggregation
+  architecture.</figcaption>
+</figure>
 
 Key benefits include:
 

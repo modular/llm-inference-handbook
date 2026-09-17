@@ -71,7 +71,11 @@ Here’s how it typically works:
    Logs (the vendor may have access to them for debugging purposes), metrics,
    and model outputs stay within your environment.
 
-<Diagram name="bring-your-own-cloud-byoc-diagram" alt="Bring-your-own-cloud: vendor-managed control plane and customer-VPC data plane" />
+<figure>
+  <Diagram name="bring-your-own-cloud-byoc-diagram" alt="" />
+  <figcaption><b>Figure 1.</b> Vendor-managed control plane and customer-managed
+  data plane.</figcaption>
+</figure>
 
 This hybrid design offers the best of both worlds:
 

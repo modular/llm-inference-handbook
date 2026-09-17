@@ -320,7 +320,10 @@ Some LLMs have long, confusing names, but they usually encode useful information
 about the model’s architecture, size, and capabilities. Once you know how to
 read them, it becomes much easier to compare models and choose the right one.
 
-<Diagram name="llm-naming" alt="Anatomy of an LLM name: series, size, activation, quantization, and precision" />
+<figure>
+  <Diagram name="llm-naming" alt="" />
+  <figcaption><b>Figure 1.</b> Anatomy of an LLM name.</figcaption>
+</figure>
 
 - The number usually indicates the number of parameters in the model. The letter
   B stands for billion parameters.
