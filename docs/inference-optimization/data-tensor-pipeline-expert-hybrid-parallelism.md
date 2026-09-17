@@ -197,10 +197,8 @@ tuning and experimentation.
 
 ## How to configure parallelism
 
-Inference frameworks expose these strategies as server flags. The examples below
-all describe the same 8-GPU node: first a single tensor-parallel replica across
-four GPUs, then the hybrid TP=4 with DP=2 layout, then expert parallelism for an
-MoE model.
+Inference frameworks expose these strategies as server flags. Here are some
+examples to serve models on multiple GPUs.
 
 <Tabs groupId="inference-framework">
 <TabItem value="max" label="MAX">
@@ -210,20 +208,22 @@ MoE model.
 max serve --model meta-llama/Llama-3.3-70B-Instruct \
   --devices=gpu:0,1,2,3
 
-# TP=4, DP=2: eight GPUs split into two replicas
-max serve --model meta-llama/Llama-3.3-70B-Instruct \
-  --devices=gpu:all \
-  --data-parallel-degree 2
+# DP=8: eight single-GPU replicas
+max serve --model meta-llama/Llama-3.1-8B-Instruct \
+  --devices gpu:0,1,2,3,4,5,6,7 \
+  --data-parallel-degree 8
 
-# EP=8: MoE experts sharded across all eight GPUs
-max serve --model deepseek-ai/DeepSeek-V3 \
-  --devices=gpu:all \
+# EP=8, DP=1: one replica, experts sharded across eight GPUs
+max serve --model nvidia/DeepSeek-V3.1-NVFP4 \
+  --devices gpu:0,1,2,3,4,5,6,7 \
+  --data-parallel-degree 1 \
   --ep-size 8
 ```
 
-MAX has no separate tensor parallelism flag. `--devices` selects the GPUs,
-`--data-parallel-degree` splits them into replicas, and each replica is
-tensor-parallel across the GPUs it owns. `--ep-size` must be either `1` (no
+Use `--devices` to select GPUs in MAX. `--data-parallel-degree`
+must be either `1` (a single TP replica across all selected GPUs) or equal to
+the GPU count (one replica per GPU). Partial layouts such as TP=4 × DP=2 on
+eight GPUs are currently not supported. `--ep-size` must be either `1` (no
 expert parallelism) or the total number of GPUs across all nodes.
 
 </TabItem>
