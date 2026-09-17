@@ -34,10 +34,11 @@ Serving LLMs breaks that model in several ways:
   cold starts raises costs.
 - **Replicas are stateful.** Each replica holds a memory-heavy
   [KV cache](/llm-inference-basics/how-does-llm-inference-work/#what-is-kv-cache)
-  for every in-flight request, so which replica handles a request affects
-  latency. Round-robin load balancing throws that state away.
-- **Requests aren’t uniform.** Work scales with every token generated, and one
-  request may generate 20 tokens while another generates 4,000. Counting
+  for active requests. With prefix caching, replicas can retain cache for
+  reuse across requests, so which replica handles a request affects latency.
+  Round-robin load balancing can miss reusable prefixes on other replicas.
+- **Requests aren’t uniform.** Work depends on prompt and output length, and
+  one request may generate 20 tokens while another generates 4,000. Counting
   requests per second tells you little about actual GPU load.
 - **Startup is slow.** LLM containers are large. Image pulls and weight loading
   make reactive autoscaling arrive after the traffic spike has already caused
@@ -163,7 +164,7 @@ replica holds KV cache state, sending a request to a replica with a matching
 prompt prefix in cache can avoid recomputing thousands of prompt tokens.
 [Inference routing](/inference-optimization/inference-routing/) covers
 prefix-aware, cache-aware, and prefill/decode-aware routing strategies. When an
-application chains several models together, the gateway also coordinates
+application chains several models together, the gateway may also coordinate
 [multi-model inference pipelines](/infrastructure-and-operations/multi-model-inference-pipelines/).
 
 ### Observability
@@ -173,22 +174,25 @@ can see what the system is doing and why. General application metrics such as
 request rate and error rate still matter, but LLM inference requires metrics
 that standard dashboards don’t track:
 
-- [Time to first token (TTFT) and inter-token latency (ITL)](/llm-inference-basics/llm-inference-metrics/)
+- Time to first token (TTFT) and inter-token latency (ITL)
 - Tokens per second, per replica and per request
 - Queue wait time and in-flight request count
 - KV cache utilization and prefix-cache hit rate
 - GPU memory usage and out-of-memory events
 
 Without these measurements, diagnosing low GPU utilization or rising TTFT
-becomes guesswork.
+becomes guesswork. See
+[LLM inference metrics](/llm-inference-basics/llm-inference-metrics/) for more
+information about the key latency and throughput metrics.
 
 The observability layer should also support **cost-to-serve management**, which
 teams often overlook until the GPU bill arrives. It means tracking the cost of
 each workload and tuning model choice, hardware, batching, routing, and scaling
 policies to meet cost targets. This is important because inference cost is
-ongoing and grows with every token served. A model that’s affordable at launch
-can become the largest line item once traffic grows. Without per-workload cost
-data, you can’t tell which model, tenant, or scaling policy is responsible.
+ongoing and grows with token usage or provisioned GPU capacity. A model that’s
+affordable at launch can become the largest line item once traffic grows.
+Without per-workload cost data, you can’t tell which model, tenant, or scaling
+policy is responsible.
 
 For more information, see
 [LLM observability](/infrastructure-and-operations/comprehensive-observability/).
@@ -231,17 +235,56 @@ environment. Every layer needs controls that maintain that boundary.
 
 There are three common ways to provision inference infrastructure.
 
-| Approach                     | What you manage                                      | Best for                                                                    | Trade-off                                                            |
-|------------------------------|------------------------------------------------------|-----------------------------------------------------------------------------|----------------------------------------------------------------------|
-| **Serverless LLM APIs**      | Nothing below the API call                           | Prototypes, low or spiky volume, proprietary frontier models                | Per-token cost at scale, limited control, data leaves your VPC       |
-| **Inference platform**       | Models and application code; platform runs the stack | Teams that self-host open models but don’t want to staff every layer        | Platform fit and pricing; some layers are opinionated                |
-| **Self-built on Kubernetes** | Every layer                                          | Teams with strong infrastructure engineering and strict customization needs | Highest engineering and maintenance cost, slowest time to production |
+| Approach                       | What you manage                                      | Best for                                                                    | Trade-off                                                            |
+|--------------------------------|------------------------------------------------------|-----------------------------------------------------------------------------|----------------------------------------------------------------------|
+| **Serverless LLM APIs**        | Nothing below the API call                           | Prototypes, low or spiky volume, proprietary frontier models                | Per-token cost at scale, limited control, data leaves your VPC       |
+| **Managed inference platform** | Models and application code; platform runs the stack | Teams that self-host open models but don’t want to staff every layer        | Platform fit and pricing; some layers are opinionated                |
+| **Self-built on Kubernetes**   | Every layer                                          | Teams with strong infrastructure engineering and strict customization needs | Highest engineering and maintenance cost, slowest time to production |
 
-The decision usually comes down to volume, control, and staffing.
-[Serverless vs. self-hosted LLM inference](/getting-started/serverless-vs-self-hosted-llm-inference/)
-compares the deployment models, and
-[build and maintenance cost](/infrastructure-and-operations/build-and-maintenance-cost/)
-explains the engineering work behind a self-built stack.
+Another way to see the difference is to map each approach onto the inference
+stack. The more layers you manage yourself, the more control you get and the
+more engineering you take on.
+
+<figure>
+  <img className="theme-logo-light" src={require('./img/inference-solutions-stack.png').default} alt="" />
+  <img className="theme-logo-dark" src={require('./img/inference-solutions-stack-dark.png').default} alt="" />
+  <figcaption>
+    <b>Figure 1.</b> Which layers of the inference stack you manage under each
+    approach.
+  </figcaption>
+</figure>
+
+The decision usually comes down to volume, control, and staffing. The sections
+below describe what each approach looks like in practice.
+
+### Serverless LLM APIs
+
+You send requests to a hosted endpoint and pay per token. The provider picks
+the hardware, runs the serving runtime, and scales capacity, so you never see
+the stack. This category includes proprietary model APIs such as OpenAI and
+Anthropic, as well as serverless endpoints for open models from providers such
+as Together AI and Fireworks AI. It’s often the fastest way to start, but can
+cost more than a well-utilized dedicated deployment at high, steady volume.
+
+For a full comparison, see
+[serverless vs. self-hosted LLM inference](/getting-started/serverless-vs-self-hosted-llm-inference/).
+
+### Managed inference platforms
+
+You bring your own model weights and application code, and the platform runs the
+serving runtime, routing, scaling, and observability for you. Note that a
+platform isn’t the same as a serving runtime such as vLLM or MAX. The platform
+runs a runtime on your behalf, along with the layers around it.
+
+Managed inference platforms usually come in two forms.
+
+- With a hosted platform, the provider supplies
+the GPUs and your requests and data go to them, as with dedicated deployments
+from Fireworks AI or Together AI.
+- With a [BYOC](/getting-started/bring-your-own-cloud/) platform, the provider
+  manages
+GPUs inside your own cloud account, so cloud infrastructure stays with you while
+the platform still handles the stack.
 
 ---
 
@@ -254,6 +297,16 @@ open models on your own GPUs without staffing every layer yourself.
 <a className="btn-outline" href="https://www.modular.com/request-demo?utm_source=llm_handbook">Talk to us</a>
 </div>
 
+### Self-built on Kubernetes
+
+You assemble every layer yourself: GPU nodes, an open serving runtime such as
+vLLM, SGLang, or MAX, an autoscaler, a router, observability, and release
+tooling. This gives you maximum control and is the usual choice for
+teams with customization needs that no platform meets. It also carries the
+most engineering and ongoing maintenance work.
+[Build and maintenance cost](/infrastructure-and-operations/build-and-maintenance-cost/)
+covers what that work involves.
+
 ## FAQs
 
 ### Do I need my own LLM infrastructure, or can I just use an API?
@@ -264,13 +317,15 @@ the cost of running open models, when compliance rules apply, or when you need
 control over latency and customization. Many teams run both: APIs for some
 workloads and self-hosted models for others.
 
-### What does LLM inference infrastructure look like on Kubernetes?
+### Can I run LLM inference on my existing Kubernetes cluster?
 
-A typical setup may run each model replica as a Pod with one or more GPUs
-allocated through the NVIDIA/AMD device plugin. A runtime serves the model
-inside the container, while an autoscaler adjusts replica counts based on some
-preset metrics. A gateway routes requests to models. Prometheus and Grafana
-usually handle metrics, with tools like DCGM exporting GPU-level data.
+Yes, and most self-hosted deployments do. Kubernetes handles the generic parts
+well: scheduling Pods onto GPU nodes, rolling out new versions, and restarting
+failed replicas. What it doesn’t provide is anything LLM-aware. You still need
+to add an autoscaler that scales on request concurrency rather than CPU, a
+router that understands KV cache locality instead of simply balancing
+round-robin, and a fast path for loading model weights onto new nodes. Those
+pieces are where most of the engineering effort goes.
 
 <LinkList>
 
