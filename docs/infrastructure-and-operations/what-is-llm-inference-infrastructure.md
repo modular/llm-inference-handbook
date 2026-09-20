@@ -286,16 +286,14 @@ from Fireworks AI or Together AI.
 GPUs inside your own cloud account, so cloud infrastructure stays with you while
 the platform still handles the stack.
 
----
+<ContactCallout>
 
 If you’re weighing these options for your own deployment, we’re happy to talk
 it through. We've built an inference platform that covers the runtime,
 routing, scaling, and observability layers described above, so you can run
 open models on your own GPUs without staffing every layer yourself.
 
-<div style={{ margin: '3rem 0' }}>
-<a className="btn-outline" href="https://www.modular.com/request-demo?utm_source=llm_handbook">Talk to us</a>
-</div>
+</ContactCallout>
 
 ### Self-built on Kubernetes
 
