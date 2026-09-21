@@ -16,7 +16,6 @@
   overflow-y: auto;
   position: sticky;
   top: 96px;
-  margin-right: -20px;
   @media (max-width: 1280px) {
     top: 150px !important;
     max-height: calc(100vh - (var(--ifm-navbar-height) + 124px));
@@ -70,5 +69,10 @@
       100% + (var(--ifm-spacing-horizontal) * 2) + var(--content-side-padding)
     );
     margin-right: calc(var(--content-side-padding) * -1);
+  }
+
+  // Pull the TOC flush with the navbar's right edge on desktop.
+  .rightRail {
+    margin-right: -20px;
   }
 }
