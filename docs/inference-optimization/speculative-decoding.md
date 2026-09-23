@@ -5,6 +5,7 @@ keywords:
     - Speculative decoding, speculative sampling
     - Adaptive speculative decoding
     - EAGLE, Medusa, Multi-Token Prediction, MTP
+    - DFlash, DSpark, block diffusion drafting
     - Lookahead decoding, prompt lookup decoding
     - Draft model, target model
     - Distributed inference, distributed LLM inference
@@ -230,8 +231,10 @@ Broadly, the approaches fall into four groups:
 - **Standalone draft model**. A separate smaller model proposes tokens (the
   classic one described above).
 - **Target-specific auxiliary drafter**. A lightweight model trained
-  specifically for the target proposes tokens or hidden features. EAGLE belongs
-  to this group and normally uses a separate checkpoint.
+  specifically for the target proposes tokens or hidden features. EAGLE,
+  DFlash, and DSpark belong to this group and require target-specific draft
+  weights, which may be packaged separately or bundled with the target
+  checkpoint.
 - **Model-integrated drafter**. Extra prediction heads or modules are included
   in the target checkpoint, as with Medusa or native MTP models.
 - **Training-free or retrieval-based methods**. Candidates are generated
@@ -346,17 +349,102 @@ EAGLE is widely adopted and supported natively in frameworks like vLLM, MAX, and
 SGLang. The EAGLE papers report strong speedups, but actual gains depend on the
 target model, draft checkpoint, workload, hardware, and serving implementation.
 
+### DFlash
+
+EAGLE and the classic draft model still generate draft tokens one at a time. A
+draft step is cheap, but γ draft steps are still γ sequential forward passes,
+which caps how much speculation you can get per verification round.
+
+DFlash removes that sequential bottleneck by using a lightweight **block
+diffusion** model as the drafter. Instead of predicting the next token and
+looping, it fills in a block of masked positions in parallel and decodes all of
+them in **a single forward pass**.
+
+This borrows the parallel generation mechanism of
+[diffusion LLMs](/llm-inference-basics/how-does-llm-inference-work/#diffusion-llms-dllms),
+but applies it block by block rather than to the whole response, and only for
+drafting. The target model stays autoregressive and verifies every token.
+
+:::note
+Why block by block? Standard full-sequence diffusion refines every position at
+every step, typically uses a fixed generation length, and can't reuse a KV
+cache in the same way as autoregressive decoding.
+[Block diffusion](https://arxiv.org/abs/2503.09573) sits between full-sequence
+diffusion and one-token-at-a-time autoregression. It denoises one block at a
+time while staying autoregressive across blocks. Generation length stays
+flexible, and the KV cache of finished blocks can be reused.
+:::
+
+To keep those parallel drafts accurate, the drafter conditions on the target
+model. Hidden states from a fixed set of target layers (sampled from shallow to
+deep) are injected directly into the key and value projections of every draft
+layer. Therefore, each draft position attends over rich target features rather
+than just previous tokens. Verification is unchanged, so the output is still
+lossless.
+
+The [DFlash paper](https://arxiv.org/abs/2602.06036) reports over 6× lossless
+acceleration on Qwen3-8B and an average of 4.9× over the autoregressive baseline
+across the evaluated models, up to 2.5× higher than EAGLE-3, with the largest
+gains on math and coding tasks. DFlash drafters are available for a range of
+open models, and major inference frameworks like vLLM, SGLang and MAX all
+support it.
+
+### DSpark
+
+Parallel drafters like DFlash have a weakness the DSpark authors call
+**suffix decay** or **acceptance decay**. Because the draft tokens in a block
+are generated independently, not autoregressively, acceptance drops off quickly
+for later positions in the block.
+
+For example, say the context allows either "of course" or "no problem". Position
+1 conditions on the real prompt, so it is likely fine either way. Position 2 is
+computed at the same time, before anything has been sampled at position 1, so it
+can't know whether position 1 came out as "of" or "no". It has to spread its
+bets across both phrases, and the block can come back as "of problem" or "no
+course". The paper calls this a **multi-modal collision**, and it compounds with
+depth: the further into a block a position sits, the more unresolved choices it
+has to hedge against.
+
+Verifying those low-value tail tokens is wasted work, and under heavy load it
+competes with batch capacity that could serve other requests.
+
+DeepSeek proposed DSpark with two complementary mechanisms:
+
+- **Semi-autoregressive drafting**. DSpark keeps a DFlash-style parallel
+  backbone (sharing the frozen embedding layer and LM head of the target), but
+  adds a lightweight sequential head. It walks left to right and adjusts each
+  position based on what was actually picked just before it. In the above
+  example, once "of" is chosen, it boosts "course" and suppresses "problem".
+- **Confidence-scheduled verification**. DSpark uses a lightweight confidence
+  head to estimate the acceptance probability of each drafted token, conditioned
+  on the preceding draft prefix being accepted. Multiplying these per-position
+  probabilities gives the estimated probability that a prefix of a given length
+  will survive verification. A hardware-aware scheduler then balances these
+  survival probabilities against profiled engine throughput and verification
+  cost. This enables DSpark to dynamically choose how much of each draft block
+  is worth verifying.
+
+DSpark is effectively a built-in form of
+[adaptive speculative decoding](#adaptive-speculative-decoding). The
+[DSpark paper](https://arxiv.org/pdf/2607.05147) reports 16–18% longer accepted
+lengths than DFlash and 27–31% longer than EAGLE-3 on Qwen3 models, and 60–85%
+faster per-user generation at matched throughput versus an MTP-1 baseline in
+production on DeepSeek-V4-Flash. Major inference frameworks like vLLM, SGLang
+and MAX support DSpark.
+
 ### Choosing a method
 
 There's no universally best method. The right choice depends on your needs:
 
-| Method                       | Extra draft model | Training required             | Note                                              |
-|------------------------------|-------------------|-------------------------------|---------------------------------------------------|
-| Vanilla speculative decoding | Yes               | No (optional fine-tuning)     | Matching a good draft model can be tricky         |
-| Medusa                       | No (extra heads)  | Yes (heads)                   | Moderate speedup                                  |
-| MTP                          | No                | Yes (jointly, at pretraining) | Models trained with MTP (e.g., DeepSeek-V3)       |
-| N-gram                       | No                | No                            | Zero-setup gains, input-grounded tasks            |
-| EAGLE                        | Yes               | Yes (draft model)             | Strong reported speedups, broad framework support |
+| Method                       | Extra draft model | Training required             | Note                                                     |
+|------------------------------|-------------------|-------------------------------|----------------------------------------------------------|
+| Vanilla speculative decoding | Yes               | No (optional fine-tuning)     | Matching a good draft model can be tricky                |
+| Medusa                       | No (extra heads)  | Yes (heads)                   | Moderate speedup                                         |
+| MTP                          | No                | Yes (jointly, at pretraining) | Models trained with MTP (e.g., DeepSeek-V3)              |
+| N-gram                       | No                | No                            | Zero-setup gains, input-grounded tasks                   |
+| EAGLE                        | Yes               | Yes (draft model)             | Strong reported speedups, broad framework support        |
+| DFlash                       | Yes               | Yes (draft model)             | Parallel block drafting in one forward pass              |
+| DSpark                       | Yes               | Yes (draft model)             | Parallel drafting plus confidence-scheduled verification |
 
 [Inference frameworks](/getting-started/choosing-the-right-inference-framework/)
 like vLLM, MAX, and SGLang implement several of these methods, so you can
@@ -488,6 +576,8 @@ production.
 - [AdaSpec: Adaptive Speculative Decoding for Fast, SLO-Aware Large Language Model Serving](https://arxiv.org/abs/2503.05096)
 - [AdaSD: Adaptive Speculative Decoding for Efficient Language Model Inference](https://arxiv.org/abs/2512.11280)
 - [EAGLE: Speculative Sampling Requires Rethinking Feature Uncertainty](https://arxiv.org/pdf/2401.15077)
+- [DFlash: Block Diffusion for Flash Speculative Decoding](https://arxiv.org/abs/2602.06036)
+- [DSpark: Confidence-Scheduled Speculative Decoding with Semi-Autoregressive Generation](https://arxiv.org/abs/2607.05147)
 - [Fast Inference from Transformers via Speculative Decoding](https://arxiv.org/abs/2211.17192)
 - [Accelerating Large Language Model Decoding with Speculative Sampling](https://arxiv.org/abs/2302.01318)
 </LinkList>
