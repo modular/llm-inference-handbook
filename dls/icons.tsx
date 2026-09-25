@@ -198,3 +198,32 @@ export function ThumbsUp({
     </svg>
   );
 }
+
+export function ChatBubbleIcon({
+  size = 20,
+  style,
+  ...others
+}: IconProps): JSX.Element {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ width: rem(size), height: rem(size), ...style }}
+      {...others}
+    >
+      <path
+        d="M2.5 3.5h15v10h-8.25L5 17v-3.5H2.5v-10Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M6 7h8M6 10h5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}

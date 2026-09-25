@@ -179,15 +179,13 @@ That said, you don’t have to build everything from scratch. An inference
 platform can help mitigate these costs and reduce the operational overhead,
 potentially making them more cost-effective in the long run.
 
----
+<ContactCallout>
 
 We work to help enterprises self-host any open and custom LLMs with flexible
 distributed architecture and tailored inference optimization. With our Inference
 Platform, you can achieve up to 6x lower cost than serverless APIs.
 
-<div style={{ margin: '3rem 0' }}>
-<a className="btn-outline" href="https://www.modular.com/request-demo?utm_source=llm_handbook">Talk to us</a>
-</div>
+</ContactCallout>
 
 ## FAQs
 

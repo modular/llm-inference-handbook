@@ -248,16 +248,14 @@ valid. In production, treat prefix cache hit rate as a per-workload metric
 rather than a single global number, and verify that your inference framework can
 compose prefix caching with the other optimizations you enable.
 
----
+<ContactCallout>
 
 Optimizing LLM prefix caching requires flexible customization in your LLM
 serving and infrastructure stack. We work to provide the infrastructure for
 dedicated and customizable LLM deployments with fast auto-scaling and
 scaling-to-zero capabilities to ensure resource efficiency.
 
-<div style={{ margin: '3rem 0' }}>
-<a className="btn-outline" href="https://www.modular.com/request-demo?utm_source=llm_handbook">Talk to us</a>
-</div>
+</ContactCallout>
 
 <LinkList>
 

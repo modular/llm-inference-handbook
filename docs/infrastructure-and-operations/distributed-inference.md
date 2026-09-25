@@ -279,10 +279,10 @@ inference, integrating:
 - Multi-GPU, cross-region, and multi-cloud deployment
 - Autoscaling, fault tolerance, and unified observability
 
+<ContactCallout>
+
 Rather than stitching together everything yourself, a platform-based approach
 allows teams to focus on models and applications, while the distributed
 inference system is managed as a cohesive layer.
 
-<div style={{ margin: '3rem 0' }}>
-<a className="btn-outline" href="https://www.modular.com/request-demo?utm_source=llm_handbook">Talk to us</a>
-</div>
+</ContactCallout>
