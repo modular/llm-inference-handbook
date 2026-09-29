@@ -18,9 +18,9 @@ interface ContactCalloutProps {
 }
 
 /**
- * An admonition-shaped callout in the Nebula brand blue with a
- * call-to-action button. Use it for the "we can help with this" blurbs at
- * the end of a section.
+ * An admonition-shaped callout with a transparent background and a
+ * call-to-action button styled like the navbar's "Sign up" CTA. Use it for
+ * the "we can help with this" blurbs at the end of a section.
  */
 function ContactCallout({
   children,
@@ -40,7 +40,7 @@ function ContactCallout({
         {children}
         <div className={styles.actions}>
           <a
-            className="btn-outline"
+            className={styles.button}
             href={href}
             target="_blank"
             rel="noopener noreferrer"

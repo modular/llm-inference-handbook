@@ -1,13 +1,31 @@
 .root {
   margin: 2rem 0;
+  // Drop Mantine's light-variant wash so the callout is outline-only.
+  // !important beats the inline var Mantine sets from `color`.
+  --alert-bg: transparent !important;
 }
 
 .actions {
   display: flex;
   margin-top: 1rem;
+}
 
-  a {
-    font-size: 0.875rem;
-    padding: 0.4rem 1.1rem;
+// Mirrors the navbar "Sign up" CTA (cta-button mixins in src/css/custom.scss).
+// The doubled class outranks `.admonitionAlertContent a`, which would
+// otherwise force the link to black text.
+.actions .button {
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 400;
+  white-space: nowrap;
+  color: var(--Elements-Neb-Ultra);
+  background: var(--Elements-Neb-20-Alpha);
+  border-radius: 4px;
+  text-decoration: none;
+
+  &:hover {
+    color: var(--Elements-Neb-Ultra);
+    background: var(--Elements-Neb-30-Alpha);
+    text-decoration: none;
   }
 }
