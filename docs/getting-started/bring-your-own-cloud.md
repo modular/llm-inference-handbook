@@ -177,17 +177,6 @@ fast to deploy, secure by design, and cost-efficient at scale.
 We offer a fully-featured AI inference platform which can be deployed into your
 own cloud account for maximum control, security, and customization.
 
-With our BYOC deployment, you can:
-
-- Run models inside your own VPC across providers like AWS, GCP, or Azure and
-  leverage your existing credits and commits
-- Keep your data and workloads fully within your environment
-- Run and scale inference across NVIDIA, AMD, CPUs, and more in the same BYOC
-  deployment
-- Apply the latest distributed inference techniques like
-  [prefill-decode disaggregation](/inference-optimization/prefill-decode-disaggregation/)
-  in your private cloud
-
 </ContactCallout>
 
 ## Frequently asked questions

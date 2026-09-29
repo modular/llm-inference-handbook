@@ -181,9 +181,9 @@ potentially making them more cost-effective in the long run.
 
 <ContactCallout>
 
-We work to help enterprises self-host any open and custom LLMs with flexible
-distributed architecture and tailored inference optimization. With our Inference
-Platform, you can achieve up to 6x lower cost than serverless APIs.
+If you’re interested in deploying on a fully-managed inference platform,
+we help enterprises host open and custom LLMs with a scalable
+distributed architecture and tailored inference optimizations.
 
 </ContactCallout>
 

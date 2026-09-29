@@ -251,9 +251,8 @@ compose prefix caching with the other optimizations you enable.
 <ContactCallout>
 
 Optimizing LLM prefix caching requires flexible customization in your LLM
-serving and infrastructure stack. We work to provide the infrastructure for
-dedicated and customizable LLM deployments with fast auto-scaling and
-scaling-to-zero capabilities to ensure resource efficiency.
+serving and infrastructure stack. We can help you deploy efficient LLMs
+with fast auto-scaling and scaling-to-zero capabilities.
 
 </ContactCallout>
 

@@ -282,7 +282,7 @@ inference, integrating:
 <ContactCallout>
 
 Rather than stitching together everything yourself, a platform-based approach
-allows teams to focus on models and applications, while the distributed
+allows your team to focus on models and applications, while the distributed
 inference system is managed as a cohesive layer.
 
 </ContactCallout>
