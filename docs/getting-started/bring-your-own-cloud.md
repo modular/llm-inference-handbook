@@ -172,27 +172,12 @@ Here’s a quick comparison:
 For most enterprise LLM workloads, BYOC provides the best middle ground. It’s
 fast to deploy, secure by design, and cost-efficient at scale.
 
----
+<ContactCallout>
 
 We offer a fully-featured AI inference platform which can be deployed into your
 own cloud account for maximum control, security, and customization.
 
-With our BYOC deployment, you can:
-
-- Run models inside your own VPC across providers like AWS, GCP, or Azure and
-  leverage your existing credits and commits
-- Keep your data and workloads fully within your environment
-- Run and scale inference across NVIDIA, AMD, CPUs, and more in the same BYOC
-  deployment
-- Apply the latest distributed inference techniques like
-  [prefill-decode disaggregation](/inference-optimization/prefill-decode-disaggregation/)
-  in your private cloud
-
-<div style={{ margin: '3rem 0' }}>
-<a className="btn-outline" href="https://www.modular.com/request-demo?utm_source=llm_handbook">Schedule a Demo</a>
-</div>
-
----
+</ContactCallout>
 
 ## Frequently asked questions
 
