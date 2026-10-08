@@ -271,16 +271,14 @@ Things to keep in mind:
   VRAM and cluster size, not architecture. Learn how to
   [calculate GPU memory for serving LLMs](/getting-started/calculating-gpu-memory-for-llms/).
 
----
+<ContactCallout>
 
 If you're evaluating GPU options for self-hosting LLMs, we support running both
 open and custom models across NVIDIA, AMD, Apple Silicon, CPUs, and more with a
 single codebase. You can run models locally, deploy in your own cloud (BYOC), or
 use shared and dedicated endpoints depending on your needs.
 
-<div style={{ margin: '3rem 0' }}>
-<a className="btn-outline" href="https://www.modular.com/request-demo?utm_source=llm_handbook">Talk to us</a>
-</div>
+</ContactCallout>
 
 ## FAQs
 
