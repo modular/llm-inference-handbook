@@ -26,7 +26,7 @@ Without observability, diagnosing latency spikes, scaling problems, or wasted
 GPU capacity becomes guesswork. Worse, silent issues like cache thrashing or
 request preemption can degrade the service for hours before anyone notices.
 
-Interest is growing fast. Gartner predicts that by 2028,
+These risks are pushing organizations to invest. Gartner predicts that by 2028,
 [LLM observability investments will cover 50% of GenAI deployments](https://www.gartner.com/en/newsroom/press-releases/2026-03-30-gartner-predicts-by-2028-explainable-ai-will-drive-llm-observability-investments-to-50-percent-for-secure-genai-deployment),
 up from 15% in 2026.
 
@@ -35,8 +35,8 @@ own the infrastructure stack.
 
 ## Why LLM inference needs dedicated observability
 
-LLM observability builds on standard cloud monitoring, but it's different from
-traditional dashboards in several ways.
+LLM observability builds on standard cloud monitoring, since the metrics you'd
+normally rely on don't tell the whole story. Here's why they fall short:
 
 - **Requests aren't uniform.** One request may generate 20 tokens and another
   4,000. Requests per second (RPS) says little about the real load on a GPU.
@@ -98,16 +98,19 @@ them.
   cluster infrastructure up to the application.</figcaption>
 </figure>
 
+The following sections explain each layer, starting with the bottom cluster
+level and moving up.
+
 ### Cluster and containers
 
 These metrics tell you whether the serving infrastructure itself is healthy.
 
-| **Metric**                         | **What it tells you**                                                                      |
-|------------------------------------|--------------------------------------------------------------------------------------------|
-| Pod status and restarts            | Detects failed, stuck, or crash-looping Pods that may affect availability                  |
-| Number of replicas                 | Verifies that autoscaling works and helps debug scaling delays                             |
-| Scaling events and cold start time | Shows how long new replicas take to serve traffic, including image pull and weight loading |
-| Resource requests and limits       | Helps you tune scheduling and avoid over- or under-provisioning                            |
+| **Metric**                         | **What it tells you**                                                                       |
+|------------------------------------|---------------------------------------------------------------------------------------------|
+| Pod status and restarts            | Detects failed, stuck, or crash-looping Pods that may affect availability.                  |
+| Number of replicas                 | Verifies that autoscaling works and helps debug scaling delays.                             |
+| Scaling events and cold start time | Shows how long new replicas take to serve traffic, including image pull and weight loading. |
+| Resource requests and limits       | Helps you tune scheduling and avoid over- or under-provisioning.                            |
 
 Slow cold starts can cause latency spikes during
 traffic bursts. See [fast scaling](/infrastructure-and-operations/fast-scaling/)
@@ -118,16 +121,16 @@ for ways to reduce them.
 GPUs are the most expensive part of the stack, so GPU metrics drive both
 performance tuning and cost control. Here are some common GPU metrics to track.
 
-| **Metric**                                    | **What it tells you**                                                                                                                                                                   |
-|-----------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| GPU utilization                               | Fraction of the sample period when at least one kernel was running. Useful for spotting idle GPUs, but not for measuring how busy they are                                              |
-| SM activity                                   | Fraction of time at least one warp is active per streaming multiprocessor, averaged across them. It shows how broadly the GPU is occupied, though active warps may be waiting on memory |
-| Tensor core activity                          | How much matrix-math hardware is in use                                                                                                                                                 |
-| Memory bandwidth activity                     | How busy GPU memory is. Decode at small batch sizes is often memory-bandwidth bound                                                                                                     |
-| GPU memory used                               | Capacity headroom for weights and KV cache                                                                                                                                              |
-| Power, temperature, and throttling indicators | Thermal or power limits on GPU performance                                                                                                                                              |
-| NVLink bandwidth                              | Interconnect load on NVLink-connected GPUs in [distributed inference](/infrastructure-and-operations/distributed-inference/)                                                            |
-| XID errors                                    | GPU error reports that may point to hardware, driver, or application faults                                                                                                             |
+| **Metric**                                    | **What it tells you**                                                                                                                                                                         |
+|-----------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| GPU utilization                               | Fraction of the sample period when at least one kernel was running. Useful for spotting idle GPUs, but not for measuring how busy they are.                                                   |
+| SM activity                                   | Fraction of time at least one warp is active per streaming multiprocessor (SM), averaged across them. It shows how broadly the GPU is occupied, though active warps may be waiting on memory. |
+| Tensor core activity                          | How much matrix-math hardware is in use.                                                                                                                                                      |
+| Memory bandwidth activity                     | How busy GPU memory is. Decode at small batch sizes is often memory-bandwidth bound.                                                                                                          |
+| GPU memory used                               | Capacity headroom for weights and KV cache.                                                                                                                                                   |
+| Power, temperature, and throttling indicators | Thermal or power limits on GPU performance.                                                                                                                                                   |
+| NVLink bandwidth                              | Interconnect load on NVLink-connected GPUs in [distributed inference](/infrastructure-and-operations/distributed-inference/).                                                                 |
+| XID errors                                    | GPU error reports that may point to hardware, driver, or application faults.                                                                                                                  |
 
 You don't need to collect them manually. Tools like the
 [DCGM exporter](https://github.com/NVIDIA/dcgm-exporter) for NVIDIA GPUs can
@@ -139,14 +142,14 @@ Inference engine metrics are the layer that generic monitoring misses most
 often. They show how the model server schedules requests and manages
 memory.
 
-| **Metric**                   | **What it tells you**                                                                                                          |
-|------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
-| Running requests             | How many requests are in the current batch                                                                                     |
-| Waiting (queued) requests    | Requests the engine can't schedule yet. A growing queue can signal saturation                                                  |
-| KV cache usage               | How full the KV cache is. Near 100%, new requests may wait, cached blocks may be evicted, or running requests may be preempted |
-| Prefix cache hit rate        | How much prompt computation is reused. Low hit rates waste GPU time when prompts contain reusable prefixes                     |
-| Preemptions                  | Requests paused or rescheduled when resources such as KV cache run short. A sustained rate is a warning                        |
-| Prompt and generation tokens | Actual work done, in tokens. Better than RPS for capacity planning and cost                                                    |
+| **Metric**                   | **What it tells you**                                                                                                           |
+|------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
+| Running requests             | How many requests are in the current batch.                                                                                     |
+| Waiting (queued) requests    | Requests the engine can't schedule yet. A growing queue can signal saturation.                                                  |
+| KV cache usage               | How full the KV cache is. Near 100%, new requests may wait, cached blocks may be evicted, or running requests may be preempted. |
+| Prefix cache hit rate        | How much prompt computation is reused. Low hit rates waste GPU time when prompts contain reusable prefixes.                     |
+| Preemptions                  | Requests paused or rescheduled when resources such as KV cache run short. A sustained rate is a warning.                        |
+| Prompt and generation tokens | Actual work done, in tokens. Better than RPS for capacity planning and cost.                                                    |
 
 The number of running plus waiting requests (concurrency) is also one of the
 best signals for
@@ -163,15 +166,15 @@ These metrics describe what users actually experience. The handbook page on
 [LLM inference metrics](/llm-inference-basics/llm-inference-metrics/) defines
 each one in detail.
 
-| **Metric**                                               | **What it tells you**                                                                                    |
-|----------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
-| Time to first token (TTFT)                               | How long users wait before the response starts. Driven by queueing and prefill                           |
-| Inter-token latency (ITL) / time per output token (TPOT) | How smoothly tokens stream. Driven by decode                                                             |
-| End-to-end latency                                       | Total time for the full response                                                                         |
-| Queue time                                               | How long requests wait before the engine starts them                                                     |
-| Tokens per second                                        | Throughput per replica and across the fleet                                                              |
-| Error rate                                               | Failed, timed-out, or rejected requests                                                                  |
-| Goodput                                                  | Requests per second that meet your latency SLOs. A measure of useful capacity at a chosen service target |
+| **Metric**                                               | **What it tells you**                                                                                     |
+|----------------------------------------------------------|-----------------------------------------------------------------------------------------------------------|
+| Time to first token (TTFT)                               | How long users wait before the response starts. Driven by queueing and prefill.                           |
+| Inter-token latency (ITL) / time per output token (TPOT) | How smoothly tokens stream. Driven by decode.                                                             |
+| End-to-end latency                                       | Total time for the full response.                                                                         |
+| Queue time                                               | How long requests wait before the engine starts them.                                                     |
+| Tokens per second                                        | Throughput per replica and across the fleet.                                                              |
+| Error rate                                               | Failed, timed-out, or rejected requests.                                                                  |
+| Goodput                                                  | Requests per second that meet your latency SLOs. A measure of useful capacity at a chosen service target. |
 
 Track latency percentiles (P50, P90, P99) alongside averages. A healthy
 median can hide a tail of users who wait 10 times longer.
@@ -179,7 +182,8 @@ median can hide a tail of users who wait 10 times longer.
 ### Application and quality
 
 The top layer answers questions infrastructure metrics can't, such as whether
-responses are correct and what each feature costs.
+responses are correct and what each feature costs. Use the following signals to
+evaluate performance at this level:
 
 - **Traces and spans** for each LLM call, retrieval step, and tool call in a
   pipeline or agent loop.
