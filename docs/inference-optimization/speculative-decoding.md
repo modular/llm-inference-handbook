@@ -351,22 +351,20 @@ target model, draft checkpoint, workload, hardware, and serving implementation.
 
 ### DFlash
 
-EAGLE and the classic draft model still generate draft tokens one at a time. A
-draft step is cheap, but γ draft steps are still γ sequential forward passes,
-which caps how much speculation you can get per verification round.
-
-DFlash removes that sequential bottleneck by using a lightweight **block
-diffusion** model as the drafter. Instead of predicting the next token and
-looping, it fills in a block of masked positions in parallel and decodes all of
+DFlash is a speculative decoding method that uses a lightweight
+**block diffusion** model as the drafter. Instead of predicting one token and
+looping, it fills in a block of masked positions in parallel and drafts all of
 them in **a single forward pass**.
 
-This borrows the parallel generation mechanism of
-[diffusion LLMs](/llm-inference-basics/how-does-llm-inference-work/#diffusion-llms-dllms),
-but applies it block by block rather than to the whole response, and only for
-drafting. The target model stays autoregressive and verifies every token.
+This matters because drafting is the sequential part of speculative decoding.
+EAGLE and the classic draft model generate tokens one at a time, so γ draft
+tokens cost γ forward passes. Each step is cheap, but the chain still caps how
+much speculation you can fit into one verification round. DFlash drafts the
+whole block in one pass, so drafting cost no longer grows step by step with the
+number of draft tokens.
 
 :::note
-Why block by block? Standard full-sequence diffusion refines every position at
+Why block diffusion? Standard full-sequence diffusion refines every position at
 every step, typically uses a fixed generation length, and can't reuse a KV
 cache in the same way as autoregressive decoding.
 [Block diffusion](https://arxiv.org/abs/2503.09573) sits between full-sequence
@@ -374,6 +372,11 @@ diffusion and one-token-at-a-time autoregression. It denoises one block at a
 time while staying autoregressive across blocks. Generation length stays
 flexible, and the KV cache of finished blocks can be reused.
 :::
+
+DFlash borrows the parallel generation mechanism of
+[diffusion LLMs](/llm-inference-basics/how-does-llm-inference-work/#diffusion-llms-dllms),
+but applies it block by block rather than to the whole response, and only for
+drafting. The target model stays autoregressive and verifies every token.
 
 To keep those parallel drafts accurate, the drafter conditions on the target
 model. Hidden states from a fixed set of target layers (sampled from shallow to
@@ -391,30 +394,38 @@ support it.
 
 ### DSpark
 
-Parallel drafters like DFlash have a weakness the DSpark authors call
-**suffix decay** or **acceptance decay**. Because the draft tokens in a block
-are generated independently, not autoregressively, acceptance drops off quickly
-for later positions in the block.
+DSpark is a speculative decoding method from DeepSeek that builds on
+DFlash-style parallel drafting. It adds a lightweight sequential correction to
+the draft block and decides how much of each block is actually worth verifying.
 
-For example, say the context allows either "of course" or "no problem". Position
-1 conditions on the real prompt, so it is likely fine either way. Position 2 is
-computed at the same time, before anything has been sampled at position 1, so it
-can't know whether position 1 came out as "of" or "no". It has to spread its
-bets across both phrases, and the block can come back as "of problem" or "no
-course". The paper calls this a **multi-modal collision**, and it compounds with
-depth: the further into a block a position sits, the more unresolved choices it
-has to hedge against.
+Both changes target a weakness of parallel drafters like DFlash, which the
+DSpark authors call **suffix decay** or **acceptance decay**. Because the draft
+tokens in a block are generated independently, not autoregressively, acceptance
+drops off quickly for later positions in the block.
+
+Decay looks like this. Suppose the user sends "Thanks!" to the model. The model
+could reply either "Of course" or "No problem". A parallel drafter picks both
+words at the same time:
+
+- The first word is either "Of" or "No".
+- The second word is either "course" or "problem". The drafter picks one without
+  knowing which first word was chosen.
+
+Each word makes sense on its own, but together they can come out as "Of problem"
+or "No course". The target model rejects this mismatch. The paper calls this
+type of problem a **multi-modal collision**. It gets worse deeper into the
+block: each later position has more unresolved earlier choices it can't see.
 
 Verifying those low-value tail tokens is wasted work, and under heavy load it
 competes with batch capacity that could serve other requests.
 
-DeepSeek proposed DSpark with two complementary mechanisms:
+DSpark addresses this with two complementary mechanisms:
 
 - **Semi-autoregressive drafting**. DSpark keeps a DFlash-style parallel
   backbone (sharing the frozen embedding layer and LM head of the target), but
   adds a lightweight sequential head. It walks left to right and adjusts each
   position based on what was actually picked just before it. In the above
-  example, once "of" is chosen, it boosts "course" and suppresses "problem".
+  example, once "Of" is chosen, it boosts "course" and suppresses "problem".
 - **Confidence-scheduled verification**. DSpark uses a lightweight confidence
   head to estimate the acceptance probability of each drafted token, conditioned
   on the preceding draft prefix being accepted. Multiplying these per-position
