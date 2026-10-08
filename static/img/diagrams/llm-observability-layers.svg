@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 372" width="560" height="372">
+  <rect x="16" y="16" width="528" height="52" rx="2" fill="#f2f3f3" stroke="#d4dae4" stroke-width="1"/>
+  <text x="280.0" y="36.0" font-family="Roboto Mono, Inter, -apple-system, system-ui, sans-serif" font-size="12" fill="#020c13" text-anchor="middle" font-weight="600">Application and quality</text>
+  <text x="280.0" y="52.0" font-family="Roboto Mono, Inter, -apple-system, system-ui, sans-serif" font-size="10" fill="#020c13" text-anchor="middle" font-weight="normal">Traces, token usage, cost, output quality</text>
+  <polygon points="148.0,81.0 145.0,75.0 151.0,75.0" fill="#d4dae4"/>
+  <polygon points="412.0,81.0 409.0,75.0 415.0,75.0" fill="#d4dae4"/>
+  <rect x="16" y="88" width="528" height="52" rx="2" fill="#f2f3f3" stroke="#d4dae4" stroke-width="1"/>
+  <text x="280.0" y="108.0" font-family="Roboto Mono, Inter, -apple-system, system-ui, sans-serif" font-size="12" fill="#020c13" text-anchor="middle" font-weight="600">Requests and latency</text>
+  <text x="280.0" y="124.0" font-family="Roboto Mono, Inter, -apple-system, system-ui, sans-serif" font-size="10" fill="#020c13" text-anchor="middle" font-weight="normal">TTFT, ITL, end-to-end latency, errors, goodput</text>
+  <polygon points="148.0,153.0 145.0,147.0 151.0,147.0" fill="#d4dae4"/>
+  <polygon points="412.0,153.0 409.0,147.0 415.0,147.0" fill="#d4dae4"/>
+  <rect x="16" y="160" width="528" height="52" rx="2" fill="#f2f3f3" stroke="#d4dae4" stroke-width="1"/>
+  <text x="280.0" y="180.0" font-family="Roboto Mono, Inter, -apple-system, system-ui, sans-serif" font-size="12" fill="#020c13" text-anchor="middle" font-weight="600">Inference engine</text>
+  <text x="280.0" y="196.0" font-family="Roboto Mono, Inter, -apple-system, system-ui, sans-serif" font-size="10" fill="#020c13" text-anchor="middle" font-weight="normal">Running/waiting requests, KV cache usage, prefix cache hits, preemptions</text>
+  <polygon points="148.0,225.0 145.0,219.0 151.0,219.0" fill="#d4dae4"/>
+  <polygon points="412.0,225.0 409.0,219.0 415.0,219.0" fill="#d4dae4"/>
+  <rect x="16" y="232" width="528" height="52" rx="2" fill="#f2f3f3" stroke="#d4dae4" stroke-width="1"/>
+  <text x="280.0" y="252.0" font-family="Roboto Mono, Inter, -apple-system, system-ui, sans-serif" font-size="12" fill="#020c13" text-anchor="middle" font-weight="600">GPUs</text>
+  <text x="280.0" y="268.0" font-family="Roboto Mono, Inter, -apple-system, system-ui, sans-serif" font-size="10" fill="#020c13" text-anchor="middle" font-weight="normal">SM activity, memory, power, temperature, NVLink, XID errors</text>
+  <polygon points="148.0,297.0 145.0,291.0 151.0,291.0" fill="#d4dae4"/>
+  <polygon points="412.0,297.0 409.0,291.0 415.0,291.0" fill="#d4dae4"/>
+  <rect x="16" y="304" width="528" height="52" rx="2" fill="#f2f3f3" stroke="#d4dae4" stroke-width="1"/>
+  <text x="280.0" y="324.0" font-family="Roboto Mono, Inter, -apple-system, system-ui, sans-serif" font-size="12" fill="#020c13" text-anchor="middle" font-weight="600">Cluster and containers</text>
+  <text x="280.0" y="340.0" font-family="Roboto Mono, Inter, -apple-system, system-ui, sans-serif" font-size="10" fill="#020c13" text-anchor="middle" font-weight="normal">Pod status, replicas, scaling events, logs</text>
+</svg>
