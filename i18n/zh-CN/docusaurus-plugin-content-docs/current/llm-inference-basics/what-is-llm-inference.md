@@ -1,5 +1,6 @@
 ---
 sidebar_position: 1
+source_commit: 4b20ab2ffbf35ce03f3fc0f9d010099e2c6d968f
 description: LLM 推理是指利用已训练的语言模型，基于提示词生成响应或预测的过程。
 keywords:
     - Large Language Models, LLM
