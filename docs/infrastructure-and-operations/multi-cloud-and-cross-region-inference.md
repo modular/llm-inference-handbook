@@ -39,14 +39,15 @@ Cross-region inference refers to running LLM workloads across multiple
 geographic regions within the same cloud provider. Note that this doesn’t mean
 running a different model in each region. Instead, the same application is
 replicated across multiple sites so requests can be served from the nearest or
-most available location. For instance, a deployment might run in AWS us-east-1
-for North America, eu-west-1 for Europe, and ap-southeast-1 for Asia.
+most available location. For instance, a deployment might run in AWS `us-east-1`
+for North America, `eu-west-1` for Europe, and `ap-southeast-1` for Asia.
 
 <figure>
   <Diagram name="multi-region-routing-failover" alt="" />
-  <figcaption><b>Figure 1.</b> Cross-region inference with failover. A global
-  router sends each user to a nearby region. When ap-southeast goes down, the
-  router fails Asia traffic over to a healthy region.</figcaption>
+  <figcaption><b>Figure 1.</b> Cross-region inference with failover. The global
+  router normally sends traffic to the nearest region, but during an
+  <code>ap-southeast</code> outage, Asia traffic is redirected to
+  <code>eu-west</code>.</figcaption>
 </figure>
 
 :::note
@@ -119,7 +120,7 @@ models, since sustained inference can push compute costs into the millions.
 ### Regional outages
 
 A single region is a single point of failure. For example, on October 19 and 20,
-2025, the AWS us-east-1 (N. Virginia) Region had a
+2025, the AWS `us-east-1` (N. Virginia) Region had a
 [service disruption that lasted about 14.5 hours](https://aws.amazon.com/message/101925/).
 For LLM inference, an outage like this means more than slow responses. New GPU
 instances can't launch, autoscaling stalls, and every request in the region
@@ -247,8 +248,8 @@ same region as the model that uses them.
 
 It can be. Running in several locations adds idle capacity, data transfer fees,
 and engineering overhead. However, access to cheaper regions, more GPU supply,
-and better pricing leverage can offset those costs, especially for large,
-sustained workloads.
+and better pricing can offset those costs, especially for large, sustained
+workloads.
 
 <LinkList>
 
