@@ -412,9 +412,10 @@ words at the same time:
   knowing which first word was chosen.
 
 Each word makes sense on its own, but together they can come out as "Of problem"
-or "No course". The target model rejects this mismatch. The paper calls this
-type of problem a **multi-modal collision**. It gets worse deeper into the
-block: each later position has more unresolved earlier choices it can't see.
+or "No course". The target model rejects this mismatch.
+The [paper](https://arxiv.org/pdf/2607.05147) calls this type of problem a
+**multi-modal collision**. It gets worse deeper into the block: each later
+position has more unresolved earlier choices it can't see.
 
 Verifying those low-value tail tokens is wasted work, and under heavy load it
 competes with batch capacity that could serve other requests.
