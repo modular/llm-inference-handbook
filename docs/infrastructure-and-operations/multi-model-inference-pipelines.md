@@ -3,9 +3,10 @@ sidebar_position: 6
 description: Multi-model inference pipelines chain multiple models into one application path, improving specialization and control, but at the cost of extra latency and operational complexity.
 keywords:
     - Multi-model inference pipelines
-    - Model composition, inference graph
-    - Compound AI systems, multi-stage inference
-    - RAG pipeline, ensemble inference, multimodal pipeline
+    - Compound AI systems, inference graph, model composition
+    - Multi-stage inference, model chaining, LLM routing
+    - RAG pipeline, document AI pipeline, multimodal pipeline
+    - Ensemble inference, fan-out fan-in, conditional routing
 ---
 
 import LinkList from '@site/src/components/LinkList';
@@ -31,6 +32,13 @@ more like an inference graph than a straight line. Some stages run in parallel.
 Some requests branch into different downstream paths. Some stages are optional.
 
 Different patterns mean different trade-offs.
+
+<figure>
+  <Diagram name="multi-model-pipeline-patterns" alt="" />
+  <figcaption><b>Figure 1.</b> Four common multi-model pipeline patterns.</figcaption>
+</figure>
+
+The following sections explain each pattern in more detail.
 
 ### Sequential pipelines
 
@@ -69,8 +77,12 @@ Examples include:
 - A safety filter blocks or redirects unsafe inputs
 
 This can save cost and protect latency, but it only works if the router is
-reliable. A bad early decision can send requests down the wrong path and hurt
-quality.
+reliable. In the [RouteLLM](https://arxiv.org/abs/2406.18665) study, learned
+routers that pick between a stronger and a weaker LLM cut costs by over 2x in
+certain cases without lowering response quality. A bad early decision can send
+requests down the wrong path and hurt quality. See
+[inference routing](/inference-optimization/inference-routing/) for more routing
+strategies.
 
 ### Multimodal pipelines
 
@@ -188,7 +200,7 @@ natural fit.
 
 A common RAG path looks like this:
 
-```cpp
+```text
 Query → Embed → Retrieve → Rerank → Generate → (Optional) Verify
 ```
 
@@ -226,8 +238,10 @@ and scaling needs.
 
 ## Single model vs. multi-model pipeline
 
-There is no universal winner. The right choice depends on what constraint
-matters most.
+There is no universal winner. Choose a single model when it already meets your
+quality, latency, and cost targets. Choose a multi-model pipeline when
+specialized stages clearly improve quality, cost, or control enough to justify
+the extra latency and operations work.
 
 | Dimension                    | Single model  | Multi-model pipeline |
 |------------------------------|---------------|----------------------|
@@ -248,6 +262,16 @@ As a rule of thumb:
 - Keep the number of stages as small as possible
 
 ## FAQs
+
+### What is a compound AI system?
+
+Researchers at Berkeley AI Research (BAIR) define a compound AI system as one
+that
+[tackles AI tasks using multiple interacting components](https://bair.berkeley.edu/blog/2024/02/18/compound-ai-systems/),
+such as multiple model calls, retrievers, or external tools. RAG applications,
+document AI pipelines, and AI agents are all compound AI systems. A multi-model
+inference pipeline is the serving layer that runs those components in
+production.
 
 ### Should every RAG system be treated as a multi-model pipeline?
 
@@ -283,6 +307,7 @@ the solution.
 
 ## Additional resources
 
+- [The Shift from Models to Compound AI Systems](https://bair.berkeley.edu/blog/2024/02/18/compound-ai-systems/)
 - [Retrieval-Augmented Generation for Large Language Models: A Survey](https://arxiv.org/abs/2312.10997)
 - [BLIP-2: Bootstrapping Language-Image Pre-training with Frozen Image Encoders and Large Language Models](https://arxiv.org/abs/2301.12597)
 </LinkList>

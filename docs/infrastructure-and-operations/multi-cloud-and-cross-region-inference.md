@@ -2,9 +2,12 @@
 sidebar_position: 7
 description: Multi-cloud and cross-region inference is the practice of running LLM workloads across multiple cloud providers or regions to improve latency, availability, and cost efficiency.
 keywords:
-    - Multi-cloud LLM inference, multi-region LLM inference
-    - Hybrid inference
+    - Multi-cloud LLM inference, multi-cloud inference
+    - Cross-region inference, multi-region LLM inference
+    - Hybrid cloud inference, hybrid inference
 ---
+
+import LinkList from '@site/src/components/LinkList';
 
 # Multi-cloud and cross-region inference
 
@@ -36,8 +39,16 @@ Cross-region inference refers to running LLM workloads across multiple
 geographic regions within the same cloud provider. Note that this doesn’t mean
 running a different model in each region. Instead, the same application is
 replicated across multiple sites so requests can be served from the nearest or
-most available location. For instance, a deployment might run in AWS us-east-1
-for North America, eu-west-1 for Europe, and ap-southeast-1 for Asia.
+most available location. For instance, a deployment might run in AWS `us-east-1`
+for North America, `eu-west-1` for Europe, and `ap-southeast-1` for Asia.
+
+<figure>
+  <Diagram name="multi-region-routing-failover" alt="" />
+  <figcaption><b>Figure 1.</b> Cross-region inference with failover. The global
+  router normally sends traffic to the nearest region, but during an
+  <code>ap-southeast</code> outage, Asia traffic is redirected to
+  <code>eu-west</code>.</figcaption>
+</figure>
 
 :::note
 Another pattern is hybrid cloud inference, which combines on-premises
@@ -68,13 +79,13 @@ another.
 
 For LLMs, this flexibility is especially important because inference isn’t just
 CPU-bound or storage-bound. It depends heavily on
-[GPU](/getting-started/choosing-the-right-gpu/) availability. Frontier models
-like DeepSeek-V3.1 and gpt-oss-120b require hardware such as NVIDIA H100s and
-AMD MI300Xs, which are both expensive and limited.
+[GPU](/getting-started/choosing-the-right-gpu/) availability. Large open models
+like DeepSeek-V4 and GLM-5.3 require hardware such as NVIDIA B200s and
+AMD MI355Xs, which are both expensive and limited.
 
 With a multi-cloud or cross-region setup, you increase the chance of finding
 GPUs when you need them. As such, teams can smooth out traffic spikes, avoid
-dropped requests, and maintain a consistent experience as they to scale.
+dropped requests, and maintain a consistent experience as they scale.
 
 ### Compliance and data residency
 
@@ -95,27 +106,26 @@ users.
 
 The cost of LLM inference is tied closely to GPU availability and pricing. GPU
 prices can vary widely across providers, regions, and even availability zones
-within the same cloud. Below is an example of on-demand NVIDIA H100 pricing on
-GCP for the `a3-highgpu-1g` instance (1 GPU).
-
-| Region             | Monthly Cost (USD) |
-|--------------------|--------------------|
-| us-central1        | $8,074.71          |
-| europe-west1       | $8,885.00          |
-| us-west2           | $9,706.48          |
-| asia-southeast1    | $10,427.89         |
-| southamerica-east1 | $12,816.56         |
-
-The gap between the cheapest region (us-central1) and the most expensive
-(southamerica-east1) is nearly 60% higher. For single-region or single-cloud
-deployment, this means you miss out on more cost-efficient GPU options in other
-regions and clouds.
+within the same cloud. The same GPU instance type can cost noticeably more in
+one region than in another, and these prices change over time. With a
+single-region or single-cloud deployment, you miss out on more cost-efficient
+GPU options in other regions and clouds.
 
 Multi-cloud and cross-region deployments give teams room to optimize around
 these differences. By routing workloads to regions where GPUs are more
 affordable or available, teams can reduce costs without compromising
 performance. The flexibility is extremely important when running frontier
 models, since sustained inference can push compute costs into the millions.
+
+### Regional outages
+
+A single region is a single point of failure. For example, on October 19 and 20,
+2025, the AWS `us-east-1` (N. Virginia) Region had a
+[service disruption that lasted about 14.5 hours](https://aws.amazon.com/message/101925/).
+For LLM inference, an outage like this means more than slow responses. New GPU
+instances can't launch, autoscaling stalls, and every request in the region
+fails. Deployments that already run in a second region or cloud can shift
+traffic and keep serving users.
 
 ### Vendor lock-in
 
@@ -163,7 +173,9 @@ and control, but also introduces challenges:
   most available and cost-effective GPUs. This may require real-time capacity
   checks and rerouting when a region is saturated.
 - **Monitoring and observability**: Teams must be able to track performance,
-  latency, and costs across all regions and providers in a unified manner.
+  latency, and costs across all regions and providers in a unified manner. For
+  more information, see
+  [LLM observability](/infrastructure-and-operations/comprehensive-observability/).
 - **Operational overhead**: Managing failover, scaling, compliance, and
   networking is an ongoing burden.
 
@@ -191,3 +203,59 @@ carefully evaluate:
   providers that best match your requirements.
 - **Failover cost**: The additional costs tied to cross-region failover, such as
   management, data transfer, and network usage.
+
+Some platforms also support
+[Bring Your Own Cloud (BYOC)](/getting-started/bring-your-own-cloud/), which
+runs the managed platform inside your own cloud accounts across regions and
+providers.
+
+## FAQs
+
+### How do you route LLM requests across regions and clouds?
+
+A global routing layer, such as a global load balancer, DNS-based routing, or a
+custom gateway, picks a location for each request. Common strategies include:
+
+| Strategy       | Routes each request to                                                                          | Best for                                                        |
+|----------------|-------------------------------------------------------------------------------------------------|-----------------------------------------------------------------|
+| Geo-based      | The region assigned to the user location                                                        | Data residency and predictable placement                        |
+| Latency-based  | The region with the lowest measured network latency                                             | Global, interactive applications                                |
+| Capacity-aware | The region with free GPU capacity or the shortest queue                                         | Bursty traffic and scarce GPUs                                  |
+| Cost-aware     | The cheapest region that still meets the SLO                                                    | Batch jobs and latency-tolerant workloads                       |
+| KV cache-aware | The region and replica that already hold a matching KV cache prefix, while still balancing load | Multi-turn chats, agents, and prompts with long shared prefixes |
+
+In practice, these strategies are often combined. KV cache-aware routing, in
+particular, can pay off across regions, not just within one cluster. For
+example, [SkyWalker](https://arxiv.org/abs/2505.24095), a cache-aware
+cross-region load balancer, reports 1.12-2.06x higher throughput, 1.74-6.30x
+lower latency, and 25% lower serving cost than existing load balancers.
+
+### How do data residency rules affect LLM routing?
+
+Data residency rules such as the EU General Data Protection Regulation (GDPR)
+can restrict where personal data is processed. To comply, the routing layer
+must apply location rules before it optimizes for latency or cost. For example,
+EU user requests may only go to EU regions, even if a US region has idle GPUs.
+
+### What data transfer costs come with multi-cloud inference?
+
+Cloud providers charge for data that leaves a region or a cloud (egress). Text
+prompts and responses are small, but model weight replication, logs, traces,
+and RAG documents can add up. Keep retrieval data and vector databases in the
+same region as the model that uses them.
+
+### Is multi-cloud LLM inference more expensive?
+
+It can be. Running in several locations adds idle capacity, data transfer fees,
+and engineering overhead. However, access to cheaper regions, more GPU supply,
+and better pricing can offset those costs, especially for large, sustained
+workloads.
+
+<LinkList>
+
+## Additional resources
+
+- [SkyWalker: A Locality-Aware Cross-Region Load Balancer for LLM Inference](https://arxiv.org/abs/2505.24095)
+- [Efficient Routing of Inference Requests across LLM Instances in Cloud-Edge Computing](https://arxiv.org/abs/2507.15553)
+- [SkyServe: Serving AI Models across Regions and Clouds with Spot Instances](https://arxiv.org/abs/2411.01438)
+</LinkList>

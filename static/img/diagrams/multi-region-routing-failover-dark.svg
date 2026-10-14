@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 530" width="960" height="530">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600&amp;display=swap');
+  </style>
+  <rect width="960" height="530" fill="#020c13"/>
+  <rect x="60.0" y="24" width="220" height="56" rx="12" fill="#181c1f" stroke="#353d42" stroke-width="2"/>
+  <text x="170" y="44" font-family="Roboto Mono, Courier, monospace" font-size="12" fill="#9a9eaa" text-anchor="middle" font-weight="400" dominant-baseline="middle">Users</text>
+  <text x="170" y="62" font-family="Roboto Mono, Courier, monospace" font-size="14" fill="#ffffff" text-anchor="middle" font-weight="600" dominant-baseline="middle">North America</text>
+  <rect x="370.0" y="24" width="220" height="56" rx="12" fill="#181c1f" stroke="#353d42" stroke-width="2"/>
+  <text x="480" y="44" font-family="Roboto Mono, Courier, monospace" font-size="12" fill="#9a9eaa" text-anchor="middle" font-weight="400" dominant-baseline="middle">Users</text>
+  <text x="480" y="62" font-family="Roboto Mono, Courier, monospace" font-size="14" fill="#ffffff" text-anchor="middle" font-weight="600" dominant-baseline="middle">Europe</text>
+  <rect x="680.0" y="24" width="220" height="56" rx="12" fill="#181c1f" stroke="#353d42" stroke-width="2"/>
+  <text x="790" y="44" font-family="Roboto Mono, Courier, monospace" font-size="12" fill="#9a9eaa" text-anchor="middle" font-weight="400" dominant-baseline="middle">Users</text>
+  <text x="790" y="62" font-family="Roboto Mono, Courier, monospace" font-size="14" fill="#ffffff" text-anchor="middle" font-weight="600" dominant-baseline="middle">Asia</text>
+  <rect x="320" y="150" width="320" height="64" rx="12" fill="#1a3a5c" stroke="#637bff" stroke-width="2"/>
+  <text x="480" y="174" font-family="Roboto Mono, Courier, monospace" font-size="15" fill="#ffffff" text-anchor="middle" font-weight="600" dominant-baseline="middle">Global router</text>
+  <text x="480" y="194" font-family="Roboto Mono, Courier, monospace" font-size="12" fill="#9a9eaa" text-anchor="middle" font-weight="400" dominant-baseline="middle">geo · latency · capacity</text>
+  <line x1="170.0" y1="80.0" x2="381.4" y2="147.3" stroke="#637bff" stroke-width="2"/>
+  <polygon points="390.0,150.0 379.6,153.0 383.2,141.6" fill="#637bff"/>
+  <line x1="480.0" y1="80.0" x2="480.0" y2="141.0" stroke="#637bff" stroke-width="2"/>
+  <polygon points="480.0,150.0 474.0,141.0 486.0,141.0" fill="#637bff"/>
+  <line x1="790.0" y1="80.0" x2="578.6" y2="147.3" stroke="#637bff" stroke-width="2"/>
+  <polygon points="570.0,150.0 576.8,141.6 580.4,153.0" fill="#637bff"/>
+  <rect x="30.0" y="300" width="280" height="150" rx="12" fill="#181c1f" stroke="#353d42" stroke-width="2"/>
+  <text x="170" y="326" font-family="Roboto Mono, Courier, monospace" font-size="15" fill="#ffffff" text-anchor="middle" font-weight="600" dominant-baseline="middle">us-east</text>
+  <text x="170" y="346" font-family="Roboto Mono, Courier, monospace" font-size="12" fill="#9a9eaa" text-anchor="middle" font-weight="400" dominant-baseline="middle">North America</text>
+  <rect x="65" y="372" width="60" height="50" rx="6" fill="#1a3a5c" stroke="#637bff" stroke-width="2"/>
+  <text x="95" y="398" font-family="Roboto Mono, Courier, monospace" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="500" dominant-baseline="middle">GPU</text>
+  <rect x="140" y="372" width="60" height="50" rx="6" fill="#1a3a5c" stroke="#637bff" stroke-width="2"/>
+  <text x="170" y="398" font-family="Roboto Mono, Courier, monospace" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="500" dominant-baseline="middle">GPU</text>
+  <rect x="215" y="372" width="60" height="50" rx="6" fill="#1a3a5c" stroke="#637bff" stroke-width="2"/>
+  <text x="245" y="398" font-family="Roboto Mono, Courier, monospace" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="500" dominant-baseline="middle">GPU</text>
+  <rect x="340.0" y="300" width="280" height="150" rx="12" fill="#181c1f" stroke="#353d42" stroke-width="2"/>
+  <text x="480" y="326" font-family="Roboto Mono, Courier, monospace" font-size="15" fill="#ffffff" text-anchor="middle" font-weight="600" dominant-baseline="middle">eu-west</text>
+  <text x="480" y="346" font-family="Roboto Mono, Courier, monospace" font-size="12" fill="#9a9eaa" text-anchor="middle" font-weight="400" dominant-baseline="middle">Europe</text>
+  <rect x="375" y="372" width="60" height="50" rx="6" fill="#1a3a5c" stroke="#637bff" stroke-width="2"/>
+  <text x="405" y="398" font-family="Roboto Mono, Courier, monospace" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="500" dominant-baseline="middle">GPU</text>
+  <rect x="450" y="372" width="60" height="50" rx="6" fill="#1a3a5c" stroke="#637bff" stroke-width="2"/>
+  <text x="480" y="398" font-family="Roboto Mono, Courier, monospace" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="500" dominant-baseline="middle">GPU</text>
+  <rect x="525" y="372" width="60" height="50" rx="6" fill="#1a3a5c" stroke="#637bff" stroke-width="2"/>
+  <text x="555" y="398" font-family="Roboto Mono, Courier, monospace" font-size="12" fill="#ffffff" text-anchor="middle" font-weight="500" dominant-baseline="middle">GPU</text>
+  <rect x="650.0" y="300" width="280" height="150" rx="12" fill="none" stroke="#353d42" stroke-width="2" stroke-dasharray="7 6"/>
+  <text x="790" y="326" font-family="Roboto Mono, Courier, monospace" font-size="15" fill="#9a9eaa" text-anchor="middle" font-weight="600" dominant-baseline="middle">ap-southeast</text>
+  <text x="790" y="346" font-family="Roboto Mono, Courier, monospace" font-size="12" fill="#9a9eaa" text-anchor="middle" font-weight="400" dominant-baseline="middle">region outage</text>
+  <rect x="685" y="372" width="60" height="50" rx="6" fill="none" stroke="#353d42" stroke-width="2" stroke-dasharray="4 4"/>
+  <text x="715" y="398" font-family="Roboto Mono, Courier, monospace" font-size="12" fill="#9a9eaa" text-anchor="middle" font-weight="400" dominant-baseline="middle">GPU</text>
+  <rect x="760" y="372" width="60" height="50" rx="6" fill="none" stroke="#353d42" stroke-width="2" stroke-dasharray="4 4"/>
+  <text x="790" y="398" font-family="Roboto Mono, Courier, monospace" font-size="12" fill="#9a9eaa" text-anchor="middle" font-weight="400" dominant-baseline="middle">GPU</text>
+  <rect x="835" y="372" width="60" height="50" rx="6" fill="none" stroke="#353d42" stroke-width="2" stroke-dasharray="4 4"/>
+  <text x="865" y="398" font-family="Roboto Mono, Courier, monospace" font-size="12" fill="#9a9eaa" text-anchor="middle" font-weight="400" dominant-baseline="middle">GPU</text>
+  <line x1="380.0" y1="214.0" x2="178.3" y2="296.6" stroke="#637bff" stroke-width="2"/>
+  <polygon points="170.0,300.0 176.1,291.0 180.6,302.1" fill="#637bff"/>
+  <line x1="440.0" y1="214.0" x2="440.0" y2="291.0" stroke="#637bff" stroke-width="2"/>
+  <polygon points="440.0,300.0 434.0,291.0 446.0,291.0" fill="#637bff"/>
+  <line x1="540.0" y1="214.0" x2="540.0" y2="291.0" stroke="#637bff" stroke-width="2" stroke-dasharray="7 6"/>
+  <polygon points="540.0,300.0 534.0,291.0 546.0,291.0" fill="#637bff"/>
+  <text x="552" y="257" font-family="Roboto Mono, Courier, monospace" font-size="12" fill="#637bff" text-anchor="start" font-weight="600" dominant-baseline="middle">failover</text>
+  <line x1="600.0" y1="214.0" x2="790.0" y2="300.0" stroke="#353d42" stroke-width="2" stroke-dasharray="7 6"/>
+  <line x1="687.0" y1="249.0" x2="703.0" y2="265.0" stroke="#9a9eaa" stroke-width="2"/>
+  <line x1="687.0" y1="265.0" x2="703.0" y2="249.0" stroke="#9a9eaa" stroke-width="2"/>
+  <line x1="260.0" y1="495.0" x2="301.0" y2="495.0" stroke="#637bff" stroke-width="2"/>
+  <polygon points="310.0,495.0 301.0,501.0 301.0,489.0" fill="#637bff"/>
+  <text x="322" y="495" font-family="Roboto Mono, Courier, monospace" font-size="12" fill="#9a9eaa" text-anchor="start" font-weight="400" dominant-baseline="middle">normal route</text>
+  <line x1="470.0" y1="495.0" x2="511.0" y2="495.0" stroke="#637bff" stroke-width="2" stroke-dasharray="7 6"/>
+  <polygon points="520.0,495.0 511.0,501.0 511.0,489.0" fill="#637bff"/>
+  <text x="532" y="495" font-family="Roboto Mono, Courier, monospace" font-size="12" fill="#9a9eaa" text-anchor="start" font-weight="400" dominant-baseline="middle">Asia traffic fails over to eu-west</text>
+</svg>
