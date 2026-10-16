@@ -66,7 +66,6 @@ const GPU_DATA: GPU[] = [
       'Gemma-4-31B',
       'Qwen3.8-27B',
       'Muse-Glimmer-30B',
-      'MiMo-V2-Flash',
       'GLM-5.3-Flash',
     ],
     notes:
@@ -81,10 +80,11 @@ const GPU_DATA: GPU[] = [
     bandwidthDisplay: '4.8 TB/s',
     exampleLLMs: [
       'MiniMax-M3',
-      'MiMo-V2.5',
+      'MiMo-V2.6-Flash',
       'DeepSeek-V4.1-Flash',
       'Ling-3.0-flash',
       'Qwen3.8-Flash-Next',
+      'Muse-Spark-Open-816B-A42B',
     ],
     notes: 'High memory capacity; designed for frontier-scale LLMs',
   },
@@ -100,7 +100,8 @@ const GPU_DATA: GPU[] = [
       'Kimi-K3',
       'Qwen3.8-2.4T-A95B',
       'GLM-5.3',
-      'MiMo-V2.5-Pro',
+      'MiMo-V2.6-Pro',
+      'Muse-Spark-Open-816B-A42B',
     ],
     notes:
       'Blackwell architecture; native FP4 support; massive throughput for trillion-parameter models',
@@ -126,7 +127,6 @@ const GPU_DATA: GPU[] = [
       'gpt-oss-120b',
       'MiniMax-M3',
       'DeepSeek-R1-0528',
-      'MiMo-V2.5',
     ],
     notes: 'Large memory capacity; strong choice for large models',
   },
@@ -157,7 +157,8 @@ const GPU_DATA: GPU[] = [
       'Kimi-K3',
       'MiniMax-M3',
       'Qwen3.8-2.4T-A95B',
-      'MiMo-V2.5-Pro',
+      'MiMo-V2.6-Pro',
+      'Muse-Spark-Open-816B-A42B',
     ],
     notes:
       '4th Gen CDNA architecture; FP4/FP6 support; competes with B200 for the largest open models',
