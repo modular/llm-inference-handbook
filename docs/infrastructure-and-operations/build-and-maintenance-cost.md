@@ -19,7 +19,7 @@ operating the model yourself.
 
 The GPU bill is usually the most visible part. For example, AWS lists an 8×H100
 `p5.48xlarge` instance at about \$47.76 per hour as a Capacity Block in US East,
-or roughly \$34,900 when extrapolated to 730 hours at that rate. The
+or roughly \$34,900 per month for one node running around the clock. The
 engineering, staffing, and maintenance costs around that node are harder to
 see, and they often decide whether self-hosting pays off.
 
