@@ -1,0 +1,153 @@
+.container {
+  overflow: hidden;
+  margin: 1.5rem 0;
+  border: 1px solid var(--Elements-Twilight-20-70);
+  border-radius: 4px;
+}
+
+.header {
+  padding: 1.25rem 1.5rem;
+  background: var(--Elements-Twilight-5-90);
+}
+
+.headerTitle {
+  color: var(--Elements-Twilight-100-0);
+  font-size: 1.2rem;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+}
+
+.headerDescription {
+  margin-top: 0.25rem;
+  color: var(--Elements-Twilight-70-20);
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.body {
+  padding: 1.25rem 1.5rem;
+}
+
+/* ── Values ── */
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 1.5rem;
+}
+
+.label {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--Elements-Twilight-70-20);
+  font-size: 0.8125rem;
+}
+
+.field {
+  margin-top: 1rem;
+}
+
+.inputWrap {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.affix {
+  color: var(--Elements-Twilight-70-20);
+  font-size: 0.875rem;
+}
+
+.numberInput {
+  width: 7rem;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid var(--Elements-Twilight-20-70);
+  border-radius: 4px;
+  background: var(--Elements-Twilight-0-100);
+  color: var(--Elements-Twilight-100-0);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.numberInput:focus-visible {
+  outline: 2px solid var(--Elements-Neb-Ultra);
+  outline-offset: 1px;
+}
+
+.stat {
+  color: var(--Elements-Twilight-100-0);
+  font-size: 1.125rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.divider {
+  margin: 1.25rem 0;
+  border-top: 1px solid var(--Elements-Twilight-20-70);
+}
+
+/* ── Sliders ── */
+
+.sliderLabel {
+  display: block;
+  margin-bottom: 0.375rem;
+  color: var(--Elements-Twilight-100-0);
+  font-size: 0.875rem;
+}
+
+.slider {
+  width: 100%;
+  margin: 0;
+  accent-color: var(--Elements-Neb-Ultra);
+  cursor: pointer;
+}
+
+.ticks {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  color: var(--Elements-Twilight-70-20);
+  font-size: 0.75rem;
+}
+
+/* ── Result ── */
+
+.result {
+  padding: 0.625rem 0.875rem;
+  border: 1px solid var(--Elements-Neb-Ultra);
+  border-radius: 4px;
+}
+
+.resultValue {
+  color: var(--Elements-Neb-Ultra);
+  font-size: 1.5rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.resultNote {
+  margin-top: 0.125rem;
+  color: var(--Elements-Twilight-70-20);
+  font-size: 0.75rem;
+}
+
+.caption {
+  margin-top: 1rem;
+  color: var(--Elements-Twilight-70-20);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 540px) {
+  .header,
+  .body {
+    padding: 1rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}
