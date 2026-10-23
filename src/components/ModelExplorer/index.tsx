@@ -273,6 +273,42 @@ const MODELS: Model[] = [
 
   // ── MiMo ──
   {
+    name: 'MiMo-V2.6-Pro',
+    family: 'MiMo',
+    company: 'Xiaomi',
+    architecture: 'MoE',
+    released: '2026-09',
+    license: 'MIT',
+    huggingface: 'XiaomiMiMo/MiMo-V2.6-Pro-RL',
+    totalParams: '1.02T',
+    activeParams: '42B',
+    contextLength: '1M',
+    modality: 'Text, Image, Video, Audio',
+    useCase: 'Long-horizon agentic coding, research, and multimodal reasoning',
+    precisions: ['MXFP4 + FP8 Mixed'],
+    deployment: ['8× H200', '8× B300', '4× MI355X'],
+    sglangDocs:
+      'https://docs.sglang.io/cookbook/autoregressive/Xiaomi/MiMo-V2.6',
+  },
+  {
+    name: 'MiMo-V2.6-Flash',
+    family: 'MiMo',
+    company: 'Xiaomi',
+    architecture: 'MoE',
+    released: '2026-09',
+    license: 'MIT',
+    huggingface: 'XiaomiMiMo/MiMo-V2.6-Flash-RL',
+    totalParams: '309B',
+    activeParams: '15B',
+    contextLength: '1M',
+    modality: 'Text, Image, Video, Audio',
+    useCase: 'Cost-efficient multimodal agents and coding',
+    precisions: ['MXFP4 + FP8 Mixed'],
+    deployment: ['8× H200', '1× MI355X'],
+    sglangDocs:
+      'https://docs.sglang.io/cookbook/autoregressive/Xiaomi/MiMo-V2.6',
+  },
+  {
     name: 'MiMo-V2.5-Pro',
     family: 'MiMo',
     company: 'Xiaomi',
@@ -480,6 +516,26 @@ const MODELS: Model[] = [
   },
 
   // ── Muse ──
+  {
+    name: 'Muse-Spark-Open-816B-A42B',
+    family: 'Muse',
+    company: 'Meta',
+    architecture: 'MoE',
+    released: '2026-10',
+    license: 'Muse Model License',
+    licenseUrl:
+      'https://huggingface.co/meta-models/Muse-Spark-Open-816B-A42B/blob/main/LICENSE.md',
+    huggingface: 'meta-models/Muse-Spark-Open-816B-A42B',
+    totalParams: '816B',
+    activeParams: '42B',
+    contextLength: '1M',
+    modality: 'Text, Image, Video, Audio',
+    useCase: 'Coding and agentic workloads with multimodal input',
+    precisions: ['BF16', 'NVFP4'],
+    deployment: ['2-node 8× H200'],
+    sglangDocs:
+      'https://docs.sglang.io/cookbook/autoregressive/Meta/MuseSparkOpen',
+  },
   {
     name: 'Muse-Glimmer-30B',
     family: 'Muse',
