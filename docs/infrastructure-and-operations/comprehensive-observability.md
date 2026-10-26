@@ -1,5 +1,5 @@
 ---
-sidebar_position: 3
+sidebar_position: 4
 description: LLM observability explained. Learn which metrics, logs, and traces to monitor for LLM inference, how to diagnose issues, and which tools to use.
 keywords:
     - LLM observability, LLM observability tools
@@ -190,7 +190,7 @@ evaluate performance at this level:
 - **Token usage and cost** by model, tenant, user, or feature. For self-hosted
   models, use GPU-hours to estimate compute cost per million tokens and compare
   with API pricing. See
-  [build and maintenance cost](/infrastructure-and-operations/build-and-maintenance-cost/).
+  [inference cost](/infrastructure-and-operations/build-and-maintenance-cost/).
 - **Output quality**, using evaluations, user feedback, or LLM-as-a-judge
   scores, to catch regressions after a model or prompt change.
 - **Safety and format checks**, such as invalid

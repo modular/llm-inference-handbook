@@ -1,11 +1,11 @@
 ---
-sidebar_position: 2
+sidebar_position: 3
 description: Distributed inference is the practice of running model inference across multiple GPUs, workers, nodes, or regions to achieve scalable, reliable, and cost-efficient serving. This document explains what distributed inference is, why teams use it in production, its key challenges, and how modern runtimes and platforms support distributed LLM inference at scale.
 keywords:
     - Distributed inference
 ---
 
-# What is distributed inference?
+# Distributed inference
 
 Distributed inference improves how AI systems handle production workloads by
 spreading inference computation across multiple connected machines. Rather than

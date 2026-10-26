@@ -208,7 +208,7 @@ These workflows help a deployment remain reliable through repeated model
 updates.
 [InferenceOps and management](/infrastructure-and-operations/inferenceops-and-management/)
 describes the workflows, and
-[build and maintenance cost](/infrastructure-and-operations/build-and-maintenance-cost/)
+[inference cost](/infrastructure-and-operations/build-and-maintenance-cost/)
 covers what it takes to staff and sustain them.
 
 ### Security and compliance
@@ -302,7 +302,7 @@ vLLM, SGLang, or MAX, an autoscaler, a router, observability, and release
 tooling. This gives you maximum control and is the usual choice for
 teams with customization needs that no platform meets. It also carries the
 most engineering and ongoing maintenance work.
-[Build and maintenance cost](/infrastructure-and-operations/build-and-maintenance-cost/)
+[Inference cost](/infrastructure-and-operations/build-and-maintenance-cost/)
 covers what that work involves.
 
 ## FAQs

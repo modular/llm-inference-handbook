@@ -127,6 +127,9 @@ concepts directly:
 - [Kernel Fusion Visualizer](/kernel-optimization/kernel-optimization-for-llm-inference/#what-is-kernel-fusion):
   See how separate kernels round-trip every intermediate through HBM, and what
   fusing them saves.
+- [Inference Cost Calculator](/infrastructure-and-operations/build-and-maintenance-cost/#hidden-costs-of-self-hosted-inference):
+  See how average throughput and extra monthly costs change the effective cost
+  per 1M tokens.
 
 ## Contributing
 
