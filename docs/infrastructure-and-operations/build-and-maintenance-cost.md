@@ -1,5 +1,5 @@
 ---
-sidebar_position: 5
+sidebar_position: 2
 description: Self-hosted LLM inference cost goes far beyond GPUs. See what drives inference cost, from GPU compute to engineering, maintenance, and talent.
 keywords:
     - Inference cost

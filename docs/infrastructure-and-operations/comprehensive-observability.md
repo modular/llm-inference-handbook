@@ -1,5 +1,5 @@
 ---
-sidebar_position: 3
+sidebar_position: 4
 description: LLM observability explained. Learn which metrics, logs, and traces to monitor for LLM inference, how to diagnose issues, and which tools to use.
 keywords:
     - LLM observability, LLM observability tools
