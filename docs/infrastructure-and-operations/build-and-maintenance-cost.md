@@ -13,15 +13,17 @@ InferenceCostCalculator from '@site/src/components/InferenceCostCalculator';
 # Inference cost
 
 Inference cost is what you pay to run a trained LLM and serve requests in
-production. With a hosted API, that’s mostly a per-token price. With self-hosted
-inference, it’s the full cost of owning or renting the infrastructure and
-operating the model yourself.
+production. When using a serverless inference service such as OpenAI or
+Anthropic, that’s mostly a per-token price. With self-hosted inference, it’s the
+full cost of owning or renting the infrastructure and operating the model
+yourself.
 
-The GPU bill is usually the most visible part. For example, AWS lists an 8×H100
-`p5.48xlarge` instance at about \$47.76 per hour as a Capacity Block in US East,
-or roughly \$34,900 per month for one node running around the clock. The
-engineering, staffing, and maintenance costs around that node are harder to
-see, and they often decide whether self-hosting pays off.
+The GPU bill is usually the most visible part. For example, as of October 2026,
+AWS lists an 8×H100 `p5.48xlarge` instance at about
+\$47.76 per hour as a Capacity Block in US East, or roughly \$34,900 per month
+for one node running around the clock. The engineering, staffing, and
+maintenance costs around that node are harder to see, and they often decide
+whether self-hosting pays off.
 
 ## How to measure inference cost
 
@@ -39,9 +41,9 @@ Teams usually compare cost using one of three units:
 A simple starting point is the GPU-only cost per million tokens:
 
 $$
-\text{Cost per Million Tokens}
-= \frac{\text{GPU Cost per Hour} \times 1{,}000{,}000}
-       {\text{Tokens per Second} \times 3{,}600}
+\text{Cost per million tokens}
+= \frac{\text{GPU cost per hour} \times 1{,}000{,}000}
+       {\text{Tokens per second} \times 3{,}600}
 $$
 
 Suppose the AWS 8×H100 node above sustains 10,000 tokens per second under real
@@ -50,7 +52,8 @@ per million tokens. If it serves requests at that rate for only 30% of the time
 (about 3,000 tokens per second averaged over all hours), the same node costs
 about \$4.42 per million tokens.
 
-Use sustained
+To calculate the most accurate inference cost, you should measure your
+tokens per second based on sustained
 [throughput](/llm-inference-basics/llm-inference-metrics/#throughput) under
 production traffic, not peak benchmark numbers. Throughput depends on the model,
 hardware, batching strategy, and latency targets, so measure it with your own
@@ -61,10 +64,11 @@ prices you compare against.
 
 ## Hidden costs of self-hosted inference
 
-The formula above only counts GPUs. The table below lists the main cost
-categories for self-hosted LLM inference. Everything beyond GPU compute is easy
-to overlook, and with a hosted API, most of these rows collapse into one
-per-token price.
+The formula above only accounts for GPU compute cost, the hourly price you pay
+for the GPUs. The table below lists the main cost categories for self-hosted LLM
+inference. Everything beyond GPU compute is easy to overlook, and with a
+serverless inference service, most of these rows collapse into one per-token
+price.
 
 | Cost category           | What it includes                                                                 | What drives it                                            |
 |-------------------------|----------------------------------------------------------------------------------|-----------------------------------------------------------|
@@ -80,16 +84,16 @@ To estimate inference cost more accurately, start from the total cost of
 running the deployment:
 
 $$
-\text{Total Cost}
-= \text{GPU Cost} + \text{Infra Cost} + \text{Ops Cost}
-+ \text{Eng and Talent Cost} + \cdots
+\text{Total cost}
+= \text{GPU cost} + \text{Infra cost} + \text{Ops cost}
++ \text{Eng and talent cost} + \cdots
 $$
 
 Then divide by the tokens served over the same period, such as a month:
 
 $$
-\text{Cost per Million Tokens}
-= \frac{\text{Total Cost} \times 1{,}000{,}000}{\text{Tokens Served}}
+\text{Cost per million tokens}
+= \frac{\text{Total cost} \times 1{,}000{,}000}{\text{Tokens served}}
 $$
 
 The calculator below starts with one GPU at \$2 per hour and a sustained
@@ -124,10 +128,9 @@ pricing](https://aws.amazon.com/ec2/capacityblocks/pricing/), October 2026.
 Prices can change, so check the provider before you plan a budget.*
 
 A newer GPU costs more per hour but may cost less per token if it delivers
-enough extra throughput. See
+enough extra throughput. To size hardware for your model, see
 [choosing the right GPU](/getting-started/choosing-the-right-gpu/) and
-[calculating GPU memory for LLMs](/getting-started/calculating-gpu-memory-for-llms/)
-to size hardware for your model.
+[calculating GPU memory for LLMs](/getting-started/calculating-gpu-memory-for-llms/).
 
 ### Why GPU capacity use matters
 
@@ -151,9 +154,7 @@ get more work out of each GPU while it’s running.
 ## Storage and network cost
 
 Storage and network costs are usually smaller than the GPU bill, but they grow
-with model size and the number of places you serve from. LLM weights are large.
-For example, a 70B-parameter model in FP16 takes about 140 GB, before you add
-container images that bundle CUDA libraries and the serving runtime.
+with model size and the number of places you serve from.
 
 These costs typically come from:
 
