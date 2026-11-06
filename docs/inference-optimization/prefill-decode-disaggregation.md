@@ -98,7 +98,7 @@ disaggregation, including
 [SGLang](https://docs.sglang.io/docs/advanced_features/pd_disaggregation),
 [MAX](https://max.modular.com/cli/serve/#--pipeline-role-pipeline_role),
 [Dynamo](https://docs.nvidia.com/dynamo/dev/user-guides/disaggregated-serving),
-and [llm-d](https://llm-d.ai/docs/architecture/advanced/disaggregation).
+and [llm-d](https://llm-d.ai/docs/architecture/disaggregation).
 
 ## Disaggregation isn’t always a silver bullet
 

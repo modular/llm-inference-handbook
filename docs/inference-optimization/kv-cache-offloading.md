@@ -252,7 +252,7 @@ dedicated KV cache layer for extended features:
   caches across GPUs, nodes, and instances, supporting prefill-decode
   disaggregation and improving cache reuse. It is widely integrated with systems
   such as vLLM, SGLang, and LMCache.
-- [NVIDIA Dynamo KVBM](https://docs.nvidia.com/dynamo/knowledge-base/modular-components/kvbm/overview)
+- [NVIDIA Dynamo KVBM](https://docs.nvidia.com/dynamo/v1.4.2/knowledge-base/modular-components/kvbm/overview)
   (KV Block Manager) is a unified memory layer to handle memory allocation,
   management, and remote sharing of KV blocks for inference tasks across
   heterogeneous and distributed environments.
