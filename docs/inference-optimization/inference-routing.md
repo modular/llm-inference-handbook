@@ -231,11 +231,11 @@ locality:
 - **Precise cache-aware routing.** Workers emit KV cache events or detailed
   cache metadata so the router can maintain an accurate global view of cache
   placement. For example,
-  [llm-d](https://llm-d.ai/docs/guides/precise-prefix-cache-aware) uses KV cache
-  events from vLLM and SGLang to track where cache blocks live across serving
-  Pods. The scheduler then scores workers based on how much of the incoming
-  request’s prefix is already available there. It also combines cache locality
-  with load-aware signals to avoid overloading hot replicas.
+  [llm-d](https://llm-d.ai/docs/well-lit-paths/foundations/precise-prefix-cache-routing)
+  uses KV cache events from vLLM and SGLang to track where cache blocks live
+  across serving Pods. The scheduler then scores workers based on how much of
+  the incoming request’s prefix is already available there. It also combines
+  cache locality with load-aware signals to avoid overloading hot replicas.
 
 In general, more accurate cache signals improve cache reuse and reduce repeated
 prefill work. The trade-off is higher coordination cost, more metadata exchange,
@@ -286,11 +286,11 @@ Several open-source projects already follow this direction:
   approximate prefix locality using radix trees and queue counts, then switches
   between cache-aware routing and shortest-queue routing depending on system
   imbalance.
-- [Dynamo](https://docs.nvidia.com/dynamo/components/router/router-guide) routes
+- [Dynamo](https://docs.nvidia.com/dynamo/components/router) routes
   requests by estimating both prefill and decode costs across workers. It
   considers KV cache overlap, active decode blocks, and workload placement to
   reduce redundant computation and improve serving efficiency.
-- [llm-d](https://llm-d.ai/docs/architecture/core/router) builds inference
+- [llm-d](https://llm-d.ai/docs/architecture/router) builds inference
   scheduling on top of the
   [Gateway API Inference Extension](https://github.com/kubernetes-sigs/gateway-api-inference-extension)
   project. It combines cache locality, worker load, and other runtime signals to
@@ -322,7 +322,7 @@ distributed workers make recomputation expensive.
 ## Additional resources
 
 - [Kubernetes Gateway API Inference Extension](https://gateway-api-inference-extension.sigs.k8s.io/)
-- [Dynamo Router Guide](https://docs.nvidia.com/dynamo/components/router/router-guide)
+- [Dynamo Router Guide](https://docs.nvidia.com/dynamo/components/router)
 - [Intelligent Inference Scheduling with llm-d](https://llm-d.ai/blog/intelligent-inference-scheduling-with-llm-d)
 - [KV-Cache Wins You Can See](https://llm-d.ai/blog/kvcache-wins-you-can-see)
 </LinkList>

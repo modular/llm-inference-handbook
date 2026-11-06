@@ -229,6 +229,6 @@ With fusion:
 
 ## Additional resources
 
-- [CUDA C++ Programming Guide](https://docs.nvidia.com/cuda/cuda-c-programming-guide/)
+- [CUDA Programming Guide](https://docs.nvidia.com/cuda/cuda-programming-guide/)
 - [What exactly is “CUDA”?](https://www.modular.com/blog/democratizing-compute-part-2-what-exactly-is-cuda?utm_source=llm_handbook)
 </LinkList>
