@@ -231,11 +231,11 @@ locality:
 - **Precise cache-aware routing.** Workers emit KV cache events or detailed
   cache metadata so the router can maintain an accurate global view of cache
   placement. For example,
-  [llm-d](https://llm-d.ai/docs/well-lit-paths/foundations/precise-prefix-cache-routing) uses KV cache
-  events from vLLM and SGLang to track where cache blocks live across serving
-  Pods. The scheduler then scores workers based on how much of the incoming
-  request’s prefix is already available there. It also combines cache locality
-  with load-aware signals to avoid overloading hot replicas.
+  [llm-d](https://llm-d.ai/docs/well-lit-paths/foundations/precise-prefix-cache-routing)
+  uses KV cache events from vLLM and SGLang to track where cache blocks live
+  across serving Pods. The scheduler then scores workers based on how much of
+  the incoming request’s prefix is already available there. It also combines
+  cache locality with load-aware signals to avoid overloading hot replicas.
 
 In general, more accurate cache signals improve cache reuse and reduce repeated
 prefill work. The trade-off is higher coordination cost, more metadata exchange,
