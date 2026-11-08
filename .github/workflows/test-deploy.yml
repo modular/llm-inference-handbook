@@ -60,5 +60,8 @@ jobs:
       - name: Typecheck
         run: pnpm run typecheck
 
+      - name: Check translation markers
+        run: pnpm l10n:test && pnpm l10n:status --ci
+
       - name: Test build website
         run: pnpm run build
