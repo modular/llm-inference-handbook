@@ -13,7 +13,7 @@ import { afterEach, test } from 'node:test'
 import { fileURLToPath } from 'node:url'
 
 const SCRIPT = fileURLToPath(new URL('./l10n.mjs', import.meta.url))
-const ZH = 'i18n/zh-Hans/docusaurus-plugin-content-docs/current'
+const ZH = 'i18n/zh-CN/docusaurus-plugin-content-docs/current'
 const repos = []
 
 function createRepo() {
@@ -80,7 +80,7 @@ test('status reports every state', () => {
   const out = result.stdout
   assert.match(
     out,
-    /^zh-Hans {2}6 translated · 2 untranslated \(compared with main\)/
+    /^zh-CN {2}6 translated · 2 untranslated \(compared with main\)/
   )
   assert.match(out, /🟡 stale +stale\.md \(1 commit, \+1 -0\)/)
   assert.match(out, /❌ no marker +plain\.md/)
