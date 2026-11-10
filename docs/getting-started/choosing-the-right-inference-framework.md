@@ -1,6 +1,6 @@
 ---
 sidebar_position: 5
-description: Learn what LLM inference frameworks do, why raw model execution is not enough for production, and how to choose the right inference frameworks for your use case.
+description: Learn what LLM inference frameworks do, why raw model execution isn't enough for production, and how to choose the right inference frameworks for your use case.
 keywords:
     - Inference frameworks, inference backends, inference runtimes, inference engines, inference platforms
     - Best inference frameworks, best LLM inference providers, LLM inference benchmark
@@ -33,11 +33,22 @@ inference backends, or model servers. The exact meaning varies by project, but
 the core job is the same: make model execution efficient and usable outside a
 training notebook.
 
+That job isn't new to LLMs. Long before them, general-purpose model servers such
+as [TensorFlow Serving](https://github.com/tensorflow/serving),
+[TorchServe](https://github.com/pytorch/serve), and
+[NVIDIA Triton Inference Server](https://github.com/triton-inference-server/server)
+were already doing it in production. They were mainly built for classic machine
+learning and deep learning workloads like recommendation and tabular prediction.
+Those requests tend to have short inputs, fixed shapes, and predictable
+runtimes. LLM requests don't. Their lengths vary widely, tokens are generated
+one at a time, and each request holds a growing KV cache. LLM inference
+frameworks are built to handle exactly these challenges.
+
 ## Why do I need an inference framework?
 
 You can run inference directly with a raw model in PyTorch or Hugging Face
-Transformers. That is often enough for experiments, local testing, or one
-request at a time. It is usually not enough for production inference.
+Transformers. That's often enough for experiments, local testing, or one
+request at a time. It usually isn't enough for production inference.
 
 Training frameworks are built around learning weights. They support
 backpropagation, optimizer steps, gradient accumulation, and large training
@@ -45,23 +56,23 @@ batches. Inference has different goals: low latency, high throughput, stable
 memory use, streaming output, and predictable behavior under concurrent traffic.
 
 Inference frameworks handle the serving-specific work that raw model execution
-does not solve well, such as:
+doesn't solve well, such as:
 
 - **Batching and scheduling**: Combine active requests so GPUs stay busy.
 - **KV cache management**: Store attention state efficiently for long prompts
   and multi-turn chats.
-- **Streaming**: Return tokens as they are generated instead of waiting for the
+- **Streaming**: Return tokens as they're generated instead of waiting for the
   full response.
 - **Memory control**: Fit larger models and more concurrent requests into
   limited GPU memory.
 - **Production APIs**: Expose
   [OpenAI-compatible](/model-interaction/openai-compatible-api/) or
   framework-specific endpoints.
-- **Multi-GPU support**: Split large models across devices when one GPU is not
+- **Multi-GPU support**: Split large models across devices when one GPU isn't
   enough.
 
 These frameworks hide much of the model execution complexity behind serving
-options you can tune. Here is an example of serving Gemma 4 31B. The flag names
+options you can tune. Here's an example of serving Gemma 4 31B. The flag names
 and accepted values differ, but each framework exposes similar categories of
 knobs, such as model parallelism, memory utilization, and maximum sequence
 length. You tune these directly without touching the model itself.
@@ -110,7 +121,7 @@ By abstracting away low-level infrastructure work, inference frameworks let you
 focus on building applications instead of reimplementing inference logic for
 each model architecture.
 
-The benefit is not just convenience. A good inference framework can improve the
+The benefit isn't just convenience. A good inference framework can improve the
 latency, throughput, and cost profile of the same model on the same hardware.
 For example, [in a 2023 benchmark](https://vllm.ai/blog/2023-06-20-vllm), the
 vLLM team reported up to 24× higher throughput than Hugging Face Transformers
@@ -131,7 +142,7 @@ Popular inference frameworks for building high-throughput, low-latency LLM
 applications include:
 
 - [vLLM](https://github.com/vllm-project/vllm). A high-performance inference
-  engine optimized for serving LLMs. It is known for its efficient use of GPU
+  engine optimized for serving LLMs. It's known for its efficient use of GPU
   resources and fast decoding capabilities.
 - [SGLang](https://github.com/sgl-project/sglang). A fast serving framework for
   LLMs and vision language models. It makes your interaction with models faster
@@ -147,16 +158,16 @@ applications include:
   suitable for deploying large models with reduced memory requirements.
 - [TensorRT LLM](https://github.com/NVIDIA/TensorRT-LLM). An inference backend
   that leverages NVIDIA's TensorRT, a high-performance deep learning inference
-  library. It is optimized for running large models on NVIDIA GPUs, providing
+  library. It's optimized for running large models on NVIDIA GPUs, providing
   fast inference and support for advanced optimizations like quantization.
 - [TokenSpeed](https://github.com/lightseekorg/tokenspeed). An inference
   engine from the LightSeek Foundation aimed at agentic workloads. It features a
   pluggable, layered kernel system, a sophisticated scheduler with safe KV cache
   management, compiler-backed parallelism, and an OpenAI-compatible serving API.
 - [Hugging Face TGI](https://github.com/huggingface/text-generation-inference).
-  A toolkit for deploying and serving LLMs. It is used in production at Hugging
+  A toolkit for deploying and serving LLMs. It's used in production at Hugging
   Face to power Hugging Chat, the Inference API and Inference Endpoint. Note
-  that Hugging Face TGI is now in **maintenance mode**. This means it is still
+  that Hugging Face TGI is now in **maintenance mode**. This means it's still
   supported and usable, but there will no longer be major feature development or
   new performance optimizations. If you’re running TGI in production, it’s worth
   planning an upgrade path as your performance or scaling needs grow.
@@ -172,7 +183,7 @@ tools are optimized for low-resource environments:
   DeepSeek, and Mistral. The tool is ideal for low-latency inference and
   performs well on consumer-grade GPUs.
 - [MLC-LLM](https://github.com/mlc-ai/mlc-llm). An ML compiler and
-  high-performance deployment engine for LLMs. It is built on top of Apache TVM
+  high-performance deployment engine for LLMs. It's built on top of Apache TVM
   and requires compilation and weight conversion before serving models. MLC-LLM
   can be used for a wide range of hardware platforms, supporting AMD, NVIDIA,
   Apple, and Intel GPUs across Linux, Windows, macOS, iOS, Android, and web
@@ -318,6 +329,52 @@ observability, and independent scaling easier to add. In either mode, the
 framework still handles model execution, batching, and KV cache management. The
 specific choice depends on your use case and how your application integrates
 with that engine.
+
+## How to select the right inference framework
+
+With so many options, it helps to narrow the field by working through a few
+questions in order. Each one usually rules out some frameworks before you need
+to benchmark anything.
+
+1. **Where will the model run?** Some frameworks are tied to one vendor or one
+   class of device. For example, TensorRT LLM runs only on NVIDIA GPUs, while
+   llama.cpp and MLC-LLM focus on laptops and edge devices. Others, like MAX,
+   are built to run AI models across any hardware from multiple vendors, from
+   data center clusters to local machines. If you expect your hardware mix to
+   change, portability can matter as much as peak speed on a single device. See
+   [choosing the right GPU](/getting-started/choosing-the-right-gpu/) for more
+   on hardware.
+2. **Does it support your model?** New architectures land in some frameworks
+   before others, sometimes weeks apart. Confirm support for the exact model,
+   model size, and precision or
+   [quantization](/model-preparation/llm-quantization/) format, not just the
+   model family.
+3. **What does your workload look like?** Interactive chat cares most about
+   [TTFT and ITL](/llm-inference-basics/llm-inference-metrics/). Agents and RAG
+   apps with shared prompts benefit from strong
+   [prefix caching](/inference-optimization/prefix-caching/). Very large models
+   may need
+   [multi-GPU parallelism](/inference-optimization/data-tensor-pipeline-expert-hybrid-parallelism/)
+   when they don't fit on one GPU. For mixed prefill and decode traffic,
+   [prefill-decode disaggregation](/inference-optimization/prefill-decode-disaggregation/)
+   can help control latency.
+4. **Which features do you need?** List the must-haves, such as
+   [structured outputs](/model-interaction/structured-outputs/),
+   [speculative decoding](/inference-optimization/speculative-decoding/), LoRA
+   adapters, tool calling, or multimodal inputs. Check how mature each feature
+   is, not just whether it appears in the docs.
+5. **How will you operate it?** Look at the API surface (OpenAI compatibility),
+   metrics and observability, container images, release cadence, community
+   activity, and license. A framework that is fast but hard to upgrade or debug
+   can cost more over time.
+6. **How does it perform on your traffic?** Shortlist two or three candidates
+   and [benchmark them](/inference-optimization/llm-performance-benchmarks/)
+   with your own model, prompt lengths, and concurrency. Published numbers
+   rarely match real workloads, and default settings are rarely optimal, so
+   tune each framework before comparing.
+
+Your answers may not all point to the same framework. That's normal, and it's
+one of the main reasons teams end up running more than one.
 
 ## Why do you need multiple inference runtimes?
 
