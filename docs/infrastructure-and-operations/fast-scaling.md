@@ -281,7 +281,6 @@ limitations matter for LLM inference:
 ## Additional resources
 
 - [Kubernetes: Horizontal Pod Autoscaling](https://kubernetes.io/docs/concepts/workloads/autoscaling/horizontal-pod-autoscale/)
-- [Scaling AI Models Like You Mean It](https://www.bentoml.com/blog/scaling-ai-model-deployment)
 - [Agentic Autoscaling through Worker-Pool Orchestration for LLM-driven Text Classification in Cloud Computing Environments](https://arxiv.org/abs/2609.14898)
 - [Decomposing Predictive Kubernetes Autoscaling for Large Language Model Serving Under Long Startup Delays](https://arxiv.org/abs/2609.20874)
 </LinkList>
