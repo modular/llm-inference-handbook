@@ -206,8 +206,8 @@ track real demand much more closely.
   correlates directly with actual demand. However, the serving framework must
   expose concurrency as a metric so the deployment platform can use it as a
   scaling signal.
-- **Engine-level signals**: Many inference engines expose metrics such as the
-  number of waiting requests and KV cache usage. A growing queue or a nearly
+- Engine-level signals: Many inference engines expose metrics such as the
+  **queue depth** and **KV cache usage**. A growing queue or a nearly
   full KV cache means the replica is saturated and new requests will see higher
   [TTFT](/llm-inference-basics/llm-inference-metrics/). See
   [LLM observability](/infrastructure-and-operations/comprehensive-observability/)
