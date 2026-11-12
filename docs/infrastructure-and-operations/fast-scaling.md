@@ -260,8 +260,7 @@ keep at least one warm replica, or accept slow first responses after idle
 periods.
 
 Historically, the standard Kubernetes HPA couldn't
-scale a Deployment to zero on its own. Starting with
-[Kubernetes 1.37](https://kubernetes.io/blog/2026/09/02/kubernetes-v1-37-hpa-scale-to-zero-beta/),
+scale a Deployment to zero on its own. Starting with Kubernetes 1.37,
 HPA supports `minReplicas: 0` as a beta feature that's enabled by default. Two
 limitations matter for LLM inference:
 
