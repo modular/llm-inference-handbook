@@ -166,6 +166,58 @@ test('diff shows English changes and write updates the marker', () => {
   )
 })
 
+test('write keeps empty front matter valid', () => {
+  const repo = createRepo()
+  repo.put('docs/a.md', page('a'))
+  repo.put('docs/b.md', page('b'))
+  const latest = repo.commit('English')
+  repo.put(`${ZH}/a.md`, '---\n\n---\n\n# zh a\n')
+  repo.put(`${ZH}/b.md`, '---\n---\n\n# zh b\n\n---\n\nAfter\n')
+
+  repo.run('write', 'a.md')
+  repo.run('write', 'b.md')
+  assert.equal(
+    repo.read(`${ZH}/a.md`),
+    `---\n\nsource_commit: ${latest}\n---\n\n# zh a\n`
+  )
+  assert.equal(
+    repo.read(`${ZH}/b.md`),
+    `---\nsource_commit: ${latest}\n---\n\n# zh b\n\n---\n\nAfter\n`
+  )
+  assert.match(repo.run('status').stdout, /✅ 2 up to date/)
+})
+
+test('write accepts the front matter shapes Docusaurus accepts', () => {
+  const repo = createRepo()
+  const shapes = {
+    bom: ['﻿---\nid: x\n---\n\n# zh\n', '﻿---\nid: x\nMARKER\n---\n\n# zh\n'],
+    spaces: [
+      '---  \nid: x\n---  \n\nIntro\n\n---\n\nAfter\n',
+      '---  \nid: x\nMARKER\n---  \n\nIntro\n\n---\n\nAfter\n'
+    ],
+    crlf: [
+      '---\r\nid: x\r\n---\r\n\r\n# zh\r\n',
+      '---\r\nid: x\r\nMARKER\r\n---\r\n\r\n# zh\r\n'
+    ],
+    none: ['# zh\n', '---\nMARKER\n---\n\n# zh\n'],
+    'bom-none': ['﻿# zh\n', '﻿---\nMARKER\n---\n\n# zh\n']
+  }
+  for (const name of Object.keys(shapes))
+    repo.put(`docs/${name}.md`, page(name))
+  const latest = repo.commit('English')
+  for (const [name, [before]] of Object.entries(shapes)) {
+    repo.put(`${ZH}/${name}.md`, before)
+  }
+
+  for (const [name, [, after]] of Object.entries(shapes)) {
+    const result = repo.run('write', `${name}.md`)
+    assert.equal(result.status, 0, result.stderr)
+    const expected = after.replace('MARKER', `source_commit: ${latest}`)
+    assert.equal(repo.read(`${ZH}/${name}.md`), expected, name)
+  }
+  assert.match(repo.run('status').stdout, /✅ 5 up to date/)
+})
+
 test('no translations is not an error', () => {
   const repo = createRepo()
   repo.put('docs/a.md', page('a'))

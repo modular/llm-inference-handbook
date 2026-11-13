@@ -119,11 +119,16 @@ function englishPages(ref) {
     .filter(isPage)
 }
 
+// Same rules as gray-matter, which Docusaurus uses: an optional BOM, an
+// opening `---` line, and the block ends at the next line that starts with
+// `---`. The body keeps its trailing newline, so empty front matter gives an
+// empty body that starts right after the opening line.
 function splitFrontMatter(text) {
-  const match = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/.exec(text)
+  const match = /^(\uFEFF?---[ \t]*(\r?\n))((?:[\s\S]*?\r?\n)??)---/.exec(text)
   if (!match) return null
-  const start = match[0].indexOf(match[1])
-  return { start, end: start + match[1].length, body: match[1] }
+  const start = match[1].length
+  const end = start + match[3].length
+  return { start, end, body: match[3], eol: match[2] }
 }
 
 function readMarker(file) {
@@ -286,11 +291,14 @@ function diff(page, options) {
 function setMarker(text, sha) {
   const line = `source_commit: ${sha}`
   const frontMatter = splitFrontMatter(text)
-  if (!frontMatter) return `---\n${line}\n---\n\n${text}`
+  if (!frontMatter) {
+    const bom = text.startsWith('\uFEFF') ? '\uFEFF' : ''
+    return `${bom}---\n${line}\n---\n\n${text.slice(bom.length)}`
+  }
   const pattern = /^source_commit:.*$/m
   const body = pattern.test(frontMatter.body)
     ? frontMatter.body.replace(pattern, line)
-    : `${frontMatter.body}\n${line}`
+    : `${frontMatter.body}${line}${frontMatter.eol}`
   return text.slice(0, frontMatter.start) + body + text.slice(frontMatter.end)
 }
 
