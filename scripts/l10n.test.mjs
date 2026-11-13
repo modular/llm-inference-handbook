@@ -218,6 +218,121 @@ test('write accepts the front matter shapes Docusaurus accepts', () => {
   assert.match(repo.run('status').stdout, /✅ 5 up to date/)
 })
 
+test('non-ASCII page names work with git path quoting on', () => {
+  const repo = createRepo()
+  repo.git('config', 'core.quotePath', 'true')
+  repo.put('docs/café.md', page('café'))
+  const base = repo.commit('English')
+  repo.put(`${ZH}/café.md`, page('zh café', base))
+  repo.commit('Translation')
+
+  const result = repo.run('status', '--ci')
+  assert.equal(result.status, 0, result.stdout)
+  assert.match(result.stdout, /✅ 1 up to date/)
+})
+
+test('a shallow clone is refused', () => {
+  const repo = createRepo()
+  repo.put('docs/a.md', page('a'))
+  const base = repo.commit('English')
+  repo.put(`${ZH}/a.md`, page('zh a', base))
+  repo.commit('Translation')
+  const clone = `${repo.dir}-shallow`
+  repos.push(clone)
+  execFileSync('git', [
+    'clone',
+    '-q',
+    '--depth',
+    '1',
+    `file://${repo.dir}`,
+    clone
+  ])
+
+  const result = spawnSync(process.execPath, [SCRIPT, 'status', '--ci'], {
+    cwd: clone,
+    encoding: 'utf8'
+  })
+  assert.equal(result.status, 2)
+  assert.match(result.stderr, /shallow clone/)
+})
+
+test('write ignores log.showSignature', (t) => {
+  const keys = mkdtempSync(path.join(tmpdir(), 'l10n-key-'))
+  repos.push(keys)
+  const key = path.join(keys, 'key')
+  const keygen = spawnSync('ssh-keygen', [
+    '-q',
+    '-t',
+    'ed25519',
+    '-N',
+    '',
+    '-f',
+    key
+  ])
+  if (keygen.error || keygen.status !== 0) return t.skip('needs ssh-keygen')
+  const repo = createRepo()
+  repo.git('config', 'gpg.format', 'ssh')
+  repo.git('config', 'user.signingkey', `${key}.pub`)
+  repo.git('config', 'commit.gpgsign', 'true')
+  repo.git('config', 'log.showSignature', 'true')
+  repo.put('docs/a.md', page('a'))
+  const latest = repo.commit('English')
+  repo.put(`${ZH}/a.md`, page('zh a'))
+
+  const result = repo.run('write', 'a.md')
+  assert.equal(result.status, 0, result.stderr)
+  assert.equal(repo.read(`${ZH}/a.md`), page('zh a', latest))
+})
+
+test('diff ignores diff.external', () => {
+  const repo = createRepo()
+  repo.put('docs/a.md', page('a'))
+  const base = repo.commit('English')
+  repo.put(`${ZH}/a.md`, page('zh a', base))
+  repo.put('docs/a.md', page('a') + 'Added line.\n')
+  repo.commit('Update')
+  repo.git('config', 'diff.external', 'echo external')
+
+  assert.match(repo.run('diff', 'a.md').stdout, /^\+Added line\.$/m)
+})
+
+test('page names are not pathspec patterns', () => {
+  const repo = createRepo()
+  repo.put('docs/q1.md', page('q1'))
+  repo.put('docs/q[1].md', page('q[1]'))
+  const base = repo.commit('English')
+  repo.put(`${ZH}/q1.md`, page('zh q1', base))
+  repo.put(`${ZH}/q[1].md`, page('zh q[1]', base))
+  repo.put('docs/q1.md', page('q1') + 'Added line.\n')
+  repo.commit('Update q1 only')
+
+  const out = repo.run('status', '--verbose').stdout
+  assert.match(out, /🟡 stale +q1\.md/)
+  const glob = spawnSync(process.execPath, [SCRIPT, 'status'], {
+    cwd: repo.dir,
+    encoding: 'utf8',
+    env: { ...process.env, GIT_GLOB_PATHSPECS: '1' }
+  })
+  assert.equal(glob.status, 0, glob.stderr)
+  assert.match(out, /✅ up to date +q\[1\]\.md/)
+  assert.match(repo.run('diff', 'q[1].md').stdout, /No English changes/)
+})
+
+test('page arguments are normalized and must be files', () => {
+  const repo = createRepo()
+  repo.put('docs/guide/a.md', page('a'))
+  const latest = repo.commit('English')
+  repo.put(`${ZH}/guide/a.md`, page('zh a'))
+
+  const written = repo.run('write', './guide//a.md')
+  assert.equal(written.status, 0, written.stderr)
+  assert.equal(repo.read(`${ZH}/guide/a.md`), page('zh a', latest))
+  const dir = repo.run('write', 'guide')
+  assert.equal(dir.status, 2)
+  assert.match(dir.stderr, /No translated page/)
+  assert.equal(repo.run('diff', 'docs/guide/').status, 2)
+})
+
 test('a reverted English change is up to date', () => {
   const repo = createRepo()
   repo.put('docs/a.md', page('a'))
@@ -249,5 +364,18 @@ test('usage errors exit 2', () => {
   repo.commit('English')
   assert.equal(repo.run('diff').status, 2)
   assert.equal(repo.run('nope').status, 2)
+  assert.equal(repo.run('toString', 'a.md').status, 2)
   assert.equal(repo.run('status', '--ref', 'missing').status, 2)
+  assert.equal(repo.run('status', '--bogus').status, 2)
+  assert.equal(repo.run('status', '--ref').status, 2)
+
+  const outside = mkdtempSync(path.join(tmpdir(), 'l10n-plain-'))
+  repos.push(outside)
+  const result = spawnSync(process.execPath, [SCRIPT, 'status'], {
+    cwd: outside,
+    encoding: 'utf8',
+    env: { ...process.env, GIT_CEILING_DIRECTORIES: path.dirname(outside) }
+  })
+  assert.equal(result.status, 2)
+  assert.match(result.stderr, /git repository/)
 })

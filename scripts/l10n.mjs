@@ -11,7 +11,13 @@
 // matter. Only `l10n:write` changes that value.
 
 import { execFileSync } from 'node:child_process'
-import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
+import {
+  existsSync,
+  readdirSync,
+  readFileSync,
+  statSync,
+  writeFileSync
+} from 'node:fs'
 import path from 'node:path'
 import { parseArgs } from 'node:util'
 
@@ -53,8 +59,15 @@ write   Set source_commit to the latest English commit for the page. Run it
 <page> is relative to docs/. --ref defaults to the first of
 ${REF_CANDIDATES.join(', ')} that exists.`
 
+// Page names are literal paths, and non-ASCII names come back unquoted.
+const GIT_ENV = { ...process.env, GIT_LITERAL_PATHSPECS: '1' }
+delete GIT_ENV.GIT_GLOB_PATHSPECS
+delete GIT_ENV.GIT_NOGLOB_PATHSPECS
+delete GIT_ENV.GIT_ICASE_PATHSPECS
+
 function git(args) {
-  return execFileSync('git', args, {
+  return execFileSync('git', ['-c', 'core.quotePath=false', ...args], {
+    env: GIT_ENV,
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'pipe']
   }).trim()
@@ -251,7 +264,7 @@ function status(options) {
 }
 
 function locate(page, options) {
-  const rel = page.replace(/^\.?\/?docs\//, '')
+  const rel = path.posix.normalize(page).replace(/^\/?docs\//, '')
   const locales = options.locale ? [options.locale] : listLocales()
   if (locales.length !== 1) {
     fail(
@@ -261,7 +274,9 @@ function locate(page, options) {
     )
   }
   const file = path.join(localeDir(locales[0]), rel)
-  if (!existsSync(file)) fail(`No translated page at ${file}.`)
+  if (!existsSync(file) || !statSync(file).isFile()) {
+    fail(`No translated page at ${file}.`)
+  }
   return { rel, file, ref: resolveRef(options.ref) }
 }
 
@@ -279,7 +294,15 @@ function diff(page, options) {
   if (!gitSucceeds(['cat-file', '-e', `${ref}:${englishPath}`])) {
     fail(`${englishPath} no longer exists on ${ref}; run pnpm l10n:status.`)
   }
-  const out = git(['--no-pager', 'diff', marker, ref, '--', englishPath])
+  const out = git([
+    '--no-pager',
+    'diff',
+    '--no-ext-diff',
+    marker,
+    ref,
+    '--',
+    englishPath
+  ])
   console.log(out || `No English changes since ${marker.slice(0, 7)}.`)
   return 0
 }
@@ -301,8 +324,12 @@ function setMarker(text, sha) {
 function write(page, options) {
   const { rel, file, ref } = locate(page, options)
   const englishPath = `${DOCS_DIR}/${rel}`
-  const sha = git(['log', '-1', '--format=%H', ref, '--', englishPath])
-  if (!sha || !gitSucceeds(['cat-file', '-e', `${ref}:${englishPath}`])) {
+  // rev-list prints only the SHA, whatever the log.* settings say.
+  const sha = git(['rev-list', '-1', ref, '--', englishPath])
+  if (
+    !FULL_SHA.test(sha) ||
+    !gitSucceeds(['cat-file', '-e', `${ref}:${englishPath}`])
+  ) {
     fail(`${englishPath} does not exist on ${ref}.`)
   }
   writeFileSync(file, setMarker(readFileSync(file, 'utf8'), sha))
@@ -310,25 +337,46 @@ function write(page, options) {
   return 0
 }
 
-const { values, positionals } = parseArgs({
-  allowPositionals: true,
-  options: {
-    locale: { type: 'string' },
-    ref: { type: 'string' },
-    verbose: { type: 'boolean', short: 'v' },
-    ci: { type: 'boolean' },
-    help: { type: 'boolean', short: 'h' }
+function parseCommandLine() {
+  try {
+    return parseArgs({
+      allowPositionals: true,
+      options: {
+        locale: { type: 'string' },
+        ref: { type: 'string' },
+        verbose: { type: 'boolean', short: 'v' },
+        ci: { type: 'boolean' },
+        help: { type: 'boolean', short: 'h' }
+      }
+    })
+  } catch (error) {
+    fail(`${error.message}\n\n${USAGE}`)
   }
-})
+}
+
+const { values, positionals } = parseCommandLine()
 const [command = 'status', page] = positionals
 const commands = { status, diff, write }
 
-if (values.help || !commands[command]) {
+if (values.help || !Object.hasOwn(commands, command)) {
   console.log(USAGE)
   process.exit(values.help ? 0 : 2)
 }
 if (command !== 'status' && !page) fail(USAGE)
 
-process.chdir(git(['rev-parse', '--show-toplevel']))
+let root
+try {
+  root = git(['rev-parse', '--show-toplevel'])
+} catch {
+  fail('Run this inside a git repository.')
+}
+process.chdir(root)
+if (git(['rev-parse', '--is-shallow-repository']) === 'true') {
+  fail(
+    'This is a shallow clone, so source_commit markers cannot be checked. ' +
+      'Fetch the full history (git fetch --unshallow, or fetch-depth: 0 in ' +
+      'actions/checkout) and run again.'
+  )
+}
 process.exitCode =
   command === 'status' ? status(values) : commands[command](page, values)
