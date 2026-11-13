@@ -184,14 +184,10 @@ function pageState(page, file, ref, english) {
     git(['rev-list', '--count', `${marker}..${ref}`, '--', englishPath])
   )
   if (commits === 0) return { page, state: 'up-to-date' }
-  const [added, deleted] = git([
-    'diff',
-    '--numstat',
-    marker,
-    ref,
-    '--',
-    englishPath
-  ]).split('\t')
+  const numstat = git(['diff', '--numstat', marker, ref, '--', englishPath])
+  // Commits that were later reverted leave nothing to translate.
+  if (!numstat) return { page, state: 'up-to-date' }
+  const [added, deleted] = numstat.split('\t')
   return { page, state: 'stale', commits, added, deleted }
 }
 

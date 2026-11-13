@@ -218,6 +218,22 @@ test('write accepts the front matter shapes Docusaurus accepts', () => {
   assert.match(repo.run('status').stdout, /✅ 5 up to date/)
 })
 
+test('a reverted English change is up to date', () => {
+  const repo = createRepo()
+  repo.put('docs/a.md', page('a'))
+  const base = repo.commit('English')
+  repo.put(`${ZH}/a.md`, page('zh a', base))
+  repo.commit('Translation')
+  repo.put('docs/a.md', page('a') + 'Draft.\n')
+  repo.commit('Edit')
+  repo.put('docs/a.md', page('a'))
+  repo.commit('Revert')
+
+  const out = repo.run('status').stdout
+  assert.match(out, /✅ 1 up to date/)
+  assert.doesNotMatch(out, /stale/)
+})
+
 test('no translations is not an error', () => {
   const repo = createRepo()
   repo.put('docs/a.md', page('a'))
