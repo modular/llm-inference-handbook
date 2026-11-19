@@ -14,7 +14,11 @@
     "format": "prettier --write .",
     "lint:md": "rumdl check .",
     "lint:md:fix": "rumdl fmt .",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "l10n:status": "node scripts/l10n.mjs status",
+    "l10n:diff": "node scripts/l10n.mjs diff",
+    "l10n:write": "node scripts/l10n.mjs write",
+    "l10n:test": "node --test scripts/l10n.test.mjs"
   },
   "dependencies": {
     "@docusaurus/core": "^3.9.0",
