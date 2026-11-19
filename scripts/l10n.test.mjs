@@ -308,13 +308,15 @@ test('page names are not pathspec patterns', () => {
 
   const out = repo.run('status', '--verbose').stdout
   assert.match(out, /🟡 stale +q1\.md/)
-  const glob = spawnSync(process.execPath, [SCRIPT, 'status'], {
+  assert.match(out, /✅ up to date +q\[1\]\.md/)
+  const glob = spawnSync(process.execPath, [SCRIPT, 'status', '--verbose'], {
     cwd: repo.dir,
     encoding: 'utf8',
     env: { ...process.env, GIT_GLOB_PATHSPECS: '1' }
   })
   assert.equal(glob.status, 0, glob.stderr)
-  assert.match(out, /✅ up to date +q\[1\]\.md/)
+  assert.match(glob.stdout, /🟡 stale +q1\.md/)
+  assert.match(glob.stdout, /✅ up to date +q\[1\]\.md/)
   assert.match(repo.run('diff', 'q[1].md').stdout, /No English changes/)
 })
 
