@@ -10,12 +10,13 @@ and may lag behind it.
 
 | Locale                       | Status  | Coordinator | Tracking issue                                                       |
 |------------------------------|---------|-------------|----------------------------------------------------------------------|
-| `zh-CN` (Simplified Chinese) | Preview | @yaokaiy    | [#221](https://github.com/modular/llm-inference-handbook/issues/221) |
+| `zh-CN` (Simplified Chinese) | Preview | @yaokaiy    | [#237](https://github.com/modular/llm-inference-handbook/issues/237) |
 
 Each locale has one coordinator and one tracking issue. The coordinator owns the
 locale's conventions and glossary and keeps its pages in sync. Contributors
 claim a chapter or page on the tracking issue, and the entry is ticked when the
-PR merges.
+PR merges. There's no CI check for translations yet, so the coordinator runs
+`pnpm l10n:status --locale <locale>` regularly.
 
 ## Where files live
 
@@ -54,8 +55,7 @@ General rules for every locale:
   (see below). Only translate text that readers see.
 - Keep the same structure, images, and links as the English page. If a link
   targets a page with no translated version yet, leave the link as is.
-- If the English page looks wrong, translate it as it is and report the problem
-  in an issue.
+- If the English page looks wrong, report the problem first.
 - Keep the English heading IDs. End each translated H2–H6 heading with the
   English ID, for example
   `## 如何计算 KV 缓存大小 {#how-to-calculate-the-kv-cache-size}`. Links from
@@ -67,8 +67,7 @@ General rules for every locale:
   `require('./img/...')` resolves from the `i18n/` folder and fails the build.
 
 Language-specific rules, such as reader address and terminology, go in each
-locale's `CONVENTIONS.md`. For zh-CN, see
-[`i18n/zh-CN/CONVENTIONS.md`](i18n/zh-CN/CONVENTIONS.md).
+locale's `CONVENTIONS.md`.
 
 ## Keeping translations in sync
 
@@ -95,7 +94,7 @@ Rules:
   issues, or comments.
 - It must be in front matter, not in an HTML comment. The `l10n` scripts only
   read front matter, and front matter must be the first thing in the file.
-- Only `pnpm l10n:write` sets it.
+- Only `pnpm l10n:write` sets it. See the next section for details.
 
 ### The `l10n` scripts
 
@@ -131,10 +130,18 @@ zh-CN  2 translated · 55 untranslated (compared with upstream/main)
   ✅ 1 up to date
 ```
 
-`--ci` makes `l10n:status` exit 1 on no marker, bad marker, or orphaned pages.
-Stale pages never fail it.
+`--ci` makes `l10n:status` exit 1 on no marker, bad marker, or orphaned pages,
+so scripts and the AI skill can stop before opening a PR. Stale pages never
+fail it. A CI check that runs it on pull requests will be added later.
 
 ### Translating or updating a page
+
+**Recommended:** let the AI skill in `skills/handbook-localize/` do steps 1–4.
+It translates the page or ports the English diff following the locale's
+`CONVENTIONS.md`, runs the `l10n` scripts, lints, and builds. However, you need
+to check the quality of the translation draft before opening the PR (see
+[AI-assisted translation](#ai-assisted-translation)). You can also do every
+step by hand.
 
 1. Update your branch to the latest `main`, then run
    `pnpm l10n:status --locale <locale>` to find stale pages. Add `--verbose` to
@@ -156,6 +163,35 @@ Stale pages never fail it.
 5. A native speaker reviews the PR for accuracy, terminology, and fluency, and
    checks that code and heading IDs are unchanged. The reviewer owns quality and
    runs the build in step 4 before approving.
+
+### Fixing orphaned pages
+
+`l10n:status` marks a translated page ❌ orphaned when its English page no
+longer exists on `main`.
+
+- English page renamed or moved: move the translated file to the matching new
+  path under `i18n/<locale>/docusaurus-plugin-content-docs/current/`. The status
+  output shows the new path when git detects the rename. The moved page then
+  shows as stale, and `l10n:diff` shows the whole English page, because it
+  doesn't follow renames. Check the translation against the English page, then
+  run `pnpm l10n:write <page> --locale <locale>`.
+- English page deleted: delete the translated file.
+
+### AI-assisted translation
+
+The `handbook-localize` skill is not tied to one locale. It follows this guide,
+the locale's `CONVENTIONS.md`, and the `l10n` scripts. For one page, it does
+steps 1–4 above.
+
+The draft is a starting point. Before you open the PR, read it against the
+English page, paragraph by paragraph:
+
+- The meaning matches, with nothing added or left out.
+- Numbers, units, and claims match.
+- Terms follow the glossary.
+- Code, math, links, and heading IDs are unchanged.
+
+A native speaker then reviews the PR, as in step 5.
 
 ## PR conventions
 
@@ -196,7 +232,9 @@ A locale goes live when all of these are true:
 - UI strings are translated.
 
 To launch, a maintainer adds the locale to `locales` without the flag and turns
-on the language switcher and search for it.
+on the language switcher. Search also needs setup: the site uses Algolia
+DocSearch with `contextualSearch`, so the Algolia crawler must be updated
+to index the locale's pages.
 
 If fewer than 80% of a live locale's pages are up to date for three months and
 nobody is coordinating it, the locale is taken out of the build. Its files stay
