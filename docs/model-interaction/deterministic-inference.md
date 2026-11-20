@@ -11,7 +11,6 @@ keywords:
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import LinkList from '@site/src/components/LinkList';
-import TokenFlipSimulator from '@site/src/components/TokenFlipSimulator';
 
 # Deterministic inference
 
@@ -61,12 +60,6 @@ equally. A difference in the fourth decimal place changes which token wins. Run
 1 can continue with "to practice every day" and run 2 with "by speaking with
 native speakers". Once one token changes, every later token is conditioned on a
 different prefix, and the outputs diverge.
-
-The simulator below models the same step 100 times with illustrative logit
-variation. Shrink the logit gap or add more variation, and see how often the
-winning token flips.
-
-<TokenFlipSimulator />
 
 :::info
 Thinking Machines Lab measured
@@ -167,8 +160,6 @@ Not every LLM application needs deterministic inference. For many user-facing
 applications, small variations in generated responses are perfectly acceptable.
 However, there are situations where reproducibility matters.
 
-Here are some common examples:
-
 ### Debugging and regression testing
 
 When a model produces an unexpected response, you want to be able to reproduce
@@ -216,33 +207,46 @@ and execution environment.
 
 ## How to enable deterministic inference
 
+Nondeterminism may sound unavoidable, but floating-point math isn't random. A
+kernel that adds the same numbers in the same order gets the same result every
+time. Outputs drift because the addition order changes with the batch. The fix
+is to use batch-invariant kernels, which keep one reduction strategy for every
+batch size. For how this works in details, see
+[how to make kernels batch-invariant](https://thinkingmachines.ai/blog/defeating-nondeterminism-in-llm-inference/#how-do-we-make-kernels-batch-invariant)
+from Thinking Machines Lab.
+
 Most serverless APIs don't guarantee deterministic outputs. Some accept a `seed`
 parameter, but treat it as best effort. The provider controls the batching,
 hardware, and kernel versions behind the endpoint, and those can change without
 notice. If you need strict reproducibility across changes in server load, use a
 supported deterministic mode in a controlled serving setup.
 
-Some open-source inference frameworks already support this feature.
+Some open-source inference frameworks already support this feature. Both
+vLLM and SGLang build their implementations on
+[Thinking Machines Lab's research](https://thinkingmachines.ai/blog/defeating-nondeterminism-in-llm-inference/).
 
 <Tabs groupId="inference-framework">
 <TabItem value="vllm" label="vLLM">
 
-vLLM calls this feature
-[batch invariance](https://docs.vllm.ai/en/latest/features/batch_invariance/).
-Enable it with the `VLLM_BATCH_INVARIANT` environment variable:
+vLLM provides deterministic inference through the
+[batch invariance](https://docs.vllm.ai/en/latest/features/batch_invariance/)
+feature, which uses deterministic kernel implementations for attention and other
+operations. Enable it with the `VLLM_BATCH_INVARIANT` environment variable:
 
 ```bash
 VLLM_BATCH_INVARIANT=1 vllm serve meta-llama/Llama-3.1-8B-Instruct
 ```
 
-Note that this feature is still in beta in vLLM.
+Note that this feature is still in beta in vLLM. Learn more in
+[this GitHub issue](https://github.com/vllm-project/vllm/issues/27433).
 
 </TabItem>
 <TabItem value="sglang" label="SGLang">
 
-SGLang enables
+SGLang's
 [deterministic inference](https://docs.sglang.io/docs/advanced_features/deterministic_inference)
-with a server flag:
+works with chunked prefill, CUDA graphs, radix cache, and non-greedy
+sampling. Enable it with a server flag:
 
 ```bash
 python3 -m sglang.launch_server \
@@ -255,6 +259,18 @@ python3 -m sglang.launch_server \
 </Tabs>
 
 ## FAQs
+
+### Is deterministic inference the same as batch invariance?
+
+No. Deterministic inference is the goal: the same request returns the same
+output every time. Batch invariance is a property that helps you reach it: a
+request's result doesn't depend on the batch size or the other requests in the
+same batch.
+
+On a server that uses continuous batching, batch invariance is the main
+requirement for determinism. However, it isn't enough on its own. Changes to the
+GPU type, tensor parallelism degree, framework version, attention backend, or
+quantization can still change the output.
 
 ### Are deterministic outputs the same on different GPUs?
 

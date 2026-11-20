@@ -95,9 +95,6 @@ concepts directly:
   Explore TTFT, E2EL, TPOT, and SLO-based goodput.
 - [Top-p vs Top-k Filter](/model-interaction/inference-parameters/#top-p-and-top-k-sampling):
   Compare how each filter handles peaky, mixed, and flat distributions.
-- [Near-Tie Token Flip](/model-interaction/deterministic-inference/#why-temperature-0-isnt-deterministic):
-  See how tiny logit noise flips the winning token at `temperature=0` when two
-  candidates are nearly tied.
 - [Model Explorer](/getting-started/choosing-the-right-model/): Browse popular
   open-source LLMs and compare their architecture, scale, context, and typical
   GPU deployment.
