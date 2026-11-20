@@ -18,6 +18,11 @@ claim a chapter or page on the tracking issue, and the entry is ticked when the
 PR merges. There's no CI check for translations yet, so the coordinator runs
 `pnpm l10n:status --locale <locale>` regularly.
 
+To propose a new locale, open an issue that names the language and who will
+coordinate it. After a maintainer confirms it, that issue becomes the locale's
+tracking issue. Then follow
+[Adding and launching a locale](#adding-and-launching-a-locale).
+
 ## Where files live
 
 Locale directories follow the
