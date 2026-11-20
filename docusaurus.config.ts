@@ -21,7 +21,12 @@ const config: Config = {
 
   i18n: {
     defaultLocale: 'en',
-    locales: ['en']
+    locales: ['en', 'zh-CN'],
+    localeConfigs: {
+      'zh-CN': {
+        label: '简体中文',
+      },
+    },
   },
 
   markdown: {
