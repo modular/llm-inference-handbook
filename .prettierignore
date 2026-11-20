@@ -1,3 +1,6 @@
 docs/**/*.md
 docs/**/*.mdx
 README.md
+LOCALIZATION.md
+i18n/**/*.md
+i18n/**/*.mdx
