@@ -127,7 +127,9 @@ A practical starting point:
 - Use
   [greedy decoding](/llm-inference-basics/how-does-llm-inference-work/#how-are-tokens-selected-via-sampling)
   if you want the model to select the highest probability token at each step. It
-  is deterministic in a fixed serving setup, but can be prone to repetition.
+  can be prone to repetition, and repeated requests may produce different
+  outputs when batching changes. For more information, see
+  [deterministic inference](/model-interaction/deterministic-inference/).
 - Use `top_p` when you want to bound the long tail and keep sampling adaptive.
 - Use `top_k` when your inference framework or model family recommends it, or
   when you need a hard cap on candidate tokens.
@@ -237,7 +239,9 @@ unexpected output.
 
 However, don't treat seeds as a perfect production guarantee. Reproducibility
 can still change when the model version, tokenizer, serving framework, hardware
-kernels, batching behavior, or floating-point implementation changes.
+kernels, batching behavior, or floating-point implementation changes. If you
+need identical outputs regardless of server load, see
+[deterministic inference](/model-interaction/deterministic-inference/).
 
 `logprobs` returns probability information for generated tokens. Some systems
 also support `prompt_logprobs`, which reports probability information for prompt
