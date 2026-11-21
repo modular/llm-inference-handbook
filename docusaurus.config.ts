@@ -21,7 +21,13 @@ const config: Config = {
 
   i18n: {
     defaultLocale: 'en',
-    locales: ['en']
+    // Unlaunched locales build only with L10N_PREVIEW=1
+    locales: process.env.L10N_PREVIEW ? ['en', 'zh-CN'] : ['en'],
+    localeConfigs: {
+      'zh-CN': {
+        label: '简体中文'
+      }
+    }
   },
 
   markdown: {
