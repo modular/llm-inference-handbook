@@ -79,10 +79,10 @@ const GPU_DATA: GPU[] = [
     bandwidthGBs: 4800,
     bandwidthDisplay: '4.8 TB/s',
     exampleLLMs: [
-      'MiniMax-M3',
+      'MiniMax-M3.1-Flash',
       'MiMo-V2.6-Flash',
-      'DeepSeek-V4.1-Flash',
-      'Ling-3.0-flash',
+      'DeepSeek-V4.1-Flash-1017',
+      'Ling-3.1-flash',
       'Qwen3.8-Flash-Next',
       'Muse-Spark-Open-816B-A42B',
     ],
@@ -102,6 +102,7 @@ const GPU_DATA: GPU[] = [
       'GLM-5.3',
       'MiMo-V2.6-Pro',
       'Muse-Spark-Open-816B-A42B',
+      'Mistral-Large-4-1T-A52B',
     ],
     notes:
       'Blackwell architecture; native FP4 support; massive throughput for trillion-parameter models',
@@ -140,7 +141,7 @@ const GPU_DATA: GPU[] = [
     exampleLLMs: [
       'Gemma-4-31B',
       'MiniMax-M3',
-      'DeepSeek-V4.1-Flash',
+      'DeepSeek-V4.1-Flash-1017',
       'GLM-5.3',
     ],
     notes: '3rd Gen CDNA architecture; built for massive multi-GPU clusters',
@@ -154,8 +155,8 @@ const GPU_DATA: GPU[] = [
     bandwidthDisplay: '8.0 TB/s',
     exampleLLMs: [
       'GLM-5.3',
-      'Kimi-K3',
-      'MiniMax-M3',
+      'Kimi-K3.1-Pro',
+      'MiniMax-M3.1-Flash',
       'Qwen3.8-2.4T-A95B',
       'MiMo-V2.6-Pro',
       'Muse-Spark-Open-816B-A42B',
