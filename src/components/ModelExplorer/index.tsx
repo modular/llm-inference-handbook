@@ -86,6 +86,25 @@ const MODELS: Model[] = [
       'https://docs.sglang.io/cookbook/autoregressive/DeepSeek/DeepSeek-R1',
   },
   {
+    name: 'DeepSeek-V4.1-Flash-1017',
+    family: 'DeepSeek',
+    company: 'DeepSeek',
+    architecture: 'MoE',
+    released: '2026-10',
+    license: 'MIT',
+    huggingface: 'deepseek-ai/DeepSeek-V4.1-Flash-1017',
+    totalParams: '552B',
+    activeParams: '8B / 16B',
+    contextLength: '1M',
+    modality: 'Text, Image',
+    useCase:
+      'Multimodal reasoning, coding, and agentic tasks (faster task completion and shorter outputs)',
+    precisions: ['FP4 + FP8 Mixed'],
+    deployment: ['4× H200', '2× B200', '2× MI355X'],
+    sglangDocs:
+      'https://docs.sglang.io/cookbook/autoregressive/DeepSeek/DeepSeek-V4_1',
+  },
+  {
     name: 'DeepSeek-V4.1-Flash',
     family: 'DeepSeek',
     company: 'DeepSeek',
@@ -100,7 +119,7 @@ const MODELS: Model[] = [
     useCase:
       'Multimodal (image + text) agentic and input-heavy workloads (FP4 KV cache cuts memory to ~1/4 of V4-Flash)',
     precisions: ['FP4 + FP8 Mixed'],
-    deployment: ['8× H200', '4× B200', '4× MI350X'],
+    deployment: ['4× H200', '2× B200', '2× MI355X'],
     vllmDocs: 'https://recipes.vllm.ai/deepseek-ai/DeepSeek-V4.1-Flash',
     sglangDocs:
       'https://docs.sglang.io/cookbook/autoregressive/DeepSeek/DeepSeek-V4_1',
@@ -346,6 +365,27 @@ const MODELS: Model[] = [
 
   // ── Kimi ──
   {
+    name: 'Kimi-K3.1-Pro',
+    family: 'Kimi',
+    company: 'Moonshot AI',
+    architecture: 'MoE',
+    released: '2026-11',
+    license: 'Kimi K3.1 Pro License',
+    licenseUrl:
+      'https://huggingface.co/moonshotai/Kimi-K3.1-Pro/blob/main/LICENSE',
+    huggingface: 'moonshotai/Kimi-K3.1-Pro',
+    totalParams: '2.8T',
+    activeParams: '104B',
+    contextLength: '1M',
+    modality: 'Text, Image',
+    useCase:
+      'Agentic coding, 3D creation, and financial research, with Gated DSA sparse attention for long context',
+    precisions: ['MXFP4 + MXFP8'],
+    deployment: ['8× B300', '8× MI355X'],
+    sglangDocs:
+      'https://docs.sglang.io/cookbook/autoregressive/Moonshotai/Kimi-K3.1-Pro',
+  },
+  {
     name: 'Kimi-K3',
     family: 'Kimi',
     company: 'Moonshot AI',
@@ -421,6 +461,25 @@ const MODELS: Model[] = [
 
   // ── Ling ──
   {
+    name: 'Ling-3.1-flash',
+    family: 'Ling',
+    company: 'InclusionAI',
+    architecture: 'MoE',
+    released: '2026-10',
+    license: 'MIT',
+    huggingface: 'inclusionAI/Ling-3.1-flash',
+    totalParams: '560B',
+    activeParams: '25B',
+    contextLength: '1M',
+    modality: 'Text',
+    useCase:
+      'Hybrid reasoning for complex real-world tasks (e.g., search, office productivity, and coding)',
+    precisions: ['FP8'],
+    deployment: ['8× H200', '4× GB300'],
+    sglangDocs:
+      'https://docs.sglang.io/cookbook/autoregressive/InclusionAI/Ling-3.1-flash',
+  },
+  {
     name: 'Ling-3.0-flash',
     family: 'Ling',
     company: 'InclusionAI',
@@ -478,6 +537,27 @@ const MODELS: Model[] = [
   },
 
   // ── MiniMax ──
+  {
+    name: 'MiniMax-M3.1-Flash',
+    family: 'MiniMax',
+    company: 'MiniMax',
+    architecture: 'MoE',
+    released: '2026-10',
+    license: 'MiniMax Community License',
+    licenseUrl:
+      'https://huggingface.co/MiniMaxAI/MiniMax-M3.1-Flash/blob/main/LICENSE',
+    huggingface: 'MiniMaxAI/MiniMax-M3.1-Flash',
+    totalParams: '428B',
+    activeParams: '23B',
+    contextLength: '1M',
+    modality: 'Text, Image, Video',
+    useCase:
+      'Coding, agentic workflows, computer use, and cybersecurity, with DSpark speculative decoding',
+    precisions: ['NVFP4 + MXFP8 Mixed'],
+    deployment: ['8× H200', '4× B300', '4× MI355X'],
+    sglangDocs:
+      'https://docs.sglang.io/cookbook/autoregressive/MiniMax/MiniMax-M3.1',
+  },
   {
     name: 'MiniMax-M3',
     family: 'MiniMax',
@@ -555,6 +635,27 @@ const MODELS: Model[] = [
   },
 
   // ── Mistral ──
+  {
+    name: 'Mistral-Large-4-1T-A52B',
+    family: 'Mistral',
+    company: 'Mistral AI',
+    architecture: 'MoE',
+    released: '2026-10',
+    license: 'Mistral Ecosystem Open-Weight License',
+    licenseUrl:
+      'https://huggingface.co/mistralai/Mistral-Large-4-1T-A52B/blob/main/LICENSE',
+    huggingface: 'mistralai/Mistral-Large-4-1T-A52B',
+    totalParams: '1T',
+    activeParams: '52B',
+    contextLength: '1M',
+    modality: 'Text, Image',
+    useCase:
+      'Reasoning, coding, and agentic workflows, with particular strength in cybersecurity, finance, and law',
+    precisions: ['FP8', 'NVFP4'],
+    deployment: ['8× B300', '2-node 8× H200', '8× MI350X'],
+    sglangDocs:
+      'https://docs.sglang.io/cookbook/autoregressive/Mistral/Mistral-Large-4',
+  },
   {
     name: 'Mistral-Medium-3.5-128B',
     family: 'Mistral',
@@ -943,11 +1044,11 @@ function ModelExplorer() {
               </div>
             </div>
 
-            <div className={styles.kvRow}>
+            <div className={`${styles.kvRow} ${styles.wrapRow}`}>
               <span className={styles.kvLabel}>License</span>
               {current.licenseUrl ? (
                 <a
-                  className={`${styles.kvValue} ${styles.kvLink}`}
+                  className={`${styles.kvValue} ${styles.wrapValue} ${styles.kvLink}`}
                   href={current.licenseUrl}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -955,14 +1056,16 @@ function ModelExplorer() {
                   {current.license}
                 </a>
               ) : (
-                <span className={styles.kvValue}>{current.license}</span>
+                <span className={`${styles.kvValue} ${styles.wrapValue}`}>
+                  {current.license}
+                </span>
               )}
             </div>
 
             {current.useCase && (
-              <div className={`${styles.kvRow} ${styles.useCaseRow}`}>
+              <div className={`${styles.kvRow} ${styles.wrapRow}`}>
                 <span className={styles.kvLabel}>Use Case</span>
-                <span className={`${styles.kvValue} ${styles.useCaseValue}`}>
+                <span className={`${styles.kvValue} ${styles.wrapValue}`}>
                   {current.useCase}
                 </span>
               </div>
@@ -992,7 +1095,7 @@ function ModelExplorer() {
               </div>
             </div>
 
-            <div className={styles.kvRow}>
+            <div className={`${styles.kvRow} ${styles.wrapRow}`}>
               <span className={styles.kvLabel}>Hardware</span>
               <div className={styles.chips}>
                 {current.deployment.map((d) => (
