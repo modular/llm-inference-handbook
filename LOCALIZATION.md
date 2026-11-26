@@ -188,6 +188,11 @@ The `handbook-localize` skill is not tied to one locale. It follows this guide,
 the locale's `CONVENTIONS.md`, and the `l10n` scripts. For one page, it does
 steps 1–4 above.
 
+To install the skill, copy or link the `skills/handbook-localize/` folder into
+your agent's skills directory, for example `.claude/skills/` for Claude Code or
+`.agents/skills/` for Codex. If your agent doesn't support skills, tell it to
+read `skills/handbook-localize/SKILL.md` and follow it.
+
 The draft is a starting point. Before you open the PR, read it against the
 English page, paragraph by paragraph:
 
