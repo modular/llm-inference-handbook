@@ -25,6 +25,7 @@ yarn-error.log*
 .codex/
 .agents/plans/
 .agents/prototypes/
+.agents/skills/
 
 # Testing
 nginx/

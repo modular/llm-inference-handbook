@@ -188,6 +188,38 @@ The `handbook-localize` skill is not tied to one locale. It follows this guide,
 the locale's `CONVENTIONS.md`, and the `l10n` scripts. For one page, it does
 steps 1–4 above.
 
+To install the skill, copy or link the `skills/handbook-localize/` folder into
+your agent's skills directory, for example `.claude/skills/` for Claude Code or
+`.agents/skills/` for Codex.
+
+```bash
+# From the repo root, link the folder so the skill stays up to date
+
+# Claude Code
+mkdir -p .claude/skills
+ln -s ../../skills/handbook-localize .claude/skills/handbook-localize
+
+# Codex
+mkdir -p .agents/skills
+ln -s ../../skills/handbook-localize .agents/skills/handbook-localize
+```
+
+Then ask your agent to translate or resync a page, naming the locale. In Claude
+Code, you can also call the skill by name:
+
+```text
+/handbook-localize --locale zh-CN llm-inference-basics/what-is-llm-inference.md
+```
+
+Other examples:
+
+- "Translate `llm-inference-basics/what-is-llm-inference.md` into zh-CN."
+- "Which zh-CN pages are stale? Resync them."
+- "Resync the zh-CN translation of `inference-optimization/prefix-caching.md`."
+
+If your agent doesn't support skills, tell it to read
+`skills/handbook-localize/SKILL.md` and follow it.
+
 The draft is a starting point. Before you open the PR, read it against the
 English page, paragraph by paragraph:
 
